@@ -1,0 +1,144 @@
+\section{Discussion}
+
+This article has quantified the error made in inference when (1) nature would follow the
+protracted speciation model, and (2) her DNA sequences would be analysed with a birth-death
+model.
+
+% The PBD model is just one implementation of speciation taking time
+
+The key feature of the PBD model is that it encompasses speciation taking time in the
+simplest way possible (that allows for mathematical analysis). The PBD model allows for
+multiple incipient species stages (where its earliest version had infinite
+stages \cite{rosindell2010protracted}). This research assumes that there is only one
+incipient species stage. One could argue that speciation takes place in more
+biological stages \todo{Add reference}, but we tried to use the simplest incarnation of the PBD possible.
+Also, the PBD model can also be viewed as a model of species recognition \todo{?Purvis et al., 2009},
+in which (human) recognition needs to build up, which we consider to be sufficiently
+encapsulated in one single stage. Future research may investigate if adding multiple incipient
+species stages for simulating nature changes the error made by (non-protracted) birth-death models.
+
+% Equal and constant rates
+
+The PBD model allows for multiple incipient species stages. 
+Each stage has its own extinction and speciation-initiation and 
+speciation-completion rate (except for good species, which lacks 
+a speciation-completion rate). These rates are assumed to be constant
+in time and equal for all stages. We chose to use the constant-rate
+birth-death model to keep this investigation as simple as possible.
+Future research may investigate whether a biologically more realistic
+rate model, for example, by adding diversity-dependence, results in
+the same inference error.
+
+We chose to set the extinction and speciation-initiation rates equal for all stages,
+again for choosing the simplest model. We expect these rates to differ in reality:
+incipient species have low initial abundances, which has an effect on extinction
+and speciation-initiation rates. 
+
+In this research, we nevertheless set these rates equal. 
+Not only because it helps constrain the parameter space investigated,
+also paraphylies would pop up in the simulated trees. This would violate more assumptions
+of the BEAST2 model used as a prior and increase the complexity of the analysis.
+
+% Sampling species trees from incipient species trees
+
+An incipient species tree may have multiple incipient lineages from the
+same ancestor. We constructed two species trees from each incipient species
+tree, by selecting the youngest and oldest subspecies to represent a species.
+This selection maximizes the chance the species trees are different, where
+random sampling of representatives would also be a valid approach, closer
+to what would happen when scientists take measurements in the field. Our
+approach increases the error made.
+
+% Nucleotide substitution model
+
+For the simulation of DNA alignments, the Jukes-Cantor nucleotide substitution model
+is used. This substitution model is a simplification of the DNA mutation processes
+happening in reality \todo{Add reference}. In this simulation research, however, we could also
+state in BEAST2 that this nucleotide substitution model is used. Thus, we kept
+the simulation of the nucleotides in time as simple as possible, and used that
+knowledge in later steps. We expect that any nucleotide substitution model, when
+used in both alignment generation and in phylogeny inference, will do equally well,
+except that the full computational pipeline would take needlessly longer.
+
+% Allopatric speciation only
+
+When a speciation event is initiated, this investigation assumes no gene flow
+between the two incipient lineages. This follows the allopatric mode of speciation, 
+which is assumed to be most prominent of nature \todo{Add reference}. It would be interesting to
+allow gene flow between related incipient species, 
+so also peripatric and sympatric modes of speciation would be allowed for.
+We predict that this would increase the error in inference.
+
+% Why not put the tree prior into an MCMC tool directly?
+One could argue we should have written a PBD tree prior for an MCMC phylogenetic tool.
+We did not do that for two reasons. First, we think it is rational to first
+measure if there is need for a more complex tree prior. Second, 
+we could not have done so, as a phylogenetic tool like BEAST2 assumes species
+trees, where our input consists of incipient species trees. Before this
+research, we were unsure how to sample species representatives. This research
+has shown that any sampling is just as good, opening up avenues for
+implementing a PBD species tree prior.
+
+% BEAST2 is just one of many tools
+
+BEAST2 is one of many MCMC phylogenetic tools with its
+own internal technicalities. Similar tools are the R phytools
+package \cite{phytools}, BAli-Phy \cite{suchard2006bali}
+and BayesPhylogenies \cite{pagel2007bayesphylogenies}, to name a few.
+BEAST2 was chosen, because (1) it's FOSS, (2) its software
+architecture is modular, encouraging extension, (3) its development
+team follows good practices in software development.
+
+
+% BEAST2 parameter settings: strict clock
+
+\todo{elaborate}
+
+Use of strict clock is clean, but unrealistic.
+
+\todo{elaborate}
+
+% Alignment generation
+
+Use of JC69 is rational, but unrealistic.
+
+% Use for empiricists
+
+\todo{elaborate}
+
+This reseach shows that a DNA sequence length of 10k [is good].
+[must be effective DNA sequence length]
+[no indels generated]
+
+% Low number of incipient species trees
+
+\todo{elaborate}
+
+For each point in parameter space, twenty incipient species tree are created.
+Was fitted to 1000 jobs.
+
+% Failed simulations
+
+Not all parameter combinations resulted in posteriors with a high ESS,
+due to computational constraints. We think this is a valid approach:
+would a phylogeny get too big, we as scientists would cut it to
+pieces that are analytically tractable. Because these simulations
+are only a minority (as shown in the Results section), we do not
+expect this to influence our conclusions.
+
+% nLTT statistic is just one of many summary statistics
+
+We used the nLTT statistic for quantifying the error between the
+true and inferred phylogeny. There are simpler statistics that
+can do the same, like the gamma \cite{pagel1999inferring}, 
+delta-r \cite{pigot2010shape} \todo{check citation}, 
+tree balance \todo{Add reference} or
+Normalized Rooted Branch Score [Drummond] statistic, 
+or more complex, like the spectral analysis [Hendy and Penny, 1993].
+We consider those other summary statistics equally good, we just picked the
+one we thought of the most informative per unit of added computational time.
+
+% Add:
+%
+% Computational Performance and Statistical Accuracy of *BEAST and Comparisons with Other Methods (by Huw A. Ogilvie Joseph Heled Dong Xie Alexei J. Drummond)
+% cites rooted branch score, RBS, as being from Heled and Bouckaert 2013, `Looking for trees in the forest: Summary tree from posterior samples`

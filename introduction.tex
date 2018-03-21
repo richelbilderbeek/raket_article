@@ -1,0 +1,228 @@
+\section{Introduction}
+
+% Biology: speciation takes time
+
+It takes time for new species-to-be to achieve the status of a new species.
+First, it takes time for the new species-to-be has to acquire sufficient different mutations to 
+establish reproductive isolation \cite{schluter2001ecology}. Second, 
+it takes time for us to recognize reproductive isolation
+and reclassify that one single species has become two (or more) species. As an
+example, \cite{fennessy2016multi} showed that Africa has four instead of only one
+giraffe species, with a common ancestor estimated at around 2 million years ago.
+
+% The use of speciation models
+
+From DNA sequences obtained in the present, we can construct phylogenies
+to infer the evolutionary relationship between species and the time 
+from which ancestral species developed into separate.
+  
+As we only sample DNA of extant species, 
+we can only infer a reconstructed tree, in which
+the lineages that have gone extinct are absent.
+Although most models assume extinctions (\cite{yule1925mathematical} being the
+classic exception, as at its time computation was expensive), 
+information on extinction times is lost due to our sampling.
+
+
+The time when reproductive isolation started to take off, is
+also lost in our sampling method, if the new species-to-be is not 
+recognized yet as such. Without fossil date, one cannot observe the
+possibly many times that reproductive isolation built up, but was lost again.
+
+% First model: constant rate birth death model
+
+Although we know that speciation takes time, we commonly ignore this when
+constructing a phylogeny, by choosing a constant-rate birth-death model
+as a speciation model. This can be justified, as for lineages 
+that have speciated far back in the past, there is no error. 
+Yet in the present, we do not recognize the future species-to-be
+that are already genetically converging, resulting in an underestimation
+of the number of species present today, which can only be 
+concluded in retrospect.
+
+The constant-rate birth-death model (as described in for example \cite{nee1994reconstructed}) 
+is among the simplest speciation models, and assumes a constant speciation
+ rate $\lambda$ and constant extinction rate $\mu$.
+
+Additionally, it assumes speciation is instantaneous.
+The constant-rate birth-death model is popular for its simplicity, yet
+has also served as a starting point for more elaborate speciation models.
+
+% Other non-protracted speciation models
+
+Other speciation models may assume that speciation rate changes in 
+time \cite{rabosky2008explosive}, is dependent on the amount of species 
+present \cite{etienne2011diversity}, or is trait dependent \cite{fitzjohn2009estimating}.
+
+In these examples, the original birth-death model has been extended by making 
+speciation rate dependent on time, diversity or trait value respectively.
+The assumption that all these extensions share is that speciation is instantaneous;
+that after a new branching event, both two lineages are (or are recognized as being) different
+species.
+
+% Protracted speciation model
+
+% Good and incipient states
+
+The protracted speciation model \cite{etienne2012prolonging} allows for speciation taking time.
+
+It adds an additional species state (see also figure \ref{fig:pbd_states}),
+coined the 'incipient' stage, which a lineages has to complete before becoming
+a 'good' species.
+
+One view is to say that good species have achieved reproductive isolation,
+where incipient species are in the process of achieving this \todo{Add reference}.
+
+As genetic drift is unlikely to be a relevant speciation mechanism,
+this is more likely to be ecological speciation [Sobel et al., 2009]. 
+\todo{RSE: Ben je het daarmee eens? Zou drift niet een belangrijke ooraak van speciation op islands kunnen zijn bijvoorbeeld?}
+
+Alternatively, an incipient species can be described as a good-species-to-be,
+yet not recognized as such \todo{?[Purvis et al., 2009]?}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick]   
+  \tikzstyle{every state}=[]
+  \node[state] (A)              {Good};   
+  \node[state] (B) [right of=A] {Incipient};   
+  \node[state] (C) [below of=B] {Extinct};   
+  \path (A) edge [bend right] node {$b_g$} (B)
+        (A) edge [bend right] node {$\mu_g$} (C)
+        (B) edge [loop above] node {$b_i$} (B)
+        (B) edge [bend right] node {$\lambda$} (A)
+        (B) edge [bend right] node {$\mu_i$} (C); 
+  \end{tikzpicture}
+
+  \caption{
+    The states and transitions of a species in the PBD model.
+    $b_i$: speciation-initiation rate of incipient species. 
+    $b_g$: speciation-initiation rate of good species. 
+    $\lambda$: speciation completion rate. 
+    $\mu_i$: extinction rate of incipient species. 
+    $\mu_g$: extinction rate of good species. 
+    Figure after Etienne et al, 2014, Evolution
+  }
+  \label{fig:pbd_states}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Biological mechanism of reproductive isolation
+
+The protracted speciation model makes no assumption about the exact biological
+mechanism by which reproductive isolation is 
+acquired \cite{etienne2012prolonging, etienne2014estimating,rosindell2010protracted}.
+
+A 'good' state can be viewed as a state in which there is convergent selection
+for that lineage.
+
+The 'incipient' state can be seen as a state in which there is the potential
+for speciation.
+
+A first example can be from the BDM \todo{Add reference} model, the state in which there
+are all three genotypes, before the intermediate genotype is lost.
+A second example can be in a sexual selection model [van Doorn and Weissing, 2002], 
+where there is the onset for convergent selection.
+In both cases, these intermediate states may fall back to the original
+state of one species, or complete to produce a new species.
+
+% Effects on topology
+
+A feature of the protracted birth-death model, is that it may result in
+paraphylies when the rates between good and incipient species differ \todo{Add reference}.
+Paraphylies may be more than an experimental artifact and are claimed to
+be an inherent feature of nature \cite{funk2003species}.
+
+\todo{Add something like: this research solves this by sampling from paraphyletic trees (at the subspecies level) to create non-paraphyletic trees at the species level}
+
+% Good and incipient rates
+
+Where the classic birth death model assumes constant speciation and extinction
+ rates, the protracted birth-death model allows these rates to be state
+ dependent.
+
+The only additional parameter is the rate at which incipient species become
+(recognized as) good species.
+When setting that parameter to infinity, incipient species become good
+species instantaneous and the model falls back to a constant-rate (non-protracted) birth-death model \todo{Add reference}.
+
+% Relationship to constant-rate birth-death model
+
+\todo{?Wat bedoelde ik met deze onzin?}
+Although both standard and protracted birth-death models use a parameter 
+$\lambda$, the $\lambda$ in the standard birth death model denotes
+a speciation rates (initiation and completion), where in the PBD model
+$\lambda$ denotes only the speciation initiation rate. 
+There is no relationship known between the parameters of the constant-rate
+birth-death model and the protracted birth-death model \cite{etienne2014estimating} 
+\todo{refesh memory, then update paragraph}.
+
+% Good and incipient rates do not need to be constant
+
+The assumption that speciation takes time is independent of the dynamics
+of the speciation and extinction rates.
+The protracted speciation model in this research assumes these rates are
+constant, but these rates can easily be made to depend on time, diversity
+or trait.
+
+% Use of a speciation model in inferring a phylogeny
+
+Speciation models are widely used to make inferences from genetic data.
+There are multiple computer programs to create phylogenies and/or parameter
+estimates from aligned DNA sequences.
+BEAST2 is a widely used tool that allows for a Bayesian approach to 
+phylogenetics \cite{bouckaert2014beast}.
+
+BEAST2 supplies the user with multiple speciation models, that all assume
+instantaneous speciation.
+ 
+% This study
+
+This simulation investigates the consequence of BEAST2 using instantaneous
+speciation, by simulating a 'true' tree that is protracted, simulate DNA
+alignments following that tree, and seeing how well BEAST2 can recover
+the original phylogeny.
+ 
+% Novelty
+
+This study is the first to measure the error made when acknowledging that
+speciation takes time, yet using one of the many tools that ignores this
+fact.
+
+
+
+Part of the parameter space will create 'true' trees that are not protracted.
+This will result in a test of BEAST2 against itself, which is, to the best
+of our knowledge, not been done, probably due to the extensive computations
+that are needed \todo{RSE: Heb je dit uitgebreid getest? Misschien zou je Remco kunnen vragen}.
+
+% Analysis
+
+The 'true' and inferred trees are compared with the nLTT statistic, which
+is a novel and efficient summary statistic, that has been proven to have
+better performance than the gamma statistics in Approximate
+Bayesian Computation \cite{janzen2015approximate} (yet on par with the likelihood).
+
+The nLTT statistics is the summed absolute difference between two 
+Lineages-Through-Time plot lines that are normalized to 
+let both time and number of lineages
+range from zero to one.
+Additionally, this statistic allows to pinpoint the time span that contributed
+most to its value.
+
+% Expectations
+
+It is expected that for higher protractedness (thus deviation from BEAST2
+its assumptions), the error will increase.
+Trees are expected to be inferred better, when there is more information
+available to construct them, thus we expect less error when there are more
+taxa and when the simulation DNA alignments are longer.
+The error is expected to be biggest close to the present, as there will
+be the most incipient species present.
+ 
+It is unknown, however, under which biological settings this error is relevant.
+
+% Preview results
+
+This study shows that ... \todo{put result here}.

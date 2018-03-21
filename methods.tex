@@ -1,0 +1,354 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Methods}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+This research measures the error our current BD tools make, when
+the real process has been protracted. Figure \ref{fig:experiment} shows
+the following overview of the experiment graphically. 
+An in silico data set is created for a wide
+range of parameters from which incipient species trees are simulated (A in figure \ref{fig:experiment}). 
+These phylogenies serve as 'the truth' or 'nature'. From that incipient species tree,
+species trees are created, by picking one representive per species.
+This is done twice, as either the youngest (B1) or oldest (B2) subspecies is chosen
+to represent a species. Per species tree, $n_a$ alignments are simulated (C1 and C2).
+Per alignment, $n_b$ posteriors are inferred, 
+each consisting of $n_s$ phylogenies and parameter estimates (D1 and D2). Each
+species tree is then compared with the species tree its alignment is based on (for
+example, B1 and D1).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+  \centering 
+  \resizebox {0.8\textwidth} {!} {
+    \CreateTikzFigureExperiment{} 
+  }
+  \caption{
+    Overview of the experiment: 
+    A: per parameter set, there are $n_i$ incipient species trees created. 
+    B1: constructing a species trees by using the youngest subspecies $A1$ to represent good species $A$.
+    B2: constructing a species trees by using the oldest subspecies $A2$ to represent good species $A$.
+    C1: constructing one of the $n_a$ alignments of B1. 
+    C2: constructing one of the $n_a$ alignments of B2. 
+    D1: reconstructing a species trees from alignment B1.
+    D2: reconstructing a species trees from alignment B2.
+    Comparisons are done between a species tree and its reconstructed species tree, 
+    for example, between B1 and D1.
+    All phylogenies are drawn at the same scale.
+  }
+  \label{fig:experiment}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Parameter space}
+\label{subsec:parameter_space}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}
+  \centering 
+  \begin{tabular}{l l}
+    \hline
+    Symbol & Description \\
+    \hline
+    \hline
+    $b_g$ & Speciation initiation rate of a good species (probability per lineage, per million year) \\
+    $b_i$ & Speciation initiation rate of an incipient species (probability per lineage, per million year) \\
+    $\lambda$ & Speciation completion rate (probability per lineage, per million year) \\
+    $\mu_g$ & Extinction rate of a good species (probability per lineage, per million year) \\
+    $\mu_i$ & Extinction rate of an incipient species (probability per lineage, per million year) \\
+    \hline
+    $t_c$ & Crown age (million years) \\
+    $r$ & Mutation rate (probability of mutation per nucleotide per million years) \\
+    $l_a$ & DNA alignment length (base pairs) \\
+    \hline
+    $n_i$ & Number of incipient species trees per parameter set \\
+    $n_a$ & Number of alignments per species tree \\
+    $n_b$ & Number of BEAST2 runs per alignment \\
+    \hline
+    $n_s$ & Number of MCMC samples \\
+    $i_s$ & MCMC sampling interval \\
+    \hline
+    $n_{ti}$ & Number of taxa in an incipient species tree \\
+    $n_{t}$ & Number of taxa in a (good) species tree \\
+    $t_{\mean{ds}}$ & Average duration of speciation \\
+    $t_{sc}$ & Speciation completion time \\
+    $\Delta_{nLTT}$ & nLTT statistic value \\
+    $\mean{\Delta_{nLTT}}$ & Average nLTT statistic value of a posterior \\
+    $\median{\Delta_{nLTT}}$ & Median nLTT statistic value of a posterior \\
+    \hline
+  \end{tabular}
+  \caption{
+    Parameter descriptions. The sections are (1) the biological parameters, (2) the
+    biological tuning parameters, (3) parameters involved in replication, (4) MCMC
+    tuning parameters, and (5) other symbols.
+  }
+  \label{table:parameter_descriptions}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\todo{@RSE: would you prefer $t_{\mean{ds}}$ or $\mean{t_{ds}}$ for average duration of speciation?}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}
+  \centering 
+  \begin{tabular}{l l}
+    \hline
+    Parameter             & Values \\
+    \hline
+    \hline
+    $b = b_g = b_i$       & 0.1, 0.5, 1.0 \\
+    $\lambda$             & 0.1, 0.3, 1.0, $10^6$ \\
+    $\mu = \mu_g = \mu_i$ & 0.0, 0.1, 0.2, 0.4 \\
+    \hline
+    $t_c$                 & 15 \\
+    $r$                   & 0.01 \\
+    $l_a$                 & $10^3$, $10^4$ \\
+    \hline
+    $n_i$                 & 20 \\
+    $n_a$                 & 2 \\
+    $n_b$                 & 2 \\
+    \hline
+    $n_s$                 & $10^3$ \\
+    $i_s$                 & $10^3$ \\
+    \hline
+  \end{tabular}
+  \caption{
+    Parameter values. The sections are (1) the biological parameters, (2) the
+    biological tuning parameters, (3) parameters involved in replication, 
+    and (4) MCMC tuning parameters.
+  }
+  \label{table:parameter_values}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Biological parameters
+
+This study primarily investigates combinations of the five biological 
+parameters ($b_g$, $b_g$, $\lambda$, $\mu_g$ and $\mu_g$, 
+see also figure \ref{fig:pbd_states} and table \ref{table:parameter_descriptions}), 
+in a close to full factorial fashion, with two exceptions.
+First, following \cite{etienne2014estimating}, birth and extinction rates were each 
+set equal between good and incipient species ($b_g = b_i$, and $\mu_g = \mu_i$).
+Second, only parameter combinations with speciation initiation rates greater
+than extinction rates were used ($b_g > \mu_g$). The values 
+used in the experiment (see table \ref{table:parameter_values}) 
+were selected to have a reasonable expected number of incipient 
+lineages, $E(n_{ti})$, where \todo{?too basic to have a reference to? I assume Kendall, 1948, \cite{kendall1948generalized}, but could not look it up here and now}: 
+
+\begin{equation}
+  E(n_{ti}) = e^{ (b - \mu) \cdot t_c }
+\end{equation}
+
+One value of speciation completion rate $\lambda$ is set (close to) infinity, as
+then the protracted speciation model falls back to a constant-rate 
+(non-protracted) birth-death model [?Etienne et al., 2012 or already Rosindell and Etienne 2011?].
+
+% Biological tuning parameters
+
+Secondarily, there are three biological tuning parameters. The crown age of
+the incipient species tree, $t_c$, is set to 15 million years for all simulations, 
+following \cite{etienne2014estimating}. The per-nucleotide mutation rate, $r$, and the
+DNA aligment length, $l_a$, together must be tuned to result in informative
+DNA alignments (see section \ref{subsec:simulating_alignments}). $r$ is identical in all
+simulations. Increasing $l_a$ results in more informative alignments, and this
+effect is measured by using two values of $l_a$ 
+per biological parameter combination.
+
+% Replication parameters
+
+All processes involving stochasticity have replicates. 
+For each set of parameters, $n_i$ incipient species trees are simulated. 
+From each species tree, $n_a$ alignments are simulated. From each alignment, 
+$n_b$ posteriors are generated.
+
+% MCMC tuning parameters
+
+The posteriors are generated using BEAST2, which uses a Monte-Carlo Markov-Chain (MCMC)
+algorithm. This algorithm is tuned to result in a high effective sample size (ESS) by
+two constants. The first constant is the MCMC sampling interval, which is $i_s$ states.
+$i_s$ which must be high enough to avoid correlation between subsequently sampled posterior states.  
+The second constant is the number of MCMC state samples, $n_s$, which equals the ESS iff \todo{@RSE: Can I use iff?}
+$i_s$ is high enough to have no correlation between subsequently sampled posterior states.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Simulating incipient species trees}
+\label{subsec:simulating_incipient_species_trees}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+From each parameter set, $n_i$ incipient species trees with a crown age
+of $t_c$ and at least two extant taxa, 
+are created in R \cite{R} using the PBD package \cite{PBD}.
+The values of the biological parameters encourage that the number of tips in
+each phylogeny is kept within computational limits. However, due to
+the stochastic nature of the Doob-Gillespie algorithm used in the creation
+of these phylogenies, phylogenies can, by chance, become very big. 
+There is no maximum number of taxa set, yet imposed instead by the R 
+programming language itself, due to a limit on the amount of memory that can be 
+allocated. The incipient species trees that could not be simulated are
+counted and discarded from further analysis.  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Sampling species trees}
+\label{subsec:sampling_species_trees}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Per incipient species tree, two species trees are created. 
+To create a species tree (a tree in which each species is represented once)
+for an incipient species tree, one representative for each species is picked. 
+If a species has initiated one or more incipient species, either the youngest
+or the oldest representative is picked. See figure \ref{fig:sampling} for an example.
+
+An alternative sampling method would be to pick 
+random representatives of each species. This would decrease the variability
+between the two species tree. Maximizing variability between the two
+species trees allows for clearer measuments on the effect of sampling.   
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+  \centering 
+  \CreateTikzFigureSampling{}
+  \caption{
+    Sampling an incipient species tree. 
+    A) At stem age $t_0$, $A1$ is present.
+    At crown age $t_1$, its derived incipient species $A2$ is born. 
+    At $t_2$, $A2$ itself speciates into a new (unnamed) species, 
+    that becomes good species $B$ at $t_3$. At present time, $t_4$, there
+    exist two possible representatives of species $A$. 
+    B) Using the oldest representative, $A1$, to represent species $A$, the crown
+    age of the resulting species tree lies at $t_1$. 
+    C) Using the youngest representative, $A2$, to represent species $A$, the crown
+    age of the resulting species tree lies at $t_2$. 
+  }
+  \label{fig:sampling}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Simulating alignments}
+\label{subsec:simulating_alignments}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+From each species tree, $n_a$ DNA alignments were simulated that match the
+phylogeny's structure, using the phangorn R package \cite{phangorn}. 
+Each alignment contains one DNA sequence per species 
+of $l_a$ nucleotides. The alignment follows the Jukes-Cantor nucleotide 
+subsititution model \cite{cantor1969mammalian}, 
+with per-nucleotide rate of mutation, $r$.
+
+The Jukes-Cantor
+nucleotide substitution model is regarded as an oversimplification of 
+nature \cite{unknown}. In this in silico experiment, however, we simulate first
+a DNA alignment from a phylogeny using nucleotide substitution model $M_N$, 
+then infer a phylogeny from that DNA alignment, assuming nucleotide substitution model $M_N$.
+Too reduce unnecessary complexity, $M_N$ is chosen to be the simplest possible.
+
+The combination of $l_a$ and $r$ is tuned to result in informative alignments. 
+Within a maximally informative alignment, each species has its own unique DNA sequence.
+Additionally, the Jukes-Cantor distance \cite{unknown} between any 
+two sequences must be calculable, which is when the proportion of matching nucleotides is below 75\%.
+The tuning was done using an $l_a$ of $10^3$ nucleotides, 
+as this appears to be the current median of the sequenced genome lengths, as currently published.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Simulation of posteriors}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+From each DNA alignment, $n_b$ posteriors of phylogenies and parameter combinations 
+is constructed, using BEAST2, a Bayesian phylogenetic tool \cite{bouckaert2014beast}.
+The nucleotide substitution model is set to 
+be Jukes-Cantor (one nucleotide substition rate category, no invariant nucleotides) 
+and a strict molecular clock, which matches the procedure the DNA alignments are generated, 
+as described in section \ref{subsec:simulating_alignments}).
+The tree prior is set to the (non-protracted) birth-death model, 
+with an uniform prior for birth-rate of range $[0, 10^5]$ and 
+a uniform death-per-birth rate prior of range $[0, 1]$. 
+The MCMC creation parameters were set to have $n_s$ states, sampled at an interval of $i_s$ states.
+
+An MCMC must have an effective sample size (ESS) of at least 200 to result in a 
+posterior that is 'adequate' \cite{drummond2015bayesian}. Due to the multiple 
+sources of stochasticity in the preceding steps, this ESS may not always be achieved.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Analysis}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+To quantify the error, each species tree is compared with the posterior derived
+from its $n_a$ alignments (for example, B1 and D1 in figure \ref{fig:experiment}).
+This is by calculating the nLTT statistic \cite{janzen2015approximate}
+between the species tree and each of its posterior's trees (using 
+the nLTT package \cite{nLTT}), resulting in an nLTT statistic distribution. 
+
+% BD trees
+
+The nLTT statistic distribution for all simulations with a high speciation 
+completion rate is visualized for the different parameter values. This allows
+to see the baseline error. Instead of using a complete
+nLTT statistic distribution, also the mean value of each posterior is 
+sometimes used to reduce variance in this.
+
+The effect of speciation completion time $\lambda$ is visualized, by showing
+nLTT statistic distributions for the different parameter values, for all values
+of $\lambda$. 
+
+Instead of using the parameter value of $\lambda$ as a proxy for protractedness,
+the speciation completion time, $t_{sc}$, and average duration of speciation, $t_{\mean{ds}}$, 
+are used. Speciation completion time, $t_{sc}$, is simply the inverse of the
+speciation completion rate $\lambda$:
+
+\begin{equation}
+  t_{sc} = \frac{1}{\lambda}
+  \label{eq:speciation_completion_time}
+\end{equation}
+
+The speciation completion time differs from the observed average speciation time, 
+as incipient species may go extinct and may produce other incipient species 
+that complete speciation before the original incipient one. The average duration 
+of speciation, $t_{\mean{ds}}$, takes this into 
+account \todo{check formula ?19 of?20 in Etienne et al., 2012, then cite}:
+
+\begin{equation}
+    t_{\mean{ds}} = \mean{\rho} = \frac{2}{ (D - \lambda + b_i - \mu_i) \cdot \ln{ \frac{2}{(1 + (\lambda - b_i + \mu_i)/D)}  } }
+\end{equation}
+
+where $D$ is defined as:
+
+\begin{equation}
+    D = \sqrt{ (\lambda + b_i)^2 + 2 \cdot (\lambda - b_i) \cdot \mu_i + \mu_i^2 }
+\end{equation}
+
+For each simulation, the expected $t_{\mean{ds}}$ is calculated from its parameter 
+values (using the PBD package \cite{PBD}), after which the nLTT statistic 
+distributed is plotted, to see the effect of protractedness on the nLTT statistic
+distribution.
+
+As not all simulations result in posteriors with an adequate ESS, the
+effect that a below-median or above-median ESS has on the nLTT statistic
+distribution is displayed. 
+
+To view the effect of alignment length, $l_a$, the nLTT statistic
+distributions are plotted side-by-side for all other parameter values. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Peripherals}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Simulating incipient species trees, sampling species trees, simulating alignments
+and creating posteriors, are done with the wiritttes package \cite{wiritttes}. The
+analysis is done with the wiritttea package \cite{wiritttea}. Those packages rely on 
+functionality in the APE \cite{APE}, geiger \cite{GEIGER}, ggplot2 \cite{ggplot2}, 
+RBeast \cite{RBeast}. Quality of these packages is assured by 
+the covr \cite{covr}, devtools \cite{devtools}, 
+goodpractice \cite{goodpractice}, lintr \cite{lintr}, testit \cite{testit} 
+and testthat \cite{testthat} packages, using the Travis CI \cite{travis} continuous integration service. 
+Both packages are hosted at GitHub \cite{github}, a good practice for computational
+scientists \cite{perez2016ten} and helps improve transparency \cite{gorgolewski2016practical}.
+Code coverage, which correlates with code quality \cite{del1995correlation}, 
+is above 90\% for both packages.
+
+The simulated dataset can be downloaded from DataDyrad [but not yet]. The
+summarized dataset can be downloaded at \cite{wirittte_data}. The
+pre-publication of this article can be downloaded at \cite{wirittte_article}. 
+
+Simulations and analyis was mostly performed on the Peregrine 
+high performance computing cluster of the University of Groningen.

@@ -1,0 +1,95 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Misc}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\todo{remove this section}
+
+\subsection{The $\Delta r$ statistic from \cite{pigot2010shape}}
+
+The $\Delta r$ statistic from \cite{pigot2010shape}:
+
+\begin{equation}
+  \Delta r=\frac{ln\left(\frac{L(T)}{L(\frac{1}{2}T)}\right)-ln\left(\frac{L(\frac{1}{2}T)}{L(0)}\right)}{ln\left(\frac{L(T)}{L(\frac{1}{2}T)}\right)+ln\left(\frac{L(\frac{1}{2}T)}{L(0)}\right)}
+  \label{eq:delta_r}
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Gamma statistic}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Worse than nLTT \cite{janzen2015approximate}.
+
+Worse than $\Delta r$, as gamma statistic depends on the size of the tree \cite{etienne2012prolonging}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{nLTT}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+By \cite{janzen2015approximate}, outperforms gamma statistic and phylogenetic diversity.
+
+In the R package 'nLTT'
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Normalized rooted branch score}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\todo{Better distinguish NRBS and NRTS}
+
+See \cite{heled2010bayesian}.
+
+It is to estimate the distance between two trees:
+
+First obtain the (non-normalized) rooted branch score:
+
+\begin{equation}
+  \left|T_{1},T_{2}\right|=\sqrt{\sum_{c\in T_{1}\cup T_{2}}\left(B\left(T_{1},c\right)-B\left(T_{2},c\right)\right)^{2}}
+  \label{eq:root_branch_score}
+\end{equation}
+
+Where:
+
+$T_{x}$ denotes tree $x$, 
+$\left|T_{1},T_{2}\right|$ denotes the (absolute value of the) rooted branch score between tree T1 and T2
+and $B(T,c)$ is 'the length of the branch connecting clade c to the tree if it is present in T, 0 otherwise'
+
+Normalization:
+
+\begin{equation}
+  NRBS = \frac{1}{\left|T\right|}\frac{\sum_{i=0}^{N}\left|T,T_{i}\right|}{N}
+  \label{eq:normalized_root_branch_score}
+\end{equation}
+
+Where:
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Normalized root tree score}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+See \cite{heled2010bayesian}.
+
+It is to estimate the distance between two trees:
+
+First obtain the (non-normalized) rooted branch score:
+
+\begin{equation}
+  \left|T_{1},T_{2}\right|=\sqrt{\sum_{c\in T_{1}\cup T_{2}}\left(D\left(T_{1},c\right)-D\left(T_{2},c\right)\right)^{2}}
+  \label{eq:root_branch_score_huh_again}
+\end{equation}
+
+Where $T_{x}$: tree x
+
+$\left|T_{1},T_{2}\right|$: (absolute value of the) rooted branch score between tree T1 and T2
+
+
+$D(T,c)=\intop_{b_{0}}^{b_{1}}\frac{1}{N_{b}}dt$: b is the branch connecting clade c to the tree if present in T, 0 otherwise.
+
+To cite \cite{heled2010bayesian}: 'This is not a true metric, as branch length and population size are confounded' 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Phylogenetic diversity}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Worse than nLTT \cite{janzen2015approximate}.
+

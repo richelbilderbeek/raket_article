@@ -1,0 +1,449 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Creation of data set}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\todo{First focus on the real results, not their quality}
+
+% Simulation of incipient species trees
+
+\todo{redo with new data}
+
+\todo{create figure or table that shows this}
+
+957 out of 960 incipient species trees have been simulated successfully. 
+The 3 failed simulations created data files bigger than R can read, 
+and have been excluded from further analysis. 
+
+The number of good species ranged from 2 to 14296, with a median of 87 and an average of 503.8. 
+There were 6 phylogenies with only 2 good species.  
+
+% Sampling species trees}
+
+\todo{redo with new data}
+
+For each incipient species trees, two species trees were constructed. 
+In 653 out of 960 cases, these trees had different branch lengths.
+In 302 cases, the trees were identical. In the remaining 5 cases,
+there were computational problems (see figure \ref{fig:exit_statuses}).
+
+% Simulation of alignments
+
+\todo{redo with new data}
+
+For each species tree, $n_a$ alignments have been created, 
+resulting in $960 \cdot 2 \cdot 2 = 3840$ alignments. 
+$?$ of these were informative.
+
+\todo{May result in an overrepresentation of the two same species trees derived from one incipient species tree}
+
+% Simulation of posteriors}
+
+A BEAST2 posterior contains multiple parameter estimates (see figure \ref{fig:ess_distribution} for all),
+and each one has an ESS. An ESS of 200 is acceptable for any parameter estimate.
+The ESS of the tree likelihood should have such a decent ESS. Figure \ref{fig:ess_distribution_likelihood}
+shows the distribution of the likelihood ESS.
+
+\todo{How tp quote https://www.beast2.org/what-is-ess/ ? It states that not all variables
+need to have a high ESS, but 'The likelihoods (both of the tree and coalescent model) should have decent ESSs.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{figure}[!htbp]
+%  \includesvg[width=\textwidth]{figure_ess_distribution_likelihood}
+%  \caption{
+%    Likelihood ESSes. 
+%    The dotted line indicates an 'acceptable' ESS
+%  }
+%  \label{fig:ess_distribution_likelihood}
+%\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Quantification of the error BEAST2 makes on all trees}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+To get a first global impression of the error BEAST2 makes, figure \ref{fig:error}
+shows a histogram of the nLTT statistics, colored by the expected mean
+duration of speciation. As BEAST2 assumes a mean duration of speciation of zero,
+it is expected that the nLTT statistic (a measure of error) is lowest. Zooming
+in on the left part of the distribution, there is no clean pattern.
+The right part of the tail of distribution shows that the biggest nLTT
+statistic values are found for high (but not highest) expected mean durations of
+speciation.
+
+\todo{figure \ref{fig:error_for_scr} shows the distribution of errors for all
+combinations of PBD parameters}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{figure}[!htbp]
+%  %\def\svgwidth{0.8\textwidth}
+%  %\input{figure_error_20171009.pdf_tex}
+%  \includesvg[]{figure_error}
+%  \caption{
+%    Histograms of the nLTT statistic distribution for all simulations
+%    The color indicates the expected mean duration of speciation from
+%    red (zero) to purple (highest). Similar colors indicate similar
+%    values of expected mean duration of speciation.
+%  }
+%  \label{fig:error}
+%\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+As the expected correlation appears to be absent, figure 
+\ref{fig:error_expected_mean_dur_spec}, subfigure $a$, 
+shows the correlation between expected
+mean duration of speciation and the nLTT statistic. A linear fit shows
+that there is indeed an increase in error for an increases expected duration
+of speciation. A trendline using locally weighted smoothing, however,
+indicates a more complex relationship. Note that this figure only uses
+a subset of all measurements, consisting of $n_s$ nLTT statistic values 
+per posterior.
+
+Taking the average nLTT value per posterior frees us from computational
+constraints and allows us to use the full data set. The resulting
+plot, figure \ref{fig:error_expected_mean_dur_spec}, subfigure $b$, shows the same pattern:
+A linear fit shows
+that there is indeed an increase in error for an increases expected duration
+of speciation. But now, a trendline using locally weighted smoothing 
+follows this linear relationship closely. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!htbp]
+  %\subfloat[]{
+  %  \includesvg[width=0.33\textwidth]{figure_error_expected_mean_dur_spec}
+  %}
+  %\subfloat[]{
+  %  \includesvg[width=0.33\textwidth]{figure_error_expected_mean_dur_spec_mean}
+  %}
+  %\subfloat[]{
+  %  \includesvg[width=0.33\textwidth]{figure_error_expected_mean_dur_spec_mean}
+  %}
+  \caption{
+    nLTT statistic distribution
+    for different expected mean duration of speciation.
+    Subfigure $a$ takes a sample of all $\Delta_{nLTT}$ values, where
+    subfigure $b$ uses each posterior's $\mean{\Delta_{nLTT}}$.
+    subfigure $c$ uses each posterior's $\median{\Delta_{nLTT}}$.
+    The straight blue line shows a linear
+    fit, the red line a fit using locally weighted smoothing.
+    The dashed horizontal line indicates
+    the mean nLTT statistic for the Birth-Death simulations ($SCR = 10^6$).
+    Note that this figure uses only a subset of all individually measured
+    nLTT statistics
+  }
+  \label{fig:error_expected_mean_dur_spec}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The inference error made is expected to be less for a longer DNA
+alignment length. 
+Figure \ref{fig:error_expected_mean_dur_spec_alignment_length} 
+show the correlation between expected mean duration of speciation 
+and the nLTT statistic for the two different DNA alignment lengths. 
+The first subfigure uses a sample of all $n_s$ individuals nLTT statistics,
+where the second subfigure takes only the posterior's 
+nLTT statistic mean value, for the complete dataset.
+
+Both figures show again that there is an 
+increase in error for an increases expected duration
+of speciation, when assuming a linear relation, and
+a more complex relationship when using locally weighted smoothing. 
+The figures also show that, as expected, 
+the error is less with more information. Additionally,
+a longer DNA alignment length results in a slower accumulation of error
+for increased expected mean duration of speciation.   
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!htbp]
+
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_error_expected_mean_dur_spec_alignment_length}
+  %}
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_error_expected_mean_dur_spec_mean_alignment_length}
+  %}
+
+  \caption{
+    Relation between mean nLTT statistic distribution
+    and  expected mean duration of speciation, for different DNA
+    alignment lengths. Straigh lines show a linear
+    fit, the curved lines use a locally weighted smoothing.
+    The dashed horizontal lines indicates
+    the mean nLTT statistic for the Birth-Death simulations ($SCR = 10^6$)
+    for that DNA alignment length.
+  }
+  \label{fig:error_expected_mean_dur_spec_alignment_length}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+A higher ESS for longer DNA alignments may be an additional
+explanation for the observed slower accumulation of error
+for increased expected mean duration of speciation.
+Figure \ref{fig:ess_expected_mean_dur_spec_alignment_length}
+shows that longer DNA alignments have a higher likelihood ESS, 
+but this trend is weaker than in figure 
+\ref{fig:error_expected_mean_dur_spec_alignment_length} and
+the 95\% confidence intervals of the linearily fitted trendlines only
+stop overlapping for the highest expected mean duration of speciation.
+The locally weighted smoothing trendlines show a different trend,
+suggesting that alignment length has no effect on the
+likelihood ESS.
+
+\todo{Figure \ref{fig:error_alignment_length} shows the same pattern, seperated
+for all combinations of PBD parameters.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!htbp]
+  %\includesvg[width=\textwidth]{figure_ess_expected_mean_dur_spec_alignment_length}
+  \caption{
+    Likelihood ESS and expected mean duration of speciation, for different DNA
+    alignment lengths. Straigh lines show a linear
+    fit, the curved lines use a locally weighted smoothing.
+  }
+  \label{fig:ess_expected_mean_dur_spec_alignment_length}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For each incipient species tree, two species trees were created, by taking
+either the youngest or oldest subspecies to represent each species.
+The effect of this is shown in figure \ref{fig:error_expected_mean_dur_spec_sampling}.
+Both subfigures show the
+error made for different $t_{\mean{ds}}$, where the first subfigure uses a sample
+of all $\Delta_{nLTT}$ values, where the second subfigure uses the $\mean{\Delta_{nLTT}}$
+of each posterior. In both subfigures, the linear and locally weighted smoothing
+have overlapping 95\% confidence intervals, hinting that there is no strong effect
+of the way subspecies are selected to represent their species.  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!htbp]
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_error_expected_mean_dur_spec_sampling}
+  %}
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_error_expected_mean_dur_spec_mean_sampling}
+  %}
+  \caption{
+    Likelihood ESS and expected mean duration of speciation, for the two
+    different methods to sample species representatives from a subspecies. 
+    Straigh lines show a linear
+    fit, the curved lines use a locally weighted smoothing.
+    See also figure \ref{fig:error_sampling_representative}
+  }
+  \label{fig:error_expected_mean_dur_spec_sampling}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\note{Figure \ref{fig:error_sampling_representative} shows the same data, ordered
+by the different PBD parameters instead}
+
+The effect of having a low or high tree likelihood ESS is shown in 
+figure \ref{fig:figure_error_expected_mean_dur_spec_low_high_ess}. We
+define a low ESS as being below median, where a high ESS is defined as 
+above-median. Plotting (a sample of or the means of) the nLTT statistic for different mean
+duration of speciation for a low an high ESS, shows that there is no clear
+difference in error made for posteriors with either low or high tree likelihood ESSes.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!htbp]
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_error_expected_mean_dur_spec_low_high_ess}
+  %}
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_error_expected_mean_dur_spec_mean_low_high_ess}
+  %}
+  \caption{
+    Likelihood ESS and expected mean duration of speciation, for the lower and upper half of the tree likelihood ESSes. 
+    Straigh lines show a linear
+    fit, the curved lines use a locally weighted smoothing.
+    See also figure \ref{fig:error_sampling_representative}
+  }
+  \label{fig:figure_error_expected_mean_dur_spec_low_high_ess}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+It is expected that the bigger phylogeny is simulated, the less the error
+will be. Figure \ref{fig:figure_error_tree_size} shows the relation between the
+number of taxa and the mean nLTT statistic. Although most simulated
+phylogenies have less than 250 taxa, there is a clear positive trend, 
+which is the opposite of the
+expactation: the bigger the phylogeny, the bigger the error made.
+As the nLTT statistic normalized for the number of taxa, some other
+mechanism must be involved. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!htbp]
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_error_tree_size}
+  %}
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_error_tree_size_mean}
+  %}
+  \caption{
+    The effect of tree size on nLTT.
+    Straigh lines show a linear
+    fit, the curved lines use a locally weighted smoothing.
+    The linear fit and $R^2$ valaues are shown
+  }
+  \label{fig:figure_error_tree_size}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For each species tree, $n_a$ different alignments are simulated. For each of
+these alignments, $n_b$ posteriors are simulated, using the same alignment. 
+It is assumed that two posteriors from the same alignment
+give rise to the same parameter estimates distributions.
+distribution. Figure \ref{fig:figure_posterior_distributions_likelihood} 
+shows the distribution of Mann-Whitney U test p-values for each pair of 
+posteriors working on a same alignment, 
+using their tree likelihood estimates.
+
+The figure shows that the tree likelihood posterior distributions 
+from a same alignment nearly always
+are significantly different. Subfigure (b) and (c) show the distribution of
+tree likelihood estimates for a posterior pair with the lowest (b) and 
+highest (c) p-value.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!htbp]
+  %\subfloat[]{
+  %  \includesvg[width=0.8\textwidth]{figure_posterior_distribution_likelihoods}
+  %}
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_posterior_distribution_likelihoods_low}
+  %}
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_posterior_distribution_likelihoods_high}
+  %}
+  \caption{
+    (a) Mann-Whitney U test p-values between $n_b$ posteriors working on the same DNA alignment
+    for tree likelihood estimates.
+    Low p-values indicate the distributions are different.
+    High p-values indicate the distributions can be rejected to be different.
+    The vertical dotted line shows the p-value of 0.05.
+    (b) and (c): distribution of tree likelihoods for the two posteriors that had the lowest
+    (b) and highest (c) p-value.
+  }
+  \label{fig:figure_posterior_distributions_likelihood}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Posteriors based on the same alignment are also (next to estimated tree likelihood) 
+assumed to have a similar nLTT statistic distribution. 
+Figure \ref{fig:figure_posterior_distribution_nltt} 
+shows the distribution of Mann-Whitney U test p-values for each pair of 
+posteriors working on a same alignment, 
+using their nLTT statistics.
+
+The figure shows that the nLTT statistic distributions 
+from a same alignment are commonly different and commonly the same. 
+Subfigures $(b)$ and $(c)$ show the distribution of
+nLTT statistics for a posterior pair with the lowest $(b)$ and 
+highest $(c)$ p-value.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!htbp]
+  %\subfloat[]{
+  %  \includesvg[width=0.8\textwidth]{figure_posterior_distribution_nltts}
+  %}
+  %
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_posterior_distribution_nltts_low}
+  %}
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_posterior_distribution_nltts_high}
+  %}
+  \caption{
+    $(a)$ Mann-Whitney U test p-values between $n_b$ posteriors working on the same DNA alignment
+    for nLTT statistics.
+    Low p-values indicate the distributions are different.
+    High p-values indicate the distributions can be rejected to be different.
+    The vertical dotted line shows the p-value of 0.05.
+    $(b)$ and $(c)$: distribution of nLTT statistics for the two posteriors that had the lowest
+    $(b)$ and highest $(c)$ p-value.
+  }
+  \label{fig:figure_posterior_distribution_nltt}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The nLTT statistic normalizes a phylogeny to have a crown age of 1.
+To prevent overlooking patterns in posterior crown ages, 
+figure \ref{fig:figure_posterior_distribution_crown_ages}
+shows the distribution of crown ages of all simulations.
+Almost all simulations have a crown age close to $0.15$, but there
+are rare cases with crown ages above $0.2$, ranging to $83.4$.
+
+\todo{I think it is very suspicious that the range centers on 0.15, when
+the crown age is 15. Check this!}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!htbp]
+  %\subfloat[]{
+  %  \includesvg[width=0.8\textwidth]{figure_posterior_distribution_crown_ages}
+  %}
+  %
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_posterior_distribution_crown_ages_low_count}
+  %}
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_posterior_distribution_crown_ages_high_count}
+  %}
+  \caption{
+    $(a)$ Distribution of crown ages in all posteriors. 
+    The horizontal line indicates the maximum count for subfigure $(b)$. 
+    The vertical line shows the maximum crown age for subfigure $(c)$.
+    $(b)$ Rare crown ages
+    $(c)$ Common crown ages
+  }
+  \label{fig:figure_posterior_distribution_crown_ages}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Again, it is assumed that posteriors based on the exact same alignment
+have a similar crown age distribution. Of all posterior pairs, the Mann-Whitney
+U test p-values are shown in figure \ref{fig:figure_posterior_distribution_crown_ages_p_values}.
+It shows that crown age distributions being different is common and these
+being the same is uncommon. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[!htbp]
+  %\subfloat[]{
+  %  \includesvg[width=0.8\textwidth]{figure_posterior_distribution_crown_ages_p_values}
+  %}
+  %
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_posterior_distribution_crown_ages_lowest_p_value}
+  %}
+  %\subfloat[]{
+  %  \includesvg[width=0.5\textwidth]{figure_posterior_distribution_crown_ages_highest_p_value}
+  %}
+  \caption{
+    $(a)$ Mann-Whitney U test p-values comparing the distribution of crown ages
+    between each posterior pair.
+    $(b)$ Crown age distributions of a posterior pair with the lowest p-value
+    $(c)$ Crown age distributions of a posterior pair with the highest p-value
+  }
+  \label{fig:figure_posterior_distribution_crown_ages_p_values}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+It is expected that if a tree is created by a Birth-Death process, BEAST2 is able
+to reasonably estimate those parameters.
+
+%a) `figure_posterior_distribution_bd_bd` histogram of BirthDeath, vertical line at simulation value	
+%b) `figure_posterior_distribution_bd_br2` histogram of birthRate2, vertical line at simulation value	
+%c) `figure_posterior_distribution_bd_rdr2` histogram of relativeDeathRate2, vertical line at simulation value
+%figure_posterior_distribution_bd
+
+
+
+% Bad species tree:
+% figure_error_posterior_nltt_bad_stree
+% figure_error_posterior_nltt_bad_post_tree
+
+
