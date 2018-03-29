@@ -9,7 +9,7 @@
 
 % Affiliations
 \usepackage{authblk}
-\title{The error when inferring phylogenies with incipient species by a Birth-Death model}
+\title{Stage 1 Registered Report: The error when inferring phylogenies with incipient species by a Birth-Death model}
 % \subtitle{Should protracted speciation be incorporated in phylogenetic tree construction methods?}
 
 \author[1]{Rich\`el J.C. Bilderbeek}
@@ -80,58 +80,84 @@
 
 \maketitle
 
-\begin{abstract}
-
-  The construction of phylogenies helps us answer evolutionary biological
-  questions.
-  Our current phylogenetic tools ignore the fact that speciation takes time,
-  which has an effect unknown in phylogeny reconstruction.
-  Here, we simulate true incipient species trees and their corresponding
-  DNA alignments, from which we measure the reconstruction of the phylogeny
-  using a standard birth-death model.
-  We measure the errors that the Bayesian phylogenetic software tool BEAST2
-  gives when recovering simulated phylogenies, for different times-to-speciate,
-  under a range of additional parameter settings.
-  It has been found that branch lengths are consistently and strongly 
-  underestimated for biologically relevant parameters.
-  This research shows that protractedness is a complexity of nature that
-  cannot always be ignored and should be incorporated in our phylogenetic
-  tools.
-
-\end{abstract}
-
-{\bf Keywords:} computational biology, evolution, phylogenetics, BEAST2, R
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-What is the effect of sampling either the youngest or oldest species-to-be
-to represent a species?
+Phylogenetics enables us to infer which species lived when and
+estimate how long it took for a species to give rise to a new
+lineage. Phylogenies show us taxa that have completed speciation, yet
+those taxa only: species that are in the process of speciation are 
+overlooked.
 
-What is the effect of protractedness on the inference error we make?
+There are multiple reasons why a speciation event, during
+or after its course, goes unnoticed. It may be that the build-up
+of reproductive isolation is still in an intermediate stage. But it
+may also be that speciation has completed, but we, humans, have not
+yet observed it. One example are the four African giraffe species, 
+that have been thought to have been one single species up until 2016,
+where the MRCA of the two most recent species goes back 1.6 million years.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Pilot experiments}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+It took some time until the Birth-Death model, a phylogenetic model
+assuming constant rates of speciation and extinction, got extended
+by a version that incorporates the fact that speciation takes time.
+This extension is called the Protracted Birth-Death model. In this
+model, a branching event does not give rise to a new species, but to
+a new species-to-be, called an incipient species. Such an incipient
+species may go extinct, or finish its speciation to become a good species.
 
-Do the DNA sequence length and mutation rate (as described in the Methods)
-give a good enough inference? Answer: pick the setting with the highest
-expected number of taxa (highest speciation initiation and completion rate, 
-no extinction). Simulate 1000 trees and obtain an nLTT distribution for a
-reference DNA sequence length and mutation rate. Increasing DNA sequence length
-or mutation rate increases the resolution of the experiment. This resolution
-must not be too low (this would cost accuracy), nor too high (this would cost
-too much computational resources). If doubling DNA length or DNA mutation rate
-results in an nLTT distribution with 90% overlap with the reference distribution,
-in 900 of 1000 cases, the (lower) reference resolution is considered high enough.
+Although we know speciation takes time, most of our theoretical 
+phylogenetic modeling ignores this fact. To the best of our knowledge,
+there is no tool incorporating this fact. One reason may be to ease
+computation, enabling researchers to work on bigger phylogenies (with
+more power statistical power) instead. Additionally, speciation being
+protracted is only playing a role in the present. As seen from the present,
+all older species have finished speciation, as we -by definition- recognize
+these species as such. 
 
-What is the MCMC chain length that gives a posterior ESS of 200 in all cases?
-Answer: run all simulations, measure the posterior's ESS. If at least one 
-ESS is lower than 200, elongate all MCMC chain lengths by a fraction 
-to predict to increase it to 220 (for example, would the lowest ESS be 165, 
-making the MCMC chains 33\% longer would bring it to (165\%*1.33=) 220. We use
-220 to prevent an asymptotic approaching to 200. 
+There are problems with ignoring protracted speciation. A very pragmatic
+example is the conservation of the now four smaller groups of giraffes,
+instead of one big group. But from a more theoretical perspective, the
+observed decline of speciation rate in time (excluding the contemporary human-driven
+mass extinction event) may be explained by these new species not being 
+recognized yet. Another problem is that the MRCA of young species is estimated 
+incorrectly, as in the BD model a species can be ultra-young (as speciation
+is assumed to be instantaneous), where the PBD model will place these MRCAs
+further back in time (as two events need to have finished completion).
+
+From a theoretical point of view, there is another reason why protracted
+speciation has yet become a member of our toolbox: there is no framework
+where it fits in: a framework assumes either an analysis at the species or
+subspecies level. When picking a tool that does its analysis at the
+species level, there is no protocol how to select which incipient species
+gets to represent the full species it is still a member of. When picking
+a tool at the sub-species level, the incipient state disappears as a
+sub-species lineage, and the process degrades to an ordinary birth-death 
+process.
+
+This research's goals are two-fold, which are (1) to quantify the
+inference error we make with contemporary tools assuming a Birth-Death
+process, and (2) to establish a protocol how to sample incipient species
+to represent a species in such a tool.
+
+To quantify the inference error, we simulate 'true' incipient species
+trees, sample a 'true' species trees from those, simulate a DNA alignments 
+that follows a species tree's ontogeny, then infer a posterior of
+phylogenies from each alignment. The 'true' species tree is compared to
+the posterior's phylogenies with the nLTT statistic, which can be viewed
+as a measure of similarity. We expect this error to increase with an
+increasing protractednedness (that is, a low speciation completion rate),
+but as the extent of this error has never been measured, we will be the
+first to measure it.
+
+To establish a protocol how to sample incipient species to represent species,
+we compare two sampling methods that are opposites of one another: one
+method is to select the oldest sub-species member to represent a species,
+the other method picks the youngest sub-species member. As we do not have
+a way to determine which sampling method will be better, all we determine
+is if the sampling methods are different. We expect these
+sampling methods to be equivalent. This research measures the extent to
+which this is true.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Methods}
@@ -205,6 +231,28 @@ of these nLTT distributions as described above. Per protracted parameter setting
 we generate 1000 replicate incipient species trees, each sampled randomly. We show the 
 average divergence of these 1000 replicates and the verbal label.
 The distribution of these divergences is shown in the supplementary information.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Pilot experiments}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Do the DNA sequence length and mutation rate (as described in the Methods)
+give a good enough inference? Answer: pick the setting with the highest
+expected number of taxa (highest speciation initiation and completion rate, 
+no extinction). Simulate 1000 trees and obtain an nLTT distribution for a
+reference DNA sequence length and mutation rate. Increasing DNA sequence length
+or mutation rate increases the resolution of the experiment. This resolution
+must not be too low (this would cost accuracy), nor too high (this would cost
+too much computational resources). If doubling DNA length or DNA mutation rate
+results in an nLTT distribution with 90% overlap with the reference distribution,
+in 900 of 1000 cases, the (lower) reference resolution is considered high enough.
+
+What is the MCMC chain length that gives a posterior ESS of 200 in all cases?
+Answer: run all simulations, measure the posterior's ESS. If at least one 
+ESS is lower than 200, elongate all MCMC chain lengths by a fraction 
+to predict to increase it to 220 (for example, would the lowest ESS be 165, 
+making the MCMC chains 33\% longer would bring it to (165\%*1.33=) 220. We use
+220 to prevent an asymptotic approaching to 200. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
