@@ -197,28 +197,31 @@ This alignment is used to infer a posterior of, using BEAST2. We assume a
 JC69 nucleotide substitution (as we do use that), a strict clock model (as
 we have that) and a Birth-Death tree prior (as this simplification is the goal
 of this research). Additionally, we assume a MRCA prior with a normal distribution
-with a mean of the crown age, and a standard deviation of 0.001 time units (which
-equates to 1000 years). After discarding a burn-in of 10\%, the MCMC algorithm must 
+with a mean of the crown age, and a standard deviation of 0.001 time units. 0.001
+time units equates to 1000 years, which is the same resolution as which the
+alignment is created. After discarding a burn-in of 10\%, the MCMC algorithm must 
 result in an ESS of the posterior of at least 200 and the MCMC chain length is 
-chosen as such that this is the case for all simulations.
+chosen as such that this is the case for all simulations. For simulations
+with an ESS below 200, their MCMC chain length is elongated. An
+MCMC chain is elongated by the proportion that is expected to increase it to 220. 
+For example, would an ESS be 165, increasing its MCMC chain length by 33\% 
+would bring it to (165\%*1.33=) 220. We use
+220 as a safeguard to prevent an asymptotic approach to 200. 
 
-The similarity of each phylogeny in the posterior with 'the true species tree'
-is determined with the nLTT statistic. In this way, a distribution of phylogenies
-is transformed to a distribution of nLTT statistics. 
+The nLTT statistic is used to quantify the similarity of each posterior's phylogeny 
+with 'the true species tree'. In this way, a distribution of phylogenies
+is transformed to a distribution of nLTT statistics. With this, the generative
+model of this experiment has been completely described, from parameter estimates
+to data (nLTT statistics) generated.
 
-To measure if sampling (either the youngest or oldest species-to-be to represent
-a species) matters, for all parameter combinations that have incipient species,
+To quantify the effect of sampling (either the youngest or oldest species-to-be to represent
+a species), for each parameter set that allows for incipient species,
 we simulate 1000 incipient species trees that result in different species trees
 when sampled either way. From each species tree, we compare the nLTT distributions
-derived from the posterior. We quantify the Kullback-Leibler divergence (more
-or less: the weighted fraction of overlapping nLTT 
-values, which is zero if the two distributions are completely seperate, and close
-to one if they overlap). For each parameter combination, we take the average
-divergence. We assign verbal labels to this average divergence as such: 
-0.0-0.25: clear effect, 0.25-0.5: strong effect, 0.5-0.75: mild effect, 
-0.75-1.0: no effect. Per parameter setting, we show the average divergence and the 
-verbal label. The distribution of these divergences is shown in the 
-supplementary information.
+for the two sampling methods. These distributions are compared 
+using the method described in [Kruschke 2013], with a non-informative
+prior. In brief: if the 95\% Highest Density Interval of the differences between 
+these two distributions excludes zero, it is credible the distributions are different. 
 
 To measure if protractedness matters, we compare the nLTT distribution per
 combination of speciation initiation and extinction rate for a protracted
@@ -226,33 +229,12 @@ setting with its non-protracted (with a high speciation completion
 rate) setting. So, for each speciation initiation and extinction rate, 
 the nLTT statistic distribution of the 
 non-protracted setting is used as the baseline. That distribution is compared
-with each protracted setting. We quantify the Kullback-Leibler divergence 
-of these nLTT distributions as described above. Per protracted parameter setting, 
-we generate 1000 replicate incipient species trees, each sampled randomly. We show the 
-average divergence of these 1000 replicates and the verbal label.
-The distribution of these divergences is shown in the supplementary information.
+with each protracted setting. This is done the same way as with the two
+different sampling methods. [NOTE: we expect nLTT to go up for increasing SCR,
+this should be in the method].
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Pilot experiments}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Do the DNA sequence length and mutation rate (as described in the Methods)
-give a good enough inference? Answer: pick the setting with the highest
-expected number of taxa (highest speciation initiation and completion rate, 
-no extinction). Simulate 1000 trees and obtain an nLTT distribution for a
-reference DNA sequence length and mutation rate. Increasing DNA sequence length
-or mutation rate increases the resolution of the experiment. This resolution
-must not be too low (this would cost accuracy), nor too high (this would cost
-too much computational resources). If doubling DNA length or DNA mutation rate
-results in an nLTT distribution with 90% overlap with the reference distribution,
-in 900 of 1000 cases, the (lower) reference resolution is considered high enough.
-
-What is the MCMC chain length that gives a posterior ESS of 200 in all cases?
-Answer: run all simulations, measure the posterior's ESS. If at least one 
-ESS is lower than 200, elongate all MCMC chain lengths by a fraction 
-to predict to increase it to 220 (for example, would the lowest ESS be 165, 
-making the MCMC chains 33\% longer would bring it to (165\%*1.33=) 220. We use
-220 to prevent an asymptotic approaching to 200. 
+[NOTE: We do have more info, from Rampal's earlier articles. Perhaps this 
+info can be put in]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
