@@ -159,6 +159,20 @@ is if the sampling methods are different. We expect these
 sampling methods to be equivalent. This research measures the extent to
 which this is true.
 
+This exploratorary research will produce a data set that maps the biological
+parameters to the error made. The data set will consist out of two files:
+one containing raw data, the other summarized data. 
+A data file should be convenient to handle, thus as an upper limit for this data set's size, 
+we use the maximum size of a table (called a data frame) of the R programming 
+language. Within R, such a table may have maximally $2^{32}-1$ cells and occupy
+less then 2 gigabytes in memory. 
+The raw data file will contain parameters and 1000 nLTT statistics values.
+Each row will contain the parameter set and these nLTT statistics.
+From the constraints of the R programming language, this allows for 40K rows. 
+The file with the summarized data will provide summary statistics of the raw
+data. Each row will contain a parameter set, summary statistics and other
+measurements. See the appendix, chapter 'Data set specifications', for the full list.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Methods}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -276,5 +290,74 @@ and for providing access to the Peregrine high performance computing cluster.
 \bibliographystyle{mee}
 \bibliography{article}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data set specifications}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The raw data file will consist of 40K rows. On each row there will be 1012 values:
+
+\begin{itemize}  
+  \item 12 simulation parameters:
+  \begin{enumerate}  
+    \item speciation initiation rate
+    \item speciation completion rate
+    \item extinction rate
+    \item crown age
+    \item crown age sigma
+    \item sampling method
+    \item mutation rate
+    \item sequence length
+    \item mcmc length
+    \item tree sim rng seed
+    \item alignment rng seed
+    \item beast2 rnd seed
+  \end{enumerate}
+  \item 1000 nLTT statistics
+\end{itemize}
+
+The summarized data file will consist of 40K rows. On each row there will be 29 values:
+
+\begin{itemize}  
+  \item 12 simulation parameters:
+  \begin{enumerate}  
+    \item speciation initiation rate
+    \item speciation completion rate
+    \item extinction rate
+    \item crown age
+    \item crown age sigma
+    \item sampling method
+    \item mutation rate
+    \item sequence length
+    \item mcmc length
+    \item tree sim rng seed
+    \item alignment rng seed
+    \item beast2 rnd seed
+  \end{enumerate}
+  \item number of taxa in incipient species tree (also: number of subspecies)
+  \item number of taxa in species tree (also: number of species)
+  \item mean nLTT statistic
+  \item median nLTT statistic
+  \item lower bound of 95\% HPD value of nLTT statistic
+  \item upper bound of 95\% HPD value of nLTT statistic
+  \item 11 ESSes of all parameters estimated by BEAST2:
+  \begin{enumerate}  
+    \item posterior
+    \item likelihood 
+    \item prior 
+    \item treeLikelihood 
+    \item TreeHeight 
+    \item BirthDeath 
+    \item BDBirthRate 
+    \item BDDeathRate 
+    \item logP.mrca 
+    \item mrcatime 
+    \item clockRate
+  \end{enumerate}
+\end{itemize}
 
 \end{document}
