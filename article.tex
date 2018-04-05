@@ -135,61 +135,58 @@ a tool at the sub-species level, the incipient state disappears as a
 sub-species lineage, and the process degrades to an ordinary birth-death 
 process.
 
-This exploratory research's goal is to produce a data set that 
-quantifies the inference error we make from choosing an overly
-simplistic prior. In this context, we measure the error made on
-phylogenies in which speciation takes time, when using a Birth-Death
-prior.
+This exploratory research's goal is to produce a 
+usefull and balanced data set, that quantifies the inference error 
+we make from choosing an overly simplistic prior. In this context, 
+we measure the error made on phylogenies in which speciation takes 
+time, when using a Birth-Death prior.
 
+The parameter space the data set explores is inspired on 
+[Etienne et al, 2014] for two reasons: (1) the academic
+reason of being able to compare results, and (2) the practical
+reason that the simulated phylogies will have enough taxa to
+be informative, but not too big to be computationally overdemanding.
+This research uses a complete superset of those parameter settings.
+For the speciation initiation rate, we'll use $0.1$, $0.5$ and $1.0$ 
+speciation initiation events per (good species) lineage per time unit, 
+extending the set of
+values used from one ($0.5$) to three. 
+The speciation completion
+rates used are $0.1$, $0.3$, $1.0$ and $10^6$ speciation completion
+events per (incipient species) lineage per time unit, in which only
+the last value is added as a computational proxy for infinity, which
+makes the experiment fall back to a Birth-Death model (as speciation
+is again instantaneous), allowing to measure the baseline error.
+The extinction rates used are $0.0$, $0.1$, $0.2$ and $0.4$ 
+extinction events per (good or incipient) lineage per time unit,
+in which $0.4$ is a new extinction rate.
+We investigate these parameters in a factorial fashion, except for
+(1) those combinations in which the extinction rate equals or exceeds
+the speciation initiation rate, and (2) the difference between
+speciation initiation rate and extinction rate exceeds 0.8. This is
+done to prevent overly taxon-poor and taxon-rich phylogenies respectively.
 
-To quantify the inference error, we simulate 'true' incipient species
-trees, sample a 'true' species trees from those, simulate a DNA alignments 
-that follows a species tree's ontogeny, then infer a posterior of
-phylogenies from each alignment, using an overly simplistic Birth-Death
-prior. The 'true' species tree is compared to
-the posterior's phylogenies with the nLTT statistic, which can be viewed
-as a measure of similarity. We predict this error to increase with an
-increasing protractednedness (that is, a low speciation completion rate),
-but we cannot predict the the extent of this error, as it has never been 
-measured.
+From each biological parameter set, a protracted birth-death tree is simulated,
+with the same crown age as [Etienne et al., 2014] of 15 million years. 
+Each protracted birth-death tree uses a different random number
+generatior seed, and thus will be unique, resulting in a balanced 
+data set. 
 
-The data set produced by the exploratory reseach will consist out of two files:
-one containing raw data, the other summarized data. 
-A data file should be convenient to handle, thus as an upper limit for this data set's size, 
-we use the maximum size of a table (called a data frame) of the R programming 
-language. Within R, such a table may have maximally $2^{32}-1$ cells and occupy
-less then 2 gigabytes in memory. 
-The raw data file will contain parameters and 1000 nLTT statistics values.
-Each row will contain the parameter set and these nLTT statistics.
-From the constraints of the R programming language, this allows for 40K rows. 
-The file with the summarized data will provide summary statistics of the raw
-data. Each row will contain a parameter set, summary statistics and other
-measurements. See the appendix, chapter 'Data set specifications', for the full list.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Methods}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-We simulate protracted birth-death trees. In a protracted birth-death tree,
-species-to-be are present, but not yet recognized as different from
-their ancestral species. We simulate these trees from the biological parameters 
-in a factorial fashion. Excluded from this are combinations of parameters in which
-speciation initiation rate is lower or equal the extinction rate, as these
-are biologically irrelevant. Out of computational necessity, 
-parameter combinations that result in an expected number of taxa above 1000 
-are removed as well.
-
-From these PBD trees, we sample species tree in two different ways. 
-From all incipient species-to-be, we pick either the youngest or oldest
-species-to-be to represent the full species. This species tree we refer
-to as 'the true species tree'.
+From an incipient species tree, we sample a species tree
+by picking either the youngest or oldest
+species-to-be to represent the full species.
+We use either sampling method in 50\% of all cases. We chose not to use
+a random species-to-be to represent a full species as to maximize variance
+in this aspect. Note that only in few cases (when speciation completion rate
+is low) the sampling method has an effect on the branch length distribution
+of the sampled species tree, as this requires a very specific scenario.
 
 From a species tree, we simulate a DNA alignment that has the same history
 as the phylogeny. The nucleotides of the DNA alignment follow a JC69
 nucleotide substitution model, in which all nucleotide-to-nucleotide transitions
 are equally likely. Although this may seem as a simplification, in our Bayesian
-inference we can use this as a prior, which we know is the truth.
-
+inference (see below) we can use this exact site model as a prior, which we 
+know is the truth.
 The DNA sequence length and mutation rate was chosen as such to provide one
 nucleotide change per 1000 years per lineage. As our time unit is in 
 millions of years, this equates to a rate of 1000 nucleotide substitutions 
@@ -197,10 +194,10 @@ changes per time unit per lineage. To provide for each substitution being unique
 we simulate as much DNA nucleotides as expected mutations, which equals the
 nucleotide substitution rate times the crown age, which equals 15K. As this
 mutation rate is constant over all branches, it in effect follows a strict 
-clock model.
+clock model, which we will specify as the known clock model prior later.
 
-The simulated alignment is the data that could be measured in the field.
-This alignment is used to infer a posterior of, using BEAST2. We assume a
+From an alignment, we run a Bayesian analysis and create a posterior, 
+using the phylogetic tool BEAST2. We assume a
 JC69 nucleotide substitution (as we do use that), a strict clock model (as
 we have that) and a Birth-Death tree prior (as this simplification is the goal
 of this research). Additionally, we assume a MRCA prior with a normal distribution
@@ -212,41 +209,50 @@ chosen as such that this is the case for all simulations. For simulations
 with an ESS below 200, their MCMC chain length is elongated. An
 MCMC chain is elongated by the proportion that is expected to increase it to 220. 
 For example, would an ESS be 165, increasing its MCMC chain length by 33\% 
-would bring it to (165\%*1.33=) 220. We use
-220 as a safeguard to prevent an asymptotic approach to 200. 
+would bring it to (165\%*1.33=) 220. We use 220 as a safeguard to prevent 
+an asymptotic approach to 200. 
 
-The nLTT statistic is used to quantify the similarity of each posterior's phylogeny 
-with 'the true species tree'. In this way, a distribution of phylogenies
-is transformed to a distribution of nLTT statistics. With this, the generative
-model of this experiment has been completely described, from parameter estimates
-to data (nLTT statistics) generated.
+We realize there will be an unavoidable bias in our data set: the MCMC
+algorithm will produce phylogenies that are representative for the joint
+likelihood of (correct) site model, (correct) clock model and 
+(incorrect) (Birth-Death) speciation model. This will
+warp the distribution of phylogenies somewhat towards the incorrect
+speciation model: branch length distributions that are likely in the
+Birth-Death model will be relatively overrepresented. We expect
+this bias to be systematic, equally affecting distributions
+of identical speciation completion rates, and symptomatic
+of using contemporary tools.
 
-To quantify the effect of sampling (either the youngest or oldest species-to-be to represent
-a species), for each parameter set that allows for incipient species,
-we simulate 1000 incipient species trees that result in different species trees
-when sampled either way. From each species tree, we compare the nLTT distributions
-for the two sampling methods. These distributions are compared 
-using the method described in [Kruschke 2013], with a non-informative
-prior. In brief: if the 95\% Highest Density Interval of the differences between 
-these two distributions excludes zero, it is credible the distributions are different. 
+Each posterior's phylogeny is compared to the 'true' species tree.
+To quantify the difference between two phylogenies, the nLTT statistic
+is used. The nLTT statistic equates to the area between the normalized
+lineages-through-time-plots of two phylogenies, which will be a value between 
+zero (for identical phylogenies) and one. As the nLTT statistic increases
+when phylogenies get increasingly different, we use the nLTT statistic
+as a measure of inference error. Comparing the one 'true' species tree
+with each of the posterior's species trees, a distribution nLTT statistics
+is created. 
 
-To measure if protractedness matters, we compare the nLTT distribution per
-combination of speciation initiation and extinction rate for a protracted
-setting with its non-protracted (with a high speciation completion 
-rate) setting. So, for each speciation initiation and extinction rate, 
-the nLTT statistic distribution of the 
-non-protracted setting is used as the baseline. That distribution is compared
-with each protracted setting. This is done the same way as with the two
-different sampling methods. [NOTE: we expect nLTT to go up for increasing SCR,
-this should be in the method].
+We predict that nLTT statistic values increase 
+with an increasing protractednedness (that is, a low speciation completion rate),
+but we cannot predict the the extent of this error, as it has never been 
+measured [NOTE: this may be easy to change: Etienne & Rosindel 2012 show the equations
+for the expected number of lineages through time. I think I may be able to pull
+of a prediction here, by fitting a BD curve on a PBD curve with a minimized error,
+but research would be needed to investigate that].
 
-[NOTE: We do have more info, from Rampal's earlier articles. Perhaps this 
-info can be put in]
-
-[NOTE: as we know the expected number of lineages through time for both BD and PBD
-model, we expect it to fall with the 95\% Highest Density Interval. It would also
-increase support for Rampal's choice of parameter values (next to their 
-computational feasability)]
+The data set produced by this exploratory research will consist out of two files:
+one containing raw data, the other summarized data. 
+A data file should be convenient to handle, thus as an upper limit for this data set's size, 
+we use the maximum size of a table (called a data frame) of the R programming 
+language. Within R, such a table may have maximally $2^{32}-1$ cells and occupy
+less then 2 gigabytes in memory. 
+The raw data file will contain parameters and 1000 nLTT statistics values.
+Each row will contain the parameter set and these nLTT statistics.
+From the constraints of the R programming language, this allows for 40K rows. 
+The file with the summarized data will provide summary statistics of the raw
+data. Each row will contain a parameter set, summary statistics and other
+measurements. See the appendix, chapter 'Data set specifications', for the full list.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -261,9 +267,10 @@ computational feasability)]
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion}
+\section{Glossary}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Please supply, as a separate list, the definitions of field-specific terms used in your article.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Acknowledgements}
@@ -415,6 +422,8 @@ The summarized data file will consist of 40K rows. On each row there will be 29 
     \item alignment rng seed
     \item beast2 rnd seed
   \end{enumerate}
+  \item expected speciation completion time (from Etienne & Rosindell 2012)
+  \item expected duration of speciation (from Etienne & Rosindell 2012)
   \item number of taxa in incipient species tree (also: number of subspecies)
   \item would there be a difference in brach lengths between the two sampling methods?
   \item number of taxa in species tree (also: number of species)
@@ -436,6 +445,7 @@ The summarized data file will consist of 40K rows. On each row there will be 29 
     \item mrcatime 
     \item clockRate
   \end{enumerate}
+  \item [some] MCMC operator acceptances
 \end{itemize}
 
 \end{document}
