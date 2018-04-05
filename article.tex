@@ -135,32 +135,25 @@ a tool at the sub-species level, the incipient state disappears as a
 sub-species lineage, and the process degrades to an ordinary birth-death 
 process.
 
-This research's goals are two-fold, which are (1) to quantify the
-inference error we make with contemporary tools assuming a Birth-Death
-process, and (2) to establish a protocol how to sample incipient species
-to represent a species in such a tool.
+This exploratory research's goal is to produce a data set that 
+quantifies the inference error we make from choosing an overly
+simplistic prior. In this context, we measure the error made on
+phylogenies in which speciation takes time, when using a Birth-Death
+prior.
+
 
 To quantify the inference error, we simulate 'true' incipient species
 trees, sample a 'true' species trees from those, simulate a DNA alignments 
 that follows a species tree's ontogeny, then infer a posterior of
-phylogenies from each alignment. The 'true' species tree is compared to
+phylogenies from each alignment, using an overly simplistic Birth-Death
+prior. The 'true' species tree is compared to
 the posterior's phylogenies with the nLTT statistic, which can be viewed
-as a measure of similarity. We expect this error to increase with an
+as a measure of similarity. We predict this error to increase with an
 increasing protractednedness (that is, a low speciation completion rate),
-but as the extent of this error has never been measured, we will be the
-first to measure it.
+but we cannot predict the the extent of this error, as it has never been 
+measured.
 
-To establish a protocol how to sample incipient species to represent species,
-we compare two sampling methods that are opposites of one another: one
-method is to select the oldest sub-species member to represent a species,
-the other method picks the youngest sub-species member. As we do not have
-a way to determine which sampling method will be better, all we determine
-is if the sampling methods are different. We expect these
-sampling methods to be equivalent. This research measures the extent to
-which this is true.
-
-This exploratorary research will produce a data set that maps the biological
-parameters to the error made. The data set will consist out of two files:
+The data set produced by the exploratory reseach will consist out of two files:
 one containing raw data, the other summarized data. 
 A data file should be convenient to handle, thus as an upper limit for this data set's size, 
 we use the maximum size of a table (called a data frame) of the R programming 
@@ -296,6 +289,90 @@ and for providing access to the Peregrine high performance computing cluster.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Abbreviations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}
+  \centering 
+  \begin{tabular}{l l}
+    \hline
+    Symbol & Description \\
+    \hline
+    \hline
+    $b_g$ & Speciation initiation rate of a good species (probability per lineage, per million year) \\
+    $b_i$ & Speciation initiation rate of an incipient species (probability per lineage, per million year) \\
+    $\lambda$ & Speciation completion rate (probability per lineage, per million year) \\
+    $\mu_g$ & Extinction rate of a good species (probability per lineage, per million year) \\
+    $\mu_i$ & Extinction rate of an incipient species (probability per lineage, per million year) \\
+    \hline
+    $t_c$ & Crown age (million years) \\
+    $r$ & Mutation rate (probability of mutation per nucleotide per million years) \\
+    $l_a$ & DNA alignment length (base pairs) \\
+    \hline
+    $n_i$ & Number of incipient species trees per parameter set \\
+    $n_a$ & Number of alignments per species tree \\
+    $n_b$ & Number of BEAST2 runs per alignment \\
+    \hline
+    $n_s$ & Number of MCMC samples \\
+    $i_s$ & MCMC sampling interval \\
+    \hline
+    $n_{ti}$ & Number of taxa in an incipient species tree \\
+    $n_{t}$ & Number of taxa in a (good) species tree \\
+    $t_{\mean{ds}}$ & Average duration of speciation \\
+    $t_{sc}$ & Speciation completion time \\
+    $\Delta_{nLTT}$ & nLTT statistic value \\
+    $\mean{\Delta_{nLTT}}$ & Average nLTT statistic value of a posterior \\
+    $\median{\Delta_{nLTT}}$ & Median nLTT statistic value of a posterior \\
+    \hline
+  \end{tabular}
+  \caption{
+    Parameter descriptions. The sections are (1) the biological parameters, (2) the
+    biological tuning parameters, (3) parameters involved in replication, (4) MCMC
+    tuning parameters, and (5) other symbols.
+  }
+  \label{table:parameter_descriptions}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Parameters}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}
+  \centering 
+  \begin{tabular}{l l}
+    \hline
+    Parameter             & Values \\
+    \hline
+    \hline
+    $b = b_g = b_i$       & 0.1, 0.5, 1.0 \\
+    $\lambda$             & 0.1, 0.3, 1.0, $10^6$ \\
+    $\mu = \mu_g = \mu_i$ & 0.0, 0.1, 0.2, 0.4 \\
+    \hline
+    $t_c$                 & 15 \\
+    $r$                   & 1000 \\
+    $l_a$                 & $15000$ \\
+    \hline
+    $n_i$                 & 178 \\
+    $n_a$                 & 2 per species tree\\
+    $n_b$                 & 2 per alignment\\
+    \hline
+    $n_s$                 & $10^3$ states (sampled)\\
+    $i_s$                 & $10^3$ states (between samples)\\
+    \hline
+  \end{tabular}
+  \caption{
+    Parameter values. The sections are (1) the biological parameters, (2) the
+    biological tuning parameters, (3) parameters involved in replication, 
+    and (4) MCMC tuning parameters.
+  }
+  \label{table:parameter_values}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data set specifications}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -339,6 +416,7 @@ The summarized data file will consist of 40K rows. On each row there will be 29 
     \item beast2 rnd seed
   \end{enumerate}
   \item number of taxa in incipient species tree (also: number of subspecies)
+  \item would there be a difference in brach lengths between the two sampling methods?
   \item number of taxa in species tree (also: number of species)
   \item mean nLTT statistic
   \item median nLTT statistic
