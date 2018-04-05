@@ -9,7 +9,7 @@
 
 % Affiliations
 \usepackage{authblk}
-\title{Stage 1 Registered Report: The error when inferring phylogenies with incipient species by a Birth-Death model}
+\title{The error when inferring phylogenies with incipient species by a Birth-Death model}
 % \subtitle{Should protracted speciation be incorporated in phylogenetic tree construction methods?}
 
 \author[1]{Rich\`el J.C. Bilderbeek}
@@ -236,7 +236,7 @@ is created.
 We predict that nLTT statistic values increase 
 with an increasing protractednedness (that is, a low speciation completion rate),
 but we cannot predict the the extent of this error, as it has never been 
-measured [NOTE: this may be easy to change: Etienne & Rosindel 2012 show the equations
+measured [NOTE: this may be easy to change: Etienne \& Rosindel 2012 show the equations
 for the expected number of lineages through time. I think I may be able to pull
 of a prediction here, by fitting a BD curve on a PBD curve with a minimized error,
 but research would be needed to investigate that].
@@ -258,13 +258,6 @@ measurements. See the appendix, chapter 'Data set specifications', for the full 
 \section{Results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{figure}[]
-  \includegraphics[width=0.9\textwidth]{fig_does_sampling_matter.png}
-\end{figure}
-
-\begin{figure}[]
-  \includegraphics[width=0.9\textwidth]{fig_does_protractedness_matter.png}
-\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Glossary}
@@ -422,8 +415,8 @@ The summarized data file will consist of 40K rows. On each row there will be 29 
     \item alignment rng seed
     \item beast2 rnd seed
   \end{enumerate}
-  \item [NOTE: add yes/no?] expected speciation completion time (from Etienne & Rosindell 2012)
-  \item [NOTE: add yes/no?] expected duration of speciation (from Etienne & Rosindell 2012)
+  \item [NOTE: add yes/no?] expected speciation completion time (from Etienne \& Rosindell 2012)
+  \item [NOTE: add yes/no?] expected duration of speciation (from Etienne \& Rosindell 2012)
   \item number of taxa in incipient species tree (also: number of subspecies)
   \item [NOTE: add yes/no?] would there be a difference in brach lengths between the two sampling methods?
   \item number of taxa in species tree (also: number of species)
