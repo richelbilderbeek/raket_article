@@ -336,157 +336,99 @@ and for providing access to the Peregrine high performance computing cluster.
 \appendix
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Abbreviations}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}
+  \centering 
+  \begin{tabular}{l l l}
+    \hline
+    Parameter             & Description & Values \\
+    \hline
+    \hline
+    $b = b_g = b_i$       & Speciation initiation rate & 0.1, 0.5, 1.0 \\
+    $\lambda$             & Speciation completion rate & 0.1, 0.3, 1.0, $10^6$ \\
+    $\mu = \mu_g = \mu_i$ & Extinction rate & 0.0, 0.1, 0.2, 0.4 \\
+    $t_c$                 & Crown age & 15 \\
+    $\sigma_c$            & Standard deviation around crown age & 0.001 \\
+    M                     & Sampling method & Youngest, oldest \\
+    $r$                   & Mutation rate & 1000 \\
+    $l_a$                 & DNA alignment length & $15000$ \\
+    L                     & MCMC chain length & 1M \\
+    $R_i$                 & RNG seed incipient tree & 1 to 40000 \\
+    $R_a$                 & RNG seed alignment simulation & 1 to 40000 \\
+    $R_b$                 & RNG seed BEAST2 & 1 to 40000 \\
+    \hline
+  \end{tabular}
+  \caption{
+    Overview of the 12 simulation parameters.
+  }
+  \label{table:simulation_parameters}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}
   \centering 
   \begin{tabular}{l l}
     \hline
-    Symbol & Description \\
+    $n$ & Description \\
     \hline
     \hline
-    $b_g$ & Speciation initiation rate of a good species (probability per lineage, per million year) \\
-    $b_i$ & Speciation initiation rate of an incipient species (probability per lineage, per million year) \\
-    $\lambda$ & Speciation completion rate (probability per lineage, per million year) \\
-    $\mu_g$ & Extinction rate of a good species (probability per lineage, per million year) \\
-    $\mu_i$ & Extinction rate of an incipient species (probability per lineage, per million year) \\
+    $12$   & simulation parameters \\
+    $1000$ & nLTT statistic \\
     \hline
-    $t_c$ & Crown age (million years) \\
-    $r$ & Mutation rate (probability of mutation per nucleotide per million years) \\
-    $l_a$ & DNA alignment length (base pairs) \\
     \hline
-    $n_i$ & Number of incipient species trees per parameter set \\
-    $n_a$ & Number of alignments per species tree \\
-    $n_b$ & Number of BEAST2 runs per alignment \\
-    \hline
-    $n_s$ & Number of MCMC samples \\
-    $i_s$ & MCMC sampling interval \\
-    \hline
-    $n_{ti}$ & Number of taxa in an incipient species tree \\
-    $n_{t}$ & Number of taxa in a (good) species tree \\
-    $t_{\mean{ds}}$ & Average duration of speciation \\
-    $t_{sc}$ & Speciation completion time \\
-    $\Delta_{nLTT}$ & nLTT statistic value \\
-    $\mean{\Delta_{nLTT}}$ & Average nLTT statistic value of a posterior \\
-    $\median{\Delta_{nLTT}}$ & Median nLTT statistic value of a posterior \\
+    $12$   & simulation parameters \\
+    $1$ & [NOTE: add yes/no?] expected speciation completion time (from Etienne \& Rosindell 2012) \\
+    $1$ & [NOTE: add yes/no?] expected duration of speciation (from Etienne \& Rosindell 2012) \\
+    $1$ & number of taxa in incipient species tree (also: number of subspecies) \\
+    $1$ & [NOTE: add yes/no?] difference in branch lengths between the two sampling methods? \\
+    $1$ & number of taxa in species tree (also: number of species) \\
+    $1$ & mean nLTT statistic \\
+    $1$ & median nLTT statistic \\
+    $1$ & lower bound of 95\% HPD value of nLTT statistic \\
+    $1$ & upper bound of 95\% HPD value of nLTT statistic \\
+    $11$ & ESSes of all parameters estimated by BEAST2 (see specs below) \\
+    $?10$ & MCMC operator acceptances\\
     \hline
   \end{tabular}
   \caption{
-    Parameter descriptions. The sections are (1) the biological parameters, (2) the
-    biological tuning parameters, (3) parameters involved in replication, (4) MCMC
-    tuning parameters, and (5) other symbols.
+    Specification of the data sets. $n$ denotes the number
+    of columns a certain item will occupy. Above the double horizontal line,
+    the content of the raw data file is specified, resulting in a table of 
+    1012 columns and 40K rows. Below the double horizontal line,
+    the content of the summary data file specified, resulting in a table of
+    42 columns and 40K rows.
   }
-  \label{table:parameter_descriptions}
+  \label{table:raw_data_set_specs}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Parameters}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}
   \centering 
   \begin{tabular}{l l}
     \hline
-    Parameter             & Values \\
+    \# & Description \\
     \hline
     \hline
-    $b = b_g = b_i$       & 0.1, 0.5, 1.0 \\
-    $\lambda$             & 0.1, 0.3, 1.0, $10^6$ \\
-    $\mu = \mu_g = \mu_i$ & 0.0, 0.1, 0.2, 0.4 \\
-    \hline
-    $t_c$                 & 15 \\
-    $r$                   & 1000 \\
-    $l_a$                 & $15000$ \\
-    \hline
-    $n_i$                 & 178 \\
-    $n_a$                 & 2 per species tree\\
-    $n_b$                 & 2 per alignment\\
-    \hline
-    $n_s$                 & $10^3$ states (sampled)\\
-    $i_s$                 & $10^3$ states (between samples)\\
+    1 & posterior \\
+    2 & likelihood \\
+    3 & prior \\
+    4 & treeLikelihood \\
+    5 & TreeHeight \\
+    6 & BirthDeath \\
+    7 & BDBirthRate \\
+    8 & BDDeathRate \\
+    9 & logP.mrca \\
+    10 & mrcatime \\
+    11 & clockRate \\
     \hline
   \end{tabular}
   \caption{
-    Parameter values. The sections are (1) the biological parameters, (2) the
-    biological tuning parameters, (3) parameters involved in replication, 
-    and (4) MCMC tuning parameters.
+    Overview of the 11 BEAST2 estimated parameters
   }
-  \label{table:parameter_values}
+  \label{table:estimated_parameters}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Data set specifications}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-The raw data file will consist of 40K rows. On each row there will be 1012 values:
-
-\begin{itemize}  
-  \item 12 simulation parameters:
-  \begin{enumerate}  
-    \item speciation initiation rate
-    \item speciation completion rate
-    \item extinction rate
-    \item crown age
-    \item crown age sigma
-    \item sampling method
-    \item mutation rate
-    \item sequence length
-    \item mcmc length
-    \item tree sim rng seed
-    \item alignment rng seed
-    \item beast2 rnd seed
-  \end{enumerate}
-  \item 1000 nLTT statistics
-\end{itemize}
-
-The summarized data file will consist of 40K rows. On each row there will be 29 values:
-
-\begin{itemize}  
-  \item 12 simulation parameters:
-  \begin{enumerate}  
-    \item speciation initiation rate
-    \item speciation completion rate
-    \item extinction rate
-    \item crown age
-    \item crown age sigma
-    \item sampling method
-    \item mutation rate
-    \item sequence length
-    \item mcmc length
-    \item tree sim rng seed
-    \item alignment rng seed
-    \item beast2 rnd seed
-  \end{enumerate}
-  \item [NOTE: add yes/no?] expected speciation completion time (from Etienne \& Rosindell 2012)
-  \item [NOTE: add yes/no?] expected duration of speciation (from Etienne \& Rosindell 2012)
-  \item number of taxa in incipient species tree (also: number of subspecies)
-  \item [NOTE: add yes/no?] would there be a difference in branch lengths between the two sampling methods?
-  \item number of taxa in species tree (also: number of species)
-  \item mean nLTT statistic
-  \item median nLTT statistic
-  \item lower bound of 95\% HPD value of nLTT statistic
-  \item upper bound of 95\% HPD value of nLTT statistic
-  \item 11 ESSes of all parameters estimated by BEAST2:
-  \begin{enumerate}  
-    \item posterior
-    \item likelihood 
-    \item prior 
-    \item treeLikelihood 
-    \item TreeHeight 
-    \item BirthDeath 
-    \item BDBirthRate 
-    \item BDDeathRate 
-    \item logP.mrca 
-    \item mrcatime 
-    \item clockRate
-  \end{enumerate}
-  \item [some] MCMC operator acceptances
-\end{itemize}
 
 \end{document}
