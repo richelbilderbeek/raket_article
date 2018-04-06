@@ -80,6 +80,18 @@
 
 \maketitle
 
+\begin{abstract}
+
+  The tools for reconstructing phylogenetic relationships between taxonomic units (e.g. species) have become very advanced in the last two decades. Among the most popular tools are Bayesian approaches, such as BEAST, MrBayes and RevBayes, that use efficient tree sampling routines to provide a posterior probability distribution of the phylogenetic tree. A feature of these approaches is the possibility to incorporate known or hypothesized structure of the phylogenetic tree through the tree prior. It has ebe shown that the effect of the prior on the posterior distribution of trees can be substantial. Currently implemented tree priors assume that speciation is instantaneous. However, we know that speciation can be a gradual process and this idea has been termed protracted speciation. Here we explore the effects of ignoring the protractedness of the speciation process with an extensive simulation study. We simulate protracted phylogenies using the protracted birth-death process and then simulate sequence alignments according to a substitution model and clock model. We then use BEAST to infer the phylogeny from these alignments using the standard birth-death prior that assumes instantaneous speciation. We compare the inferred tree to the simulated tree, and find that ....
+
+  Furthermore, we identify an important issue related to protracted speciation. Because the tree produced by the protracted birth-death process is not necessarily monophyletic, we cannot speak of "the" species tree. Instead we have to sample among the incipient species to represent species. We show that different ways of sampling the representative species results in ....
+
+  We conclude that ...
+
+\end{abstract}
+
+{\bf Keywords:} computational biology, evolution, phylogenetics, BEAST2, R
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -254,10 +266,46 @@ The file with the summarized data will provide summary statistics of the raw
 data. Each row will contain a parameter set, summary statistics and other
 measurements. See the appendix, chapter 'Data set specifications', for the full list.
 
+To visualize the data set, we will produce two figures.
+The first figure will display the distribution 
+of median nLTT statistics per combination of speciation initiation, speciation
+completion and extinction rate. We will use the median nLTT statistic over 
+summing nLTT statistic distributions, as we think this will give the cleanest
+visualization [NOTE: I am unconvinced, wouldn't a violin plot would
+be better?]. We will use the median nLTT statistic, instead of the mean, as
+we expect the distribution of nLTT statistics not to be symmetrical. The distribution
+of median nLTT statistics is displayed per biological parameter set in a box-plot,
+to shown of that distribution as needed, without showing an overly amount of detail
+regarding that distribution. 
+The second figure will show the distribution of median nLTT statistics per expected
+mean duration of speciation. The expected mean duration of parameter can be calculated
+with equation 19 of [Etienne \& Rosidell 2012] and is a combination of the three
+biological parameters combined to their relevant biological effect. Through these
+points, we'll fit a straight line (we have no reason to expect an effect of
+higher order) and a locally weighted scatterplot smoothing (LOESS) 
+curve, which is a non-parametric fit to expose potential higher order effects.
+Additionally, we'll draw a horizontal line to the average median nLTT value 
+[NOTE: here the median of all distributions would feel better] of
+those simulations with instantanous speciation, which serves as a baseline of
+the inference error made.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{figure}[!htbp]
+  \includegraphics[width=0.8\textwidth]{nltt_stats_per_setup.png}
+  \caption{
+    median nLTT statistic distribution per parameter setting
+  }
+\end{figure}
+
+\begin{figure}[!htbp]
+  \includegraphics[width=0.8\textwidth]{nllt_stats_per_mean_dur_spec.png}
+  \caption{
+    median nLTT statistic distribution per mean duration of speciation
+  }
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Glossary}
@@ -418,7 +466,7 @@ The summarized data file will consist of 40K rows. On each row there will be 29 
   \item [NOTE: add yes/no?] expected speciation completion time (from Etienne \& Rosindell 2012)
   \item [NOTE: add yes/no?] expected duration of speciation (from Etienne \& Rosindell 2012)
   \item number of taxa in incipient species tree (also: number of subspecies)
-  \item [NOTE: add yes/no?] would there be a difference in brach lengths between the two sampling methods?
+  \item [NOTE: add yes/no?] would there be a difference in branch lengths between the two sampling methods?
   \item number of taxa in species tree (also: number of species)
   \item mean nLTT statistic
   \item median nLTT statistic
