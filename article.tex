@@ -94,18 +94,31 @@
   % One or two sentences providing a basic
   % introduction to the field,
   % comprehensible to a scientist in any discipline.
+  The tools for reconstructing phylogenetic relationships between taxonomic 
+  units (e.g. species) have become very advanced in the last two decades. 
 
   % Two to three sentences of
   % more detailed background, comprehensible to
   % scientists in related disciplines.
+  Among the most popular tools are Bayesian approaches, such as BEAST, MrBayes and RevBayes, 
+  that use efficient tree sampling routines to create a posterior probability distribution 
+  of the phylogenetic tree. 
+  A feature of these approaches is the possibility to incorporate 
+  known or hypothesized structure of the phylogenetic tree through the tree prior. 
+  It has been shown that the effect of the prior on the posterior distribution 
+  of trees can be substantial. 
 
   % One sentence clearly stating the general
   % problem being addressed by this particular
   % study.
+  Currently implemented tree priors assume that speciation is instantaneous,
+  where we know that speciation can be a gradual process.
 
   % One sentence summarising the main
   % result (with the words “here we show”
   % their equivalent).
+  Here we explore the effects of ignoring 
+  the protractedness of the speciation process with an extensive simulation study. 
 
   % Two or three sentences explaining what
   % the main result reveals in direct
@@ -123,66 +136,62 @@
   % in the first paragraph if the editor considers that the accessibility of the paper is significantly enhanced
   % by their inclusion. Under these circumstances, the length of the paragraph can be up to 300 words.
   % (The above example is 190 words without the final section, and 250 words with it).
-
-
-  The tools for reconstructing phylogenetic relationships between taxonomic 
-  units (e.g. species) have become very advanced in the last two decades. 
-  Among the most popular tools are Bayesian approaches, such as BEAST, MrBayes and RevBayes, 
-  that use efficient tree sampling routines to provide a posterior probability distribution 
-  of the phylogenetic tree. A feature of these approaches is the possibility to incorporate 
-  known or hypothesized structure of the phylogenetic tree through the tree prior. It has 
-  been shown that the effect of the prior on the posterior distribution of trees can 
-  be substantial. Currently implemented tree priors assume that speciation is 
-  instantaneous. However, we know that speciation can be a gradual process and this 
-  idea has been termed protracted speciation. Here we explore the effects of ignoring 
-  the protractedness of the speciation process with an extensive simulation study. 
-  We simulate protracted phylogenies using the protracted birth-death process 
-  and then simulate sequence alignments according to a substitution model and clock model. 
-  We then use BEAST to infer the phylogeny from these alignments using the standard 
-  birth-death prior that assumes instantaneous speciation. We compare the 
-  inferred tree to the simulated tree, and find that ....
-
-  Furthermore, we identify an important issue related to protracted speciation. 
-  Because the tree produced by the protracted birth-death process 
-  is not necessarily monophyletic, we cannot speak of "the" species tree. 
-  Instead we have to sample among the incipient species to represent species. 
-  We show that different ways of sampling the representative species results in ....
-
   We conclude that ...
+
+  % Does not seem to fit here: 
+  %  
+  % We simulate protracted phylogenies using the protracted birth-death process 
+  % and then simulate sequence alignments according to a substitution model and clock model. 
+  % We then use BEAST to infer the phylogeny from these alignments using the standard 
+  % birth-death prior that assumes instantaneous speciation. We compare the 
+  % inferred tree to the simulated tree, and find that ....
+  % 
+  % Furthermore, we identify an important issue related to protracted speciation. 
+  % Because the tree produced by the protracted birth-death process 
+  % is not necessarily monophyletic, we cannot speak of "the" species tree. 
+  % Instead we have to sample among the incipient species to represent species. 
+  % We show that different ways of sampling the representative species results in ....
+
 
 \end{abstract}
 
-{\bf Keywords:} computational biology, evolution, phylogenetics, BEAST2, R
+{\bf Keywords:} computational biology, evolution, phylogenetics, prior choice
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Phylogenetics enables us to infer which species lived when and
-estimate how long it took for a species to give rise to a new
-lineage. Phylogenies show us taxa that have completed speciation, yet
-those taxa only: species that are in the process of speciation are 
-overlooked.
+The computational tools a contemporary phylogeneticist has at his/her disposal
+goes beyond the wildest imagination of those living two decades ago. 
+Advances in computational power allowed the first cladograms to be inferred 
+from DNA alignments in [some year, some ref]. The first time-trees were
+published in [some year, some ref]. Thanks to the addition of effective sampling
+methods, the first Bayesian tools appeared in [some year, some ref], allowing
+for unprecedented flexibility in the setup of a phylogenetic model.
 
-There are multiple reasons why a speciation event, during
-or after its course, goes unnoticed. It may be that the build-up
-of reproductive isolation is still in an intermediate stage. But it
-may also be that speciation has completed, but we, humans, have not
-yet observed it. One example are the four African giraffe species, 
-that have been thought to have been one single species up until 2016,
-where the MRCA of the two most recent species goes back 1.6 million years.
+Currently, the most popular Bayesian phylogenetics tools are BEAST [ref],  
+MrBayes [ref] and RevBayes [ref]. Each of these use efficient tree sampling 
+routines to create a posterior probability distribution of the to-be-inferred 
+phylogenetic tree. But next to the computational speed, they also allow
+to incorporate known or hypothesized structure of the phylogenetic 
+tree-to-be-inferred through the model priors.
 
-It took some time until the Birth-Death model, a phylogenetic model
-assuming constant rates of speciation and extinction, got extended
-by a version that incorporates the fact that speciation takes time.
-This extension is called the Protracted Birth-Death model. In this
-model, a branching event does not give rise to a new species, but to
+The model prior most relevant here, is the tree prior. The tree prior
+embodies the speciation model assumed. Each speciation model has a
+different expected branch length distribution. It has been shown 
+[NOTE: where?] that the effect of the prior on the posterior distribution 
+of trees can be substantial. 
+
+All of the currently implemented tree priors assume that speciation is 
+instantaneous, where we know that speciation can be a gradual process.
+The protracted birth-death (PBD) model, an extension of 
+the (constant-rate) birth-death (BD) model, incorporates this idea.
+In the PBD model, a branching event does not give rise to a new species, but to
 a new species-to-be, called an incipient species. Such an incipient
 species may go extinct, or finish its speciation to become a good species.
 
-Although we know speciation takes time, most of our theoretical 
-phylogenetic modeling ignores this fact. To the best of our knowledge,
-there is no tool incorporating this fact. One reason may be to ease
+Although we know speciation takes time, all of our theoretical 
+phylogenetic modeling tools ignore this fact. One reason may be to ease
 computation, enabling researchers to work on bigger phylogenies (with
 more power statistical power) instead. Additionally, speciation being
 protracted is only playing a role in the present. As seen from the present,
@@ -190,8 +199,8 @@ all older species have finished speciation, as we -by definition- recognize
 these species as such. 
 
 There are problems with ignoring protracted speciation. A very pragmatic
-example is the conservation of the now four smaller groups of giraffes,
-instead of one big group. But from a more theoretical perspective, the
+example is the conservation of an underestimated amount of species. 
+But from a more theoretical perspective, the
 observed decline of speciation rate in time (excluding the contemporary human-driven
 mass extinction event) may be explained by these new species not being 
 recognized yet. Another problem is that the MRCA of young species is estimated 
@@ -210,10 +219,9 @@ sub-species lineage, and the process degrades to an ordinary birth-death
 process.
 
 This exploratory research's goal is to produce a 
-usefull and balanced data set, that quantifies the inference error 
-we make from choosing an overly simplistic prior. In this context, 
-we measure the error made on phylogenies in which speciation takes 
-time, when using a Birth-Death prior.
+useful and balanced data set, that quantifies the inference error 
+we make from choosing the incorrect prior. In this context, 
+we measure the error made on PBD phylogenies, when using a BD prior.
 
 The parameter space the data set explores is inspired on 
 [Etienne et al, 2014] for two reasons: (1) the academic
@@ -278,13 +286,10 @@ of this research). Additionally, we assume a MRCA prior with a normal distributi
 with a mean of the crown age, and a standard deviation of 0.001 time units. 0.001
 time units equates to 1000 years, which is the same resolution as which the
 alignment is created. After discarding a burn-in of 10\%, the MCMC algorithm must 
-result in an ESS of the posterior of at least 200 and the MCMC chain length is 
+result in an ESS of the posterior of at least 200 and the MCMC sampling interval is 
 chosen as such that this is the case for all simulations. For simulations
-with an ESS below 200, their MCMC chain length is elongated. An
-MCMC chain is elongated by the proportion that is expected to increase it to 220. 
-For example, would an ESS be 165, increasing its MCMC chain length by 33\% 
-would bring it to (165\%*1.33=) 220. We use 220 as a safeguard to prevent 
-an asymptotic approach to 200. 
+with an ESS below 200, their MCMC sampling interval is doubled up until
+the ESS exceeds 200. 
 
 We realize there will be an unavoidable bias in our data set: the MCMC
 algorithm will produce phylogenies that are representative for the joint
@@ -297,13 +302,13 @@ this bias to be systematic, equally affecting distributions
 of identical speciation completion rates, and symptomatic
 of using contemporary tools.
 
-Each posterior's phylogeny is compared to the 'true' species tree.
+Each posterior's phylogeny is compared to the (sampled) species tree.
 To quantify the difference between two phylogenies, the nLTT statistic
 is used. The nLTT statistic equates to the area between the normalized
 lineages-through-time-plots of two phylogenies, which will be a value between 
 zero (for identical phylogenies) and one. As the nLTT statistic increases
 when phylogenies get increasingly different, we use the nLTT statistic
-as a measure of inference error. Comparing the one 'true' species tree
+as a measure of inference error. Comparing the one (sampled) species tree
 with each of the posterior's species trees, a distribution nLTT statistics
 is created. 
 
@@ -346,9 +351,9 @@ biological parameters combined to their relevant biological effect. Through thes
 points, we'll fit a straight line (we have no reason to expect an effect of
 higher order) and a locally weighted scatterplot smoothing (LOESS) 
 curve, which is a non-parametric fit to expose potential higher order effects.
-Additionally, we'll draw a horizontal line to the average median nLTT value 
-[NOTE: here the median of all distributions would feel better] of
-those simulations with instantanous speciation, which serves as a baseline of
+Additionally, we'll draw a horizontal line to the average nLTT 
+value (over all replicates) of those simulations with instantaneous speciation, 
+which serves as a baseline of
 the inference error made.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -411,13 +416,14 @@ and for providing access to the Peregrine high performance computing cluster.
     $\mu = \mu_g = \mu_i$ & Extinction rate & 0.0, 0.1, 0.2, 0.4 \\
     $t_c$                 & Crown age & 15 \\
     $\sigma_c$            & Standard deviation around crown age & 0.001 \\
-    M                     & Sampling method & Youngest, oldest \\
-    $r$                   & Mutation rate & 1000 \\
-    $l_a$                 & DNA alignment length & $15000$ \\
-    L                     & MCMC chain length & 1M \\
-    $R_i$                 & RNG seed incipient tree & 1 to 40000 \\
-    $R_a$                 & RNG seed alignment simulation & 1 to 40000 \\
-    $R_b$                 & RNG seed BEAST2 & 1 to 40000 \\
+    $M$                   & Sampling method & Youngest for odd $R_i$, oldest for even $R_i$ \\
+    $r$                   & Mutation rate & 1K \\
+    $l_a$                 & DNA alignment length & $15K$ \\
+    $n_s$                 & Number of MCMC states & 1K \\
+    $f_i$                 & MCMC sampling interval & 1K or more \\
+    $R_i$                 & RNG seed incipient tree & 1 to 40K \\
+    $R_a$                 & RNG seed alignment simulation & 1 to 40K \\
+    $R_b$                 & RNG seed BEAST2 & 1 to 40K \\
     \hline
   \end{tabular}
   \caption{
@@ -439,18 +445,15 @@ and for providing access to the Peregrine high performance computing cluster.
     $1000$ & nLTT statistic \\
     \hline
     \hline
-    $12$   & simulation parameters \\
-    $1$ & [NOTE: add yes/no?] expected speciation completion time (from Etienne \& Rosindell 2012) \\
-    $1$ & [NOTE: add yes/no?] expected duration of speciation (from Etienne \& Rosindell 2012) \\
+    $12$ & simulation parameters \\
+    $1$ & expected duration of speciation (from Etienne \& Rosindell 2012) \\
     $1$ & number of taxa in incipient species tree (also: number of subspecies) \\
-    $1$ & [NOTE: add yes/no?] difference in branch lengths between the two sampling methods? \\
     $1$ & number of taxa in species tree (also: number of species) \\
     $1$ & mean nLTT statistic \\
     $1$ & median nLTT statistic \\
     $1$ & lower bound of 95\% HPD value of nLTT statistic \\
     $1$ & upper bound of 95\% HPD value of nLTT statistic \\
     $11$ & ESSes of all parameters estimated by BEAST2 (see specs below) \\
-    $?10$ & MCMC operator acceptances\\
     \hline
   \end{tabular}
   \caption{
