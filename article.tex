@@ -1,10 +1,15 @@
 \documentclass{article}
 
+% Short communications of approximately 3000 words are also accepted. 
+% These papers should contain no more than two figures, two tables, and thirty references. 
+% A short abstract of fewer than 200 words is acceptable.
+
+
 % Bibliography
 \usepackage{natbib}
 \bibpunct{(}{)}{;}{a}{}{;}
 
-% Use 'It was found that A is B (Name 1234)' style
+% Use 'It was found that something is something (Name 1234)' style
 \setcitestyle{authoryear,open={},close={}}
 
 % Affiliations
@@ -82,9 +87,66 @@
 
 \begin{abstract}
 
-  The tools for reconstructing phylogenetic relationships between taxonomic units (e.g. species) have become very advanced in the last two decades. Among the most popular tools are Bayesian approaches, such as BEAST, MrBayes and RevBayes, that use efficient tree sampling routines to provide a posterior probability distribution of the phylogenetic tree. A feature of these approaches is the possibility to incorporate known or hypothesized structure of the phylogenetic tree through the tree prior. It has ebe shown that the effect of the prior on the posterior distribution of trees can be substantial. Currently implemented tree priors assume that speciation is instantaneous. However, we know that speciation can be a gradual process and this idea has been termed protracted speciation. Here we explore the effects of ignoring the protractedness of the speciation process with an extensive simulation study. We simulate protracted phylogenies using the protracted birth-death process and then simulate sequence alignments according to a substitution model and clock model. We then use BEAST to infer the phylogeny from these alignments using the standard birth-death prior that assumes instantaneous speciation. We compare the inferred tree to the simulated tree, and find that ....
+  % From 'How to construct a Nature summary paragraph'
 
-  Furthermore, we identify an important issue related to protracted speciation. Because the tree produced by the protracted birth-death process is not necessarily monophyletic, we cannot speak of "the" species tree. Instead we have to sample among the incipient species to represent species. We show that different ways of sampling the representative species results in ....
+  % A short abstract of fewer than 200 words is acceptable.
+
+  % One or two sentences providing a basic
+  % introduction to the field,
+  % comprehensible to a scientist in any discipline.
+
+  % Two to three sentences of
+  % more detailed background, comprehensible to
+  % scientists in related disciplines.
+
+  % One sentence clearly stating the general
+  % problem being addressed by this particular
+  % study.
+
+  % One sentence summarising the main
+  % result (with the words “here we show”
+  % their equivalent).
+
+  % Two or three sentences explaining what
+  % the main result reveals in direct
+  % comparison to what was thought to be the case
+  % previously, or how the main result adds to
+  % previous knowledge.
+
+  % One or two sentences to put the results into a
+  % more general context.
+
+
+  % Two or three sentences to provide a
+  % broader perspective, readily comprehensible
+  % to a scientist in any discipline, may be included
+  % in the first paragraph if the editor considers that the accessibility of the paper is significantly enhanced
+  % by their inclusion. Under these circumstances, the length of the paragraph can be up to 300 words.
+  % (The above example is 190 words without the final section, and 250 words with it).
+
+
+  The tools for reconstructing phylogenetic relationships between taxonomic 
+  units (e.g. species) have become very advanced in the last two decades. 
+  Among the most popular tools are Bayesian approaches, such as BEAST, MrBayes and RevBayes, 
+  that use efficient tree sampling routines to provide a posterior probability distribution 
+  of the phylogenetic tree. A feature of these approaches is the possibility to incorporate 
+  known or hypothesized structure of the phylogenetic tree through the tree prior. It has 
+  been shown that the effect of the prior on the posterior distribution of trees can 
+  be substantial. Currently implemented tree priors assume that speciation is 
+  instantaneous. However, we know that speciation can be a gradual process and this 
+  idea has been termed protracted speciation. Here we explore the effects of ignoring 
+  the protractedness of the speciation process with an extensive simulation study. 
+  We simulate protracted phylogenies using the protracted birth-death process 
+  and then simulate sequence alignments according to a substitution model and clock model. 
+  We then use BEAST to infer the phylogeny from these alignments using the standard 
+  birth-death prior that assumes instantaneous speciation. We compare the 
+  inferred tree to the simulated tree, and find that ....
+
+  Furthermore, we identify an important issue related to protracted speciation. 
+  Because the tree produced by the protracted birth-death process 
+  is not necessarily monophyletic, we cannot speak of "the" species tree. 
+  Instead we have to sample among the incipient species to represent species. 
+  We show that different ways of sampling the representative species results in ....
 
   We conclude that ...
 
