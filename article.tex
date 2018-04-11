@@ -317,12 +317,18 @@ for the expected number of lineages through time. I think I may be able to pull
 of a prediction here, by fitting a BD curve on a PBD curve with a minimized error,
 but research would be needed to investigate that].
 
-The data set produced by this exploratory research will consist out of two files:
-one containing raw data, the other summarized data. 
-A data file should be convenient to handle, thus as an upper limit for this data set's size, 
-we use the maximum size of a table (called a data frame) of the R programming 
-language. Within R, such a table may have maximally $2^{32}-1$ cells and occupy
-less then 2 gigabytes in memory. 
+There will be two data sets produced by this research.
+The first data set will be a general balanced data set to chart
+the effect of the biological parameters on the nLTT statistic
+distribution. The second data set charts the effect of sampling
+subspecies (young versus old) and only uses phylogenies in which this sampling
+has an effect.
+
+Each data set will consist out of two files, containing raw and summarized 
+data respectively. We placed 
+an upper limit for this data set's size at the maximum size of a table (called 
+a data frame) of the R programming language, in which such a table may 
+have maximally $2^{32}-1$ cells and occupy less then 2 gigabytes in memory.
 The raw data file will contain parameters and 1000 nLTT statistics values.
 Each row will contain the parameter set and these nLTT statistics.
 From the constraints of the R programming language, this allows for 40K rows. 
