@@ -1,0 +1,7 @@
+#!/bin/bash
+
+
+pdflatex extra_figures.tex --shell-escape
+bibtex extra_figures.aux
+pdflatex extra_figures.tex --shell-escape
+pdflatex extra_figures.tex --shell-escape
