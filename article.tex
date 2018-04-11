@@ -172,7 +172,7 @@ tree-to-be-inferred through the model priors.
 The model prior most relevant here, is the tree prior. The tree prior
 embodies the assumed speciation model. Each speciation model has a
 different expected branch length distribution. It has been shown 
-[NOTE: where?] that the effect of the prior on the posterior distribution 
+[Moeller, du Plessis, Stadler. 2018] that the effect of the prior on the posterior distribution 
 of trees can be substantial. 
 
 All of the currently implemented tree priors assume that speciation is 
@@ -276,7 +276,8 @@ clock model, which we will specify as the known clock model prior later.
 
 From an alignment, we run a Bayesian analysis and create a posterior, 
 using the phylogetic tool BEAST2. We assume a
-JC69 nucleotide substitution (as we do use that), a strict clock model (as
+JC69 nucleotide substitution (as we do use that), a strict clock model with 
+the same fixed rate as used in the simulation of the alignment (as
 we have that) and a Birth-Death tree prior (as this simplification is the goal
 of this research). Additionally, we assume a MRCA prior with a normal distribution
 with a mean of the crown age, and a standard deviation of 0.001 time units. 0.001
