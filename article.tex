@@ -129,7 +129,7 @@
   % in the first paragraph if the editor considers that the accessibility of the paper is significantly enhanced
   % by their inclusion. Under these circumstances, the length of the paragraph can be up to 300 words.
   % (The above example is 190 words without the final section, and 250 words with it).
-  We conclude that ...
+  We conclude that in general [something], and the effect of sampling is [something]. 
 
   % Does not seem to fit here: 
   %  
@@ -217,6 +217,12 @@ This exploratory research's goal is to produce a
 useful and balanced data set, that quantifies the inference error 
 we make from choosing the incorrect prior. In this context, 
 we measure the error made on PBD phylogenies, when using a BD prior.
+In brief, we simulate protracted phylogenies using the protracted birth-death process,
+from those phylogenies sample a species tree. From that species tree, 
+we simulate a DNA sequence alignment. Then we let BEAST infer a phylogeny 
+from these alignments using the standard birth-death prior. 
+We compare the posterior phylogenies to the species tree using the nLTT statistic.
+
 
 The parameter space the data set explores is inspired on 
 [Etienne et al, 2014] for two reasons: (1) the academic
@@ -240,7 +246,7 @@ in which $0.4$ is a new extinction rate.
 We investigate these parameters in a factorial fashion, except for
 (1) those combinations in which the extinction rate equals or exceeds
 the speciation initiation rate, and (2) the difference between
-speciation initiation rate and extinction rate exceeds 0.8. This is
+speciation initiation rate and extinction rate exceeds $0.8$. This is
 done to prevent overly taxon-poor and taxon-rich phylogenies respectively.
 
 From each biological parameter set, a protracted birth-death tree is simulated,
@@ -264,8 +270,9 @@ nucleotide substitution model, in which all nucleotide-to-nucleotide transitions
 are equally likely. Although this may seem as a simplification, in our Bayesian
 inference (see below) we can use this exact site model as a prior, which we 
 know is the truth.
-The DNA sequence length and mutation rate was chosen as such to provide one
-nucleotide change per 1000 years per lineage. As our time unit is in 
+The DNA sequence length and mutation rate was chosen as such to provide a
+resolution of a 1000 years, that is, to have one expected nucleotide change 
+per 1000 years per lineage on average. As our time unit is in 
 millions of years, and our crown age is 15 million years,
 this equates to a rate of $\frac{1000}{15}$ nucleotide substitutions 
 changes per time unit per lineage. To provide for each substitution being unique,
@@ -336,44 +343,32 @@ The file with the summarized data will provide summary statistics of the raw
 data. Each row will contain a parameter set, summary statistics and other
 measurements. See the appendix, chapter 'Data set specifications', for the full list.
 
-To visualize the data set, we will produce two figures.
-The first figure will display the distribution 
-of median nLTT statistics per combination of speciation initiation, speciation
-completion and extinction rate. We will use the median nLTT statistic over 
-summing nLTT statistic distributions, as we think this will give the cleanest
-visualization [NOTE: I am unconvinced, wouldn't a violin plot would
-be better?]. We will use the median nLTT statistic, instead of the mean, as
-we expect the distribution of nLTT statistics not to be symmetrical. The distribution
-of median nLTT statistics is displayed per biological parameter set in a box-plot,
-to shown of that distribution as needed, without showing an overly amount of detail
-regarding that distribution. 
-The second figure will show the distribution of median nLTT statistics per expected
-mean duration of speciation. The expected mean duration of parameter can be calculated
-with equation 19 of [Etienne \& Rosidell 2012] and is a combination of the three
-biological parameters combined to their relevant biological effect. Through these
-points, we'll fit a straight line (we have no reason to expect an effect of
-higher order) and a locally weighted scatterplot smoothing (LOESS) 
-curve, which is a non-parametric fit to expose potential higher order effects.
-Additionally, we'll draw a horizontal line to the average nLTT 
-value (over all replicates) of those simulations with instantaneous speciation, 
-which serves as a baseline of
-the inference error made.
+Our results will show the general effect of the biological parameters (speciation initiation, 
+speciation completion and extinction rate) using the balanced data set,
+and the effect of sampling using the data set conditioned on sampling having an effect.
+In both cases, the nLTT statistics distribution will be plotted per
+biological parameter set using a violin plot. A violin plot is chosen to
+maintain information about the distribution. When displaying the effect of a 
+sampling regime, per regime, the nLTT statistics distribution is shown per
+biological parameter set.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[!htbp]
-  \includegraphics[width=0.8\textwidth]{nltt_stats_per_setup.png}
+  \includegraphics[width=0.8\textwidth]{fig_nltt_stats_per_setup.png}
   \caption{
-    median nLTT statistic distribution per parameter setting
+    nLTT statistic distribution per biological parameter set, using the
+    balanced data set
   }
 \end{figure}
 
 \begin{figure}[!htbp]
-  \includegraphics[width=0.8\textwidth]{nllt_stats_per_mean_dur_spec.png}
+  \includegraphics[width=0.8\textwidth]{fig_sampling.png}
   \caption{
-    median nLTT statistic distribution per mean duration of speciation
+    nLTT statistic distribution per biological parameter set per sampling
+    regime, using the data set conditioned on sampling regime having an effect 
   }
 \end{figure}
 
@@ -394,7 +389,11 @@ and for providing access to the Peregrine high performance computing cluster.
 \section{Authors' contributions}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+RJCB and RSE conceived the idea for this experiment and package. 
+RJCB created and tested the experiment and package, 
+and wrote the first draft of the manuscript. 
+RSE contributed substantially to revisions.
+
 % Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MEE style
@@ -417,6 +416,7 @@ and for providing access to the Peregrine high performance computing cluster.
     $b = b_g = b_i$       & Speciation initiation rate & 0.1, 0.5, 1.0 \\
     $\lambda$             & Speciation completion rate & 0.1, 0.3, 1.0, $10^6$ \\
     $\mu = \mu_g = \mu_i$ & Extinction rate & 0.0, 0.1, 0.2, 0.4 \\
+    \hline
     $t_c$                 & Crown age & 15 \\
     $\sigma_c$            & Standard deviation around crown age & 0.001 \\
     $M$                   & Sampling method & Youngest for odd $R_i$, oldest for even $R_i$ \\
@@ -429,7 +429,8 @@ and for providing access to the Peregrine high performance computing cluster.
     \hline
   \end{tabular}
   \caption{
-    Overview of the 12 simulation parameters.
+    Overview of the 12 simulation parameters. Above the horizontal line is 
+    the biological parameter set.
   }
   \label{table:simulation_parameters}
 \end{table}
