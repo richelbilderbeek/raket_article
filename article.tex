@@ -189,7 +189,9 @@ we simulate a DNA sequence alignment. Then, BEAST2 uses these alignments
 to infer a posterior of phylogenies, using a BD prior. The difference
 between the (BD) posterior phylogenies and (PBD) species tree is quantified.
 
-% Methods
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Methods (but we are not allowed to keep this header)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The PBD model has five biological parameters (see \ref{table:parameters}), 
 which we explore in a factorial fashion, excluding some combinations. 
@@ -212,49 +214,56 @@ The extinction rates used are $0.0$, $0.1$, $0.2$ and $0.4$
 extinction events per (good or incipient) lineage per time unit.
 
 From each biological parameter set, a protracted birth-death tree is simulated,
-with the same crown age as [Etienne et al., 2014] of 15 million years. 
+using the PBD package (\cite{pbd}) in the R programming language (\cite{r}), 
+with the same crown age as \cite{etienne2014} of 15 million years. 
 Each protracted birth-death tree uses a different random number
 generatior seed, and thus will be unique, resulting in a balanced 
 data set. 
 
-From an incipient species tree, we sample a species tree
-by picking either the youngest or oldest
-species-to-be to represent the full species.
-We use either sampling method in 50\% of all cases. We chose not to use
-a random species-to-be to represent a full species as to maximize variance
-in this aspect. Note that only in few cases (when speciation completion rate
-is low) the sampling method has an effect on the branch length distribution
-of the sampled species tree, as this requires a very specific scenario.
+From an incipient species tree, we sample a species tree. To do
+so, from each species a sub-species must be chosen to represent
+the good species as a whole. To clarify, it may be that an
+incipient species branched of from a good species. Both of these
+subspecies are recognized as the good species, and both can be 
+picked as a representative. Here we use three sampling scenario's,
+in which we pick the youngest (most recent incipient speciation), 
+oldest or random subspecies. Note that only in few 
+cases (when speciation completion rate is low) the incipient species
+chosen will have an effect on the branch length distribution of species 
+tree, as this requires a very specific scenario.
 
 From a species tree, we simulate a DNA alignment that has the same history
-as the phylogeny. The nucleotides of the DNA alignment follow a JC69
+as the phylogeny, using the phangorn package (\cite{phangorn}). 
+The nucleotides of the DNA alignment follow a Jukes-Cantor (\cite{jc69})
 nucleotide substitution model, in which all nucleotide-to-nucleotide transitions
 are equally likely. Although this may seem as a simplification, in our Bayesian
-inference (see below) we can use this exact site model as a prior, which we 
-know is the truth.
-The DNA sequence length and mutation rate was chosen as such to provide a
+inference (see below) we use this exact site model as the (obviously correct) site model prior.
+The DNA sequence length and mutation rate are chosen as such to provide a
 resolution of a 1000 years, that is, to have one expected nucleotide change 
-per 1000 years per lineage on average. As our time unit is in 
-millions of years, and our crown age is 15 million years,
+per 1000 years per lineage on average. As we use a crown age is 15 million years,
 this equates to a rate of $\frac{1000}{15}$ nucleotide substitutions 
-changes per time unit per lineage. To provide for each substitution being unique,
-we simulate as much DNA nucleotides as expected mutations, which equals the
-nucleotide substitution rate times the crown age, which equals 15K (which is
+changes per million years per lineage. To provide for each substitution being unique,
+we simulate as much DNA nucleotides as the expected number of mutations (including those
+that do not modify the nucleotide), which equals the
+nucleotide substitution rate times the crown age, which equals 15000 nucleotides (which is
 coincidentally the same as \cite{moller2018}). As this
 mutation rate is constant over all branches, it in effect follows a strict 
-clock model, which we will specify as the known clock model prior later.
+clock model, which we will specify as the known clock model prior in the Bayesian inference.
 
 From an alignment, we run a Bayesian analysis and create a posterior, 
-using the phylogetic tool BEAST2. We assume a
-JC69 nucleotide substitution (as we do use that), a strict clock model with 
-the same fixed rate as used in the simulation of the alignment (as
-we have that) and a Birth-Death tree prior (as this simplification is the goal
-of this research). Additionally, we assume a MRCA prior with a normal distribution
+using the phylogetic tool BEAST2 \cite{beast2} using the 
+pirouette (\cite{pirouette}) package. As our site model, we assume a Jukes-Cantor 
+nucleotide substitution model, as we used that in the simulation of the alignment.
+For our clock model, we assume a strict clock with the same fixed rate as 
+used in the simulation of the alignment. The tree prior assumed is the BD model, 
+as this simplification is the goal of this research. 
+Additionally, we assume a MRCA prior with a normal distribution
 with a mean of the crown age, and a standard deviation of 0.001 time units. 0.001
 time units equates to 1000 years, which is the same resolution as which the
 alignment is created. After discarding a burn-in of 10\%, the MCMC algorithm must 
-result in an ESS of the posterior of at least 200 and the MCMC sampling interval is 
-chosen as such that this is the case for all simulations. For simulations
+result in an effective sample size (ESS) of the posterior of at least 200 
+to have a strong enough inference (\cite{beastbook}). The MCMC sampling interval is 
+chosen in such a way that this is the case for all simulations. For simulations
 with an ESS below 200, their MCMC sampling interval is doubled up until
 the ESS exceeds 200. 
 
@@ -269,9 +278,9 @@ this bias to be systematic, equally affecting distributions
 of identical speciation completion rates, and symptomatic
 of using contemporary tools.
 
-Each posterior's phylogeny is compared to the (sampled) species tree.
-To quantify the difference between two phylogenies, the nLTT statistic
-is used. The nLTT statistic equates to the area between the normalized
+Each posterior's phylogeny is compared to the (sampled) species tree
+by the nLTT statistic (\cite{janzen2015}), using the nLTT package (\cite{nltt}). 
+The nLTT statistic equates to the area between the normalized
 lineages-through-time-plots of two phylogenies, which will be a value between 
 zero (for identical phylogenies) and one. As the nLTT statistic increases
 when phylogenies get increasingly different, we use the nLTT statistic
@@ -279,32 +288,24 @@ as a measure of inference error. Comparing the one (sampled) species tree
 with each of the posterior's species trees, a distribution nLTT statistics
 is created. 
 
-We predict that nLTT statistic values increase 
-with an increasing protractednedness (that is, a low speciation completion rate),
-but we cannot predict the the extent of this error, as it has never been 
-measured [NOTE: this may be easy to change: Etienne \& Rosindel 2012 show the equations
-for the expected number of lineages through time. I think I may be able to pull
-of a prediction here, by fitting a BD curve on a PBD curve with a minimized error,
-but research would be needed to investigate that].
-
 There will be two data sets produced by this research.
 The first data set will be a general balanced data set to chart
 the effect of the biological parameters on the nLTT statistic
-distribution. The second data set charts the effect of sampling
-subspecies (young versus old) and only uses phylogenies in which this sampling
-has an effect.
+distribution. In this data set, incipient species are sampled 
+randomly to represent a good species.
+The second data set charts the effect of sampling
+subspecies and only uses PBD trees in which this sampling
+has an effect. For each of these trees, we sample both youngest and
+oldest subspecies. We predict that these two most extreme sampling methods
+result in the most pronounced differences.
 
-Each data set will consist out of two files, containing raw and summarized 
-data respectively. We placed 
+Each data set will be stored as a comma-seperated file. We placed 
 an upper limit for this data set's size at the maximum size of a table (called 
 a data frame) of the R programming language, in which such a table may 
 have maximally $2^{32}-1$ cells and occupy less then 2 gigabytes in memory.
-The raw data file will contain parameters and 1000 nLTT statistics values.
-Each row will contain the parameter set and these nLTT statistics.
-From the constraints of the R programming language, this allows for 40K rows. 
-The file with the summarized data will provide summary statistics of the raw
-data. Each row will contain a parameter set, summary statistics and other
-measurements. See the appendix, chapter 'Data set specifications', for the full list.
+Each row will contain the parameter set, nLTT statistics and some 
+diagnostics [NOTE: should I keep the diagnostics?] (see \ref{table:specs} for the 
+complete list). From the constraints of the R programming language, this allows for 40K rows. 
 
 Our results will show the general effect of the biological parameters (speciation initiation, 
 speciation completion and extinction rate) using the balanced data set,
@@ -314,6 +315,10 @@ biological parameter set using a violin plot. A violin plot is chosen to
 maintain information about the distribution. When displaying the effect of a 
 sampling regime, per regime, the nLTT statistics distribution is shown per
 biological parameter set.
+We predict that nLTT statistic values increase 
+with an increasing protractednedness (that is, a low speciation completion rate),
+but we cannot predict the the extent of this error, as it has never been 
+measured.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -377,12 +382,12 @@ RSE contributed substantially to revisions.
     \hline
     \hline
     $b = b_g = b_i$       & Speciation initiation rate & 0.1, 0.5, 1.0 \\
-    $\lambda$             & Speciation completion rate & 0.1, 0.3, 1.0, $10^6$ \\
+    $\lambda$             & Speciation completion rate & 0.1, 0.3, 1.0, $\infty$ \\
     $\mu = \mu_g = \mu_i$ & Extinction rate & 0.0, 0.1, 0.2, 0.4 \\
     \hline
     $t_c$                 & Crown age & 15 \\
     $\sigma_c$            & Standard deviation around crown age & 0.001 \\
-    $M$                   & Sampling method & Youngest for odd $R_i$, oldest for even $R_i$ \\
+    $M$                   & Sampling method & Random \\
     $r$                   & Mutation rate & $\frac{1000}{15}$ \\
     $l_a$                 & DNA alignment length & $15K$ \\
     $f_i$                 & MCMC sampling interval & 1K or more \\
@@ -407,29 +412,24 @@ RSE contributed substantially to revisions.
     $n$ & Description \\
     \hline
     \hline
-    $12$   & simulation parameters \\
-    $1000$ & nLTT statistic \\
-    \hline
-    $12$ & simulation parameters \\
-    $1$ & expected duration of speciation (from Etienne \& Rosindell 2012) \\
-    $1$ & number of taxa in incipient species tree (also: number of subspecies) \\
-    $1$ & number of taxa in species tree (also: number of species) \\
-    $1$ & mean nLTT statistic \\
-    $1$ & median nLTT statistic \\
-    $1$ & lower bound of 95\% HPD value of nLTT statistic \\
-    $1$ & upper bound of 95\% HPD value of nLTT statistic \\
+    $12$   & simulation parameters, see table \ref{table:parameters} \\
+    $1000$ & nLTT statistic values \\
+    $1$ & [NOTE: keep this in?] expected duration of speciation (from Etienne \& Rosindell 2012) \\
+    $1$ & [NOTE: keep this in?] number of taxa in incipient species tree (also: number of subspecies) \\
+    $1$ & [NOTE: keep this in?] number of taxa in species tree (also: number of species) \\
+    $1$ & [NOTE: keep this in?] mean nLTT statistic \\
+    $1$ & [NOTE: keep this in?] median nLTT statistic \\
+    $1$ & [NOTE: keep this in?] lower bound of 95\% HPD value of nLTT statistic \\
+    $1$ & [NOTE: keep this in?] upper bound of 95\% HPD value of nLTT statistic \\
     $11$ & ESSes of all parameters estimated by BEAST2 (see specs below) \\
     \hline
   \end{tabular}
   \caption{
     Specification of the data sets. $n$ denotes the number
-    of columns a certain item will occupy. Above the horizontal line,
-    the content of the raw data file is specified, resulting in a table of 
-    1012 columns and 40K rows. Below the horizontal line,
-    the content of the summary data file specified, resulting in a table of
-    40 columns and 40K rows.
+    of columns a certain item will occupy, resulting in a table of 
+    1030 columns and 40K rows.
   }
-  \label{table:raw_data_set_specs}
+  \label{table:specs}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
