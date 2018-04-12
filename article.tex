@@ -119,12 +119,13 @@
 The computational tools a contemporary phylogeneticist has at his/her disposal
 goes beyond the wildest imagination of those living three decades ago. 
 Advances in computational power allowed the first cladograms to be inferred 
-from DNA alignments in 1981 \cite{felsenstein1981}. The first Bayesian tools 
-appeared in 1996 \cite{rannala1996}, allowing
+from DNA alignments in 1981 (\cite{felsenstein1981}). The first Bayesian tools 
+appeared in 1996 (\cite{rannala1996}), allowing
 for unprecedented flexibility in the setup of a phylogenetic model.
 
-Currently, the most popular Bayesian phylogenetics tools are BEAST \cite{beast},  
-MrBayes \cite{mrbayes} and RevBayes \cite{revbayes}. 
+Currently, the most popular Bayesian phylogenetics tools are BEAST (\cite{beast})
+and its successor BEAST2 (\cite{beast2}),  
+MrBayes (\cite{mrbayes}) and RevBayes (\cite{revbayes}). 
 Each of these use efficient tree sampling 
 routines to create a posterior probability distribution of the to-be-inferred 
 phylogenetic tree. But next to the computational speed, they also allow
@@ -137,60 +138,58 @@ governs the nucleotide subsititution model, (2) clock model, specifying
 the rate of mutation per lineage in time, and (3) tree prior, embodying
 the speciation model behind branching events (speciation) 
 and branch termination (extinction).
-
 The effect of choosing a (potentially wrong) prior will have its effect on
-the posterior. Recently, for example, \cite{moller2018} show that the effect
+the posterior. For example, recently, it was shown that the effect
 of choosing a tree prior biases the estimation of the molecular clock rate, 
-for DNA sequences of 100-1000 base pairs.
+for DNA sequences of 100-1000 base pairs (\cite{moller2018}).
 
-All of the currently implemented tree priors assume that speciation is 
-instantaneous, where we know that speciation can be a gradual process.
+At the present time, for sexually producing animals, all we have at our
+disposal are tree priors that assume that speciation
+is instantaneous, where we know that speciation is a gradual process.
+When assuming big populations sizes (thus the effect of sampling to 
+be small), the (constant-rate) birth-death (BD) model is a commonly 
+used tree prior, which does not incorporate the temporal aspect of speciation.
 The protracted birth-death (PBD) model, an extension of 
-the (constant-rate) birth-death (BD) model, incorporates this idea.
-In the PBD model, a branching event does not give rise to a new species, but to
+the BD model, does incorporate the idea that speciation takes time.
+In this model, a branching event does not give rise to a new species, but to
 a new species-to-be, called an incipient species. Such an incipient
-species may go extinct, or finish its speciation to become a good species.
+species may go extinct, finish its speciation to become a good species, or give
+rise to new incipient species.
 
-Although we know speciation takes time, all of our theoretical 
-phylogenetic modeling tools ignore this fact. One reason may be to ease
-computation, enabling researchers to work on bigger phylogenies (with
-more power statistical power) instead. Additionally, speciation being
-protracted is only playing a role in the present. As seen from the present,
-all older species have finished speciation, as we -by definition- recognize
-these species as such. 
+The effect of using the (incorrect) BD tree prior for a PBD process is unknown.
+A potential problem in species conservation is that the number of 
+species is underestimated (see \cite{fennessy2016} for a clear example). 
+Additionally, protracted speciation may be one 
+explanation in the observed decline of speciation rates in 
+time (\cite{etienne2012}). Also, a BD model places the most recent common 
+ancestor (MRCA) of a young species duo closer to the present, as the
+BD model allows for a speciation event being recognized immediately,
+where the PBD model acknowledges that this will take time.
 
-There are problems with ignoring protracted speciation. A very pragmatic
-example is the conservation of an underestimated amount of species. 
-But from a more theoretical perspective, the
-observed decline of speciation rate in time (excluding the contemporary human-driven
-mass extinction event) may be explained by these new species not being 
-recognized yet. Another problem is that the most recent common 
-ancestor (MRCA) of a young species duo is estimated 
-too close to the present, as in the BD model a species can be 
-ultra-young (as speciation is assumed to be instantaneous), 
-where the PBD model will place these MRCAs
-further back in time (as two events need to have finished completion).
+There are multiple possiblities why the PBD model is relatively unexplored.
+Biologically, the PBD model is predicted to have an effect strongest in
+the present (as earlier speciation events are nearly always recognized),
+so in research that investigates (mostly) older species, a BD model would suffice. 
+Computationally, the BD model is simpler, thus more convenient, model. 
+Methodological, there is no computational tool where 
+the PBD model fits in: every contemporary framework assumes 
+either an analysis at the species or subspecies level. In the PBD
+model, incipient species are the cause there is no such thing 
+as a 'true' species tree, as incipient species may give rise to paraphylies.
+It may be possible to establish a protocol to sample a species tree from an 
+incipient species tree, but this has not yet been explored [NOTE: except by Simonet].
 
-From a theoretical point of view, there is another reason why protracted
-speciation has not yet become a member of our toolbox: there is no framework
-where it fits in: a framework assumes either an analysis at the species or
-subspecies level. When picking a tool that does its analysis at the
-species level, there is no protocol how to select which incipient species
-gets to represent the full species it is still a member of. When picking
-a tool at the sub-species level, the incipient state disappears as a
-sub-species lineage, and the process degrades to an ordinary birth-death 
-process.
+This research's goal is to explore the effect of using an overly simplistic
+BD prior on a PBD simulated reality. We provide a data set, 
+that quantifies the inference error made in general, and explores
+the effect of the way species trees are sampled from an incipient species tree.  
+In brief, we simulate protracted phylogenies using the PBD process,
+from which we sample a species tree. From that species tree, 
+we simulate a DNA sequence alignment. Then, BEAST2 uses these alignments
+to infer a posterior of phylogenies, using a BD prior. The difference
+between the (BD) posterior phylogenies and (PBD) species tree is quantified.
 
-This exploratory research's goal is to produce a 
-useful and balanced data set, that quantifies the inference error 
-we make from choosing the incorrect prior. In this context, 
-we measure the error made on PBD phylogenies, when using a BD prior.
-In brief, we simulate protracted phylogenies using the protracted birth-death process,
-from those phylogenies sample a species tree. From that species tree, 
-we simulate a DNA sequence alignment. Then we let BEAST infer a phylogeny 
-from these alignments using the standard birth-death prior. 
-We compare the posterior phylogenies to the species tree using the nLTT statistic.
-
+% Methods
 
 The parameter space the data set explores is inspired on 
 [Etienne et al, 2014] for two reasons: (1) the academic
