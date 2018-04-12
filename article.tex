@@ -180,7 +180,7 @@ It may be possible to establish a protocol to sample a species tree from an
 incipient species tree, but this has not yet been explored [NOTE: except by Simonet].
 
 This research's goal is to explore the effect of using an overly simplistic
-BD prior on a PBD simulated reality. We provide a data set, 
+BD prior on PBD simulated phylogenies. We provide a data set, 
 that quantifies the inference error made in general, and explores
 the effect of the way species trees are sampled from an incipient species tree.  
 In brief, we simulate protracted phylogenies using the PBD process,
@@ -191,30 +191,25 @@ between the (BD) posterior phylogenies and (PBD) species tree is quantified.
 
 % Methods
 
-The parameter space the data set explores is inspired on 
-[Etienne et al, 2014] for two reasons: (1) the academic
-reason of being able to compare results, and (2) the practical
-reason that the simulated phylogies will have enough taxa to
-be informative, but not too big to be computationally overdemanding.
-This research uses a complete superset of those parameter settings.
-For the speciation initiation rate, we'll use $0.1$, $0.5$ and $1.0$ 
-speciation initiation events per (good species) lineage per time unit, 
-extending the set of
-values used from one ($0.5$) to three. 
-The speciation completion
-rates used are $0.1$, $0.3$, $1.0$ and $10^6$ speciation completion
-events per (incipient species) lineage per time unit, in which only
-the last value is added as a computational proxy for infinity, which
-makes the experiment fall back to a Birth-Death model (as speciation
-is again instantaneous), allowing to measure the baseline error.
+The PBD model has five biological parameters (see \ref{table:parameters}), 
+which we explore in a factorial fashion, excluding some combinations. 
+We assume that the speciation initiation and extinction rates
+of an incipient and good species are equal ($b_i = b_g$ and $\mu_i = \mu_g$),
+as this will result in monophyletic incipient species trees.
+We only simulate a PBD process for phylogenies in which
+speciation initiation exceeds extinction rate ($b > \mu$),
+and in which their difference is not too big ($b - \mu < 0.8$), 
+to prevent overly taxon-poor and taxon-rich phylogenies respectively.
+The parameter values chosen are a 
+superset of \cite{etienne2014}, as these parameters result in reasonably
+sized phylogenies and allows us to compare results. 
+For the speciation initiation rate $b$, we'll use $0.1$, $0.5$ and $1.0$ 
+speciation initiation events per (good species) lineage per time unit.
+The speciation completion rates used are $0.1$, $0.3$, $1.0$ and $\infty$ speciation completion
+events per (incipient species) lineage per time unit. For $\lambda = \infty$, 
+the PBD model equals a BD model, which allows us to measure the baseline error.
 The extinction rates used are $0.0$, $0.1$, $0.2$ and $0.4$ 
-extinction events per (good or incipient) lineage per time unit,
-in which $0.4$ is a new extinction rate.
-We investigate these parameters in a factorial fashion, except for
-(1) those combinations in which the extinction rate equals or exceeds
-the speciation initiation rate, and (2) the difference between
-speciation initiation rate and extinction rate exceeds $0.8$. This is
-done to prevent overly taxon-poor and taxon-rich phylogenies respectively.
+extinction events per (good or incipient) lineage per time unit.
 
 From each biological parameter set, a protracted birth-death tree is simulated,
 with the same crown age as [Etienne et al., 2014] of 15 million years. 
@@ -400,7 +395,7 @@ RSE contributed substantially to revisions.
     Overview of the 12 simulation parameters. Above the horizontal line is 
     the biological parameter set.
   }
-  \label{table:simulation_parameters}
+  \label{table:parameters}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
