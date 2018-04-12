@@ -48,7 +48,7 @@
   % introduction to the field,
   % comprehensible to a scientist in any discipline.
   The tools for reconstructing phylogenetic relationships between taxonomic 
-  units (e.g. species) have become very advanced in the last two decades. 
+  units (e.g. species) have become very advanced in the last three decades. 
 
   % Two to three sentences of
   % more detailed background, comprehensible to
@@ -117,24 +117,36 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The computational tools a contemporary phylogeneticist has at his/her disposal
-goes beyond the wildest imagination of those living two decades ago. 
+goes beyond the wildest imagination of those living three decades ago. 
 Advances in computational power allowed the first cladograms to be inferred 
 from DNA alignments in 1981 \cite{felsenstein1981}. The first Bayesian tools 
 appeared in 1996 \cite{rannala1996}, allowing
 for unprecedented flexibility in the setup of a phylogenetic model.
 
 Currently, the most popular Bayesian phylogenetics tools are BEAST \cite{beast},  
-MrBayes [ref] and RevBayes [ref]. Each of these use efficient tree sampling 
+MrBayes \cite{mrbayes} and RevBayes \cite{revbayes}. 
+Each of these use efficient tree sampling 
 routines to create a posterior probability distribution of the to-be-inferred 
 phylogenetic tree. But next to the computational speed, they also allow
 to incorporate known or hypothesized structure of the phylogenetic 
 tree-to-be-inferred through the model priors.
 
-The model prior most relevant here, is the tree prior. The tree prior
-embodies the assumed speciation model. Each speciation model has a
-different expected branch length distribution. It has been shown 
-[Moeller, du Plessis, Stadler. 2018] that the effect of the prior on the posterior distribution 
-of trees can be substantial. 
+In a Bayesian analysis, the model priors are explicitly specified.
+Those model priors can be grouped in three groups: (1) site model, which
+governs the nucleotide subsititution model, (2) clock model, specifying
+the rate of mutation per lineage in time, and (3) tree prior, embodying
+the speciation model behind branching events (speciation) 
+and branch termination (extinction).
+
+The effect of choosing a (potentially wrong) prior will have its effect on
+the posterior. Recently, for example, \cite{moller2018} show that the effect
+of choosing a tree prior biases the estimation of the molecular clock rate, 
+for DNA sequences of 100-1000 base pairs.
+ 
+This bias has its implications in the research and policy regarding rapidly 
+evolving viruses. [NOTE: I would say that same study concludes 
+that it does not matter for DNA alignments of 15K, which is the DNA 
+alignment length that I use].
 
 All of the currently implemented tree priors assume that speciation is 
 instantaneous, where we know that speciation can be a gradual process.
@@ -238,7 +250,8 @@ millions of years, and our crown age is 15 million years,
 this equates to a rate of $\frac{1000}{15}$ nucleotide substitutions 
 changes per time unit per lineage. To provide for each substitution being unique,
 we simulate as much DNA nucleotides as expected mutations, which equals the
-nucleotide substitution rate times the crown age, which equals 15K. As this
+nucleotide substitution rate times the crown age, which equals 15K (which is
+coincidentally the same as \cite{moller2018}). As this
 mutation rate is constant over all branches, it in effect follows a strict 
 clock model, which we will specify as the known clock model prior later.
 
