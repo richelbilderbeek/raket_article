@@ -230,7 +230,10 @@ in which we pick the youngest (most recent incipient speciation),
 oldest or random subspecies. Note that only in few 
 cases (when speciation completion rate is low) the incipient species
 chosen will have an effect on the branch length distribution of species 
-tree, as this requires a very specific scenario.
+tree. The simplest scenario requires a species, with one good and
+one incipient lineage, after which either lineages gives 
+rise to a new good species, before the first incipient lineage
+completes speciation itself.
 
 From a species tree, we simulate a DNA alignment that has the same history
 as the phylogeny, using the phangorn package (\cite{phangorn}). 
@@ -262,22 +265,12 @@ with a mean of the crown age, and a standard deviation of 0.001 time units. 0.00
 time units equates to 1000 years, which is the same resolution as which the
 alignment is created. The MCMC chain is run to generate 1100 states,
 of which the first 10\% (also called the 'burn-in') is removed. Of the remaining
-1000 MCMC states, the effective sample size (ESS) of the posterior must at least be 200
-for a strong enough inference (\cite{beastbook}). The MCMC sampling interval is 
-chosen in such a way that this is the case for all simulations. For simulations
-with an ESS below 200, their MCMC sampling interval is doubled up until
-the ESS exceeds 200. 
-
-We realize there will be an unavoidable bias in our data set: the MCMC
-algorithm will produce phylogenies that are representative for the joint
-likelihood of (correct) site model, (correct) clock model and 
-(incorrect) (Birth-Death) speciation model. This will
-warp the distribution of phylogenies somewhat towards the incorrect
-speciation model: branch length distributions that are likely in the
-Birth-Death model will be relatively overrepresented. We expect
-this bias to be systematic, equally affecting distributions
-of identical speciation completion rates, and symptomatic
-of using contemporary tools.
+1000 MCMC states [NOTE: Why 1000? Why not 250?], 
+the effective sample size (ESS) of the posterior must at least be 200
+for a strong enough inference (\cite{beastbook}). An ESS can be increased by increasing
+the number of samples or decreasing the autocorrelation between samples. 
+Would the ESS be less than 200, we decrease autocorrelation by doubling 
+the MCMC sampling interval of that simulation, until the ESS exceeds 200.
 
 Each posterior's phylogeny is compared to the (sampled) species tree
 by the nLTT statistic (\cite{janzen2015}), using the nLTT package (\cite{nltt}). 
