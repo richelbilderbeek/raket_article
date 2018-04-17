@@ -298,9 +298,11 @@ Each data set will be stored as a comma-seperated file. We placed
 an upper limit for this data set's size at the maximum size of a table (called 
 a data frame) of the R programming language, in which such a table may 
 have maximally $2^{32}-1$ cells and occupy less then 2 gigabytes in memory.
-Each row will contain the parameter set, nLTT statistics and some 
-diagnostics [NOTE: should I keep the diagnostics?] (see \ref{table:specs} for the 
-complete list). From the constraints of the R programming language, this allows for 40K rows. 
+To provide for copying such a table (thus, allowing it to be present in
+memory twice), the size of the table has an upper limit of half its maximal size.
+Each row will contain the parameter set and the generated nLTT 
+statistics (see \ref{table:specs} for the exact data specification).
+From these constraints, this allows for 20K rows. 
 
 Our results will show the general effect of the biological parameters (speciation initiation, 
 speciation completion and extinction rate) using the balanced data set,
