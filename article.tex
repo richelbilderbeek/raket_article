@@ -227,8 +227,8 @@ the good species as a whole. To clarify, it may be that an
 incipient species branched of from a good species. Both of these
 subspecies are recognized as the good species, and both can be 
 picked as a representative. Here we use three sampling scenario's,
-in which we pick the youngest (most recent incipient speciation), 
-oldest or random subspecies. Note that only in few 
+in which we pick the most recent common ancestor (MRCA), 
+most distant common ancestor (MDCA) or random subspecies. Note that only in few 
 cases (when speciation completion rate is low) the incipient species
 chosen will have an effect on the branch length distribution of species 
 tree. The simplest scenario requires a species, with one good and
@@ -290,8 +290,8 @@ distribution. In this data set, incipient species are sampled
 randomly to represent a good species.
 The second data set charts the effect of sampling
 subspecies and only uses PBD trees in which this sampling
-has an effect. For each of these trees, we sample both youngest and
-oldest subspecies. We predict that these two most extreme sampling methods
+has an effect. For each of these trees, we sample both MRCA and
+MDCA subspecies. We predict that these two most extreme sampling methods
 result in the most pronounced differences.
 
 Each data set will be stored as a comma-seperated file. We placed 
@@ -382,7 +382,7 @@ RSE contributed substantially to revisions.
     \hline
     $t_c$                 & Crown age & 15 \\
     $\sigma_c$            & Standard deviation around crown age & 0.001 \\
-    $M$                   & Sampling method & Random \\
+    $M$                   & Sampling method & MRCA, MDCA or random \\
     $r$                   & Mutation rate & $\frac{1000}{15}$ \\
     $l_a$                 & DNA alignment length & $15K$ \\
     $f_i$                 & MCMC sampling interval & 1K or more \\
@@ -393,7 +393,10 @@ RSE contributed substantially to revisions.
   \end{tabular}
   \caption{
     Overview of the 12 simulation parameters. Above the horizontal line is 
-    the biological parameter set.
+    the biological parameter set. Sampling method $M$ is random for the general
+    data set. For the data set exploring the effect of sampling, MRCA is
+    used for odd values of $R_i$, and MDCA is used for even values of $R_i$.
+    $R_i$ is 1 for the first simulation, 2 for the next, etcetera.
   }
   \label{table:parameters}
 \end{table}
@@ -409,20 +412,13 @@ RSE contributed substantially to revisions.
     \hline
     $12$   & simulation parameters, see table \ref{table:parameters} \\
     $1000$ & nLTT statistic values \\
-    $1$ & [NOTE: keep this in?] expected duration of speciation (from Etienne \& Rosindell 2012) \\
-    $1$ & [NOTE: keep this in?] number of taxa in incipient species tree (also: number of subspecies) \\
-    $1$ & [NOTE: keep this in?] number of taxa in species tree (also: number of species) \\
-    $1$ & [NOTE: keep this in?] mean nLTT statistic \\
-    $1$ & [NOTE: keep this in?] median nLTT statistic \\
-    $1$ & [NOTE: keep this in?] lower bound of 95\% HPD value of nLTT statistic \\
-    $1$ & [NOTE: keep this in?] upper bound of 95\% HPD value of nLTT statistic \\
     $11$ & ESSes of all parameters estimated by BEAST2 (see specs below) \\
     \hline
   \end{tabular}
   \caption{
     Specification of the data sets. $n$ denotes the number
     of columns a certain item will occupy, resulting in a table of 
-    1030 columns and 40K rows.
+    1023 columns and 40K rows.
   }
   \label{table:specs}
 \end{table}
