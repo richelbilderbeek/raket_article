@@ -119,18 +119,19 @@
 The computational tools a contemporary phylogeneticist has at his/her disposal
 goes beyond the wildest imagination of those living three decades ago. 
 Advances in computational power allowed the first cladograms to be inferred 
-from DNA alignments in 1981 (\cite{felsenstein1981}). The first Bayesian tools 
-appeared in 1996 (\cite{rannala1996}), allowing
-for unprecedented flexibility in the setup of a phylogenetic model.
+from DNA alignments in 1981 (\cite{felsenstein1981}), where  
+the first Bayesian tools emerged in 1996 (\cite{rannala1996}), the latter
+providing for unprecedented flexibility in the setup of a phylogenetic model.
 
 Currently, the most popular Bayesian phylogenetics tools are BEAST (\cite{beast})
-and its successor BEAST2 (\cite{beast2}),  
-MrBayes (\cite{mrbayes}) and RevBayes (\cite{revbayes}). 
-Each of these use efficient tree sampling 
-routines to create a posterior probability distribution of the to-be-inferred 
-phylogenetic tree. But next to the computational speed, they also allow
-to incorporate known or hypothesized structure of the phylogenetic 
-tree-to-be-inferred through the model priors.
+and its successor BEAST2 (\cite{beast2}), MrBayes (\cite{mrbayes}) and RevBayes (\cite{revbayes}). 
+They allow to incorporate known or hypothesized structure of a phylogenetic 
+tree-to-be-inferred through model priors. From these priors and an alignment 
+of DNA, RNA or protein sequences, a posterior is created. A posterior
+is a collection of phylogenies and parameter estimates (of the model prior), 
+in which likelier combinations are present more often.
+Each of these tools use efficient tree sampling routines to create an 
+informative posterior fast.
 
 In a Bayesian analysis, the model priors are explicitly specified.
 Those model priors can be grouped in three groups: (1) site model, which
@@ -138,17 +139,17 @@ governs the nucleotide subsititution model, (2) clock model, specifying
 the rate of mutation per lineage in time, and (3) tree prior, embodying
 the speciation model behind branching events (speciation) 
 and branch termination (extinction).
-The effect of choosing a (potentially wrong) prior will have its effect on
+The effect of choosing a (potentially wrong) prior affects
 the posterior. For example, recently, it was shown that the effect
 of choosing a tree prior biases the estimation of the molecular clock rate, 
 for DNA sequences of 100-1000 base pairs (\cite{moller2018}).
 
-At the present time, for sexually producing animals, all we have at our
-disposal are tree priors that assume that speciation
-is instantaneous, where we know that speciation is a gradual process.
-When assuming big populations sizes (thus the effect of sampling to 
+The contemporary phylogenetic tools provide only for tree priors 
+that assume speciation is instantaneous, where we know that, 
+in animals, speciation is a gradual process.
+When big populations sizes can be assumed big (thus the effect of sampling to 
 be small), the (constant-rate) birth-death (BD) model is a commonly 
-used tree prior, which does not incorporate the temporal aspect of speciation.
+used tree prior, which ignores the temporal aspect of speciation.
 The protracted birth-death (PBD) model, an extension of 
 the BD model, does incorporate the idea that speciation takes time.
 In this model, a branching event does not give rise to a new species, but to
@@ -164,20 +165,18 @@ explanation in the observed decline of speciation rates in
 time (\cite{etienne2012}). Also, a BD model places the most recent common 
 ancestor (MRCA) of a young species duo closer to the present, as the
 BD model allows for a speciation event being recognized immediately,
-where the PBD model acknowledges that this will take time.
+where the PBD model accounts for speciation needing time.
 
 There are multiple possiblities why the PBD model is relatively unexplored.
 Biologically, the PBD model is predicted to have an effect strongest in
 the present (as earlier speciation events are nearly always recognized),
 so in research that investigates (mostly) older species, a BD model would suffice. 
-Computationally, the BD model is simpler, thus more convenient, model. 
+Computationally, the BD model is simpler, thus more light-weight, model. 
 Methodological, there is no computational tool where 
 the PBD model fits in: every contemporary framework assumes 
 either an analysis at the species or subspecies level. In the PBD
 model, incipient species are the cause there is no such thing 
 as a 'true' species tree, as incipient species may give rise to paraphylies.
-It may be possible to establish a protocol to sample a species tree from an 
-incipient species tree, but this has not yet been explored [NOTE: except by Simonet].
 
 This research's goal is to explore the effect of using an overly simplistic
 BD prior on PBD simulated phylogenies. We provide a data set, 
@@ -196,8 +195,9 @@ between the (BD) posterior phylogenies and (PBD) species tree is quantified.
 The PBD model has five biological parameters (see \ref{table:parameters}), 
 which we explore in a factorial fashion, excluding some combinations. 
 We assume that the speciation initiation and extinction rates
-of an incipient and good species are equal ($b_i = b_g$ and $\mu_i = \mu_g$),
-as this will result in monophyletic incipient species trees.
+of an incipient and good species are equal ($b = b_i = b_g$ and $\mu = \mu_i = \mu_g$),
+as this enables use to do more replicates 
+\textbf{[NOTE: I am unconvinced. I think we should also explore $b_i \neq b_g$ and $\mu_i \neq \mu_g$]}.
 We only simulate a PBD process for phylogenies in which
 speciation initiation exceeds extinction rate ($b > \mu$),
 and in which their difference is not too big ($b - \mu < 0.8$), 
@@ -222,53 +222,54 @@ generatior seed, and thus will be unique, resulting in a balanced
 data set. 
 
 From an incipient species tree, we sample a species tree. To do
-so, from each species a sub-species must be chosen to represent
+so, from each species a sub-species is chosen to represent
 the good species as a whole. To clarify, it may be that an
-incipient species branched of from a good species. Both of these
-subspecies are recognized as the good species, and both can be 
-picked as a representative. Here we use three sampling scenario's,
+incipient species branched of from its mother lineage. 
+Both of these subspecies are recognized as the good species of the 
+mother lineage, and both can be picked as an (equally good) representative of the 
+good mother species. 
+In this research, we use three sampling scenario's,
 in which we pick the most recent common ancestor (MRCA), 
-most distant common ancestor (MDCA) or random subspecies. Note that only in few 
-cases (when speciation completion rate is low) the incipient species
-chosen will have an effect on the branch length distribution of species 
-tree. The simplest scenario requires a species, with one good and
-one incipient lineage, after which either lineages gives 
-rise to a new good species, before the first incipient lineage
-completes speciation itself.
+most distant common ancestor (MDCA) or random subspecies. 
+The scenario in which sampling has an effect on the branch length
+distributions of the species tree, is when a species in the proces
+of speciation, gives rise to a new incipient lineage that finishes
+speciation before the ancestral completes speciation itself.
 
 From a species tree, we simulate a DNA alignment that has the same history
 as the phylogeny, using the phangorn package (\cite{phangorn}). 
 The nucleotides of the DNA alignment follow a Jukes-Cantor (\cite{jc69})
 nucleotide substitution model, in which all nucleotide-to-nucleotide transitions
-are equally likely. Although this may seem as a simplification, in our Bayesian
-inference (see below) we use this exact site model as the (obviously correct) site model prior.
+are equally likely. Although this may seem as a simplification, 
+in our Bayesian inference (see below) we use this exact site model as the (obviously correct) site model prior.
 The mutation rate is set in such a way to maximize chronologic information.
-To do so, the mutation rate is set to expect on average 1 (possibly silent) mutation per nucleotide
+To do so, the mutation rate is set to expect on average one (possibly silent) mutation per nucleotide
 between crown age and present, which equates to $\frac{1}{15}$ mutations
 per million year.
 The DNA sequence length is chosen to provide a
-resolution of a 1K years, that is, to have one expected nucleotide change 
-per 1k years per lineage on average. As 1 nucleotide is expected 
-to have on average 1 (possibly silent) mutation per 15 million years, 15K
-nucleotides provides for 1 mutation per alignment per 1K years (which is
+resolution of $10^3$ years, that is, to have one expected nucleotide change 
+per $10^3$ years per lineage on average. As one nucleotide is expected 
+to have on average one (possibly silent) mutation per 15 million years, $15 \cdot 10^3$
+nucleotides results in 1 mutation per alignment per $10^3$ years (which is
 coincidentally the same as \cite{moller2018}). 
 The simulation of these DNA aligment follows a strict clock model, 
 which we will specify as the known clock model prior in the Bayesian inference.
 
 From an alignment, we run a Bayesian analysis and create a posterior, 
 using the phylogetic tool BEAST2 \cite{beast2} using the 
-pirouette (\cite{pirouette}) package. As our site model, we assume a Jukes-Cantor 
+pirouette (\cite{pirouette}) package. For our site model, we assume a Jukes-Cantor 
 nucleotide substitution model, as we used that in the simulation of the alignment.
 For our clock model, we assume a strict clock with the same fixed rate as 
-used in the simulation of the alignment. The tree prior assumed is the BD model, 
+used in the simulation of the alignment \textbf{[NOTE: \cite{moller2018} did not use a
+fixed clock rate, I do not see why]}. The tree prior assumed is the BD model, 
 as this simplification is the goal of this research. 
 Additionally, we assume a MRCA prior with a normal distribution
-with a mean of the crown age, and a standard deviation of 0.001 time units. 0.001
-time units equates to 1000 years, which is the same resolution as which the
-alignment is created. The MCMC chain is run to generate 1111 states,
+with a mean of the crown age, and a standard deviation of $0.5 \cdot 10^{-3}$ time units,
+resulting in 95\% of the crown ages used have the same resolution (of $10^{-3}$ time 
+units) as the alignment. The MCMC chain is run to generate 1111 states,
 of which the first 10\% (also called the 'burn-in') is removed. Of the remaining
-1000 MCMC states [NOTE: Why 1000? Why not 250?], 
-the effective sample size (ESS) of the posterior must at least be 200
+1000 MCMC states \textbf{[NOTE: Why 1000? Why not 250? I would say 250 is preferable, as
+the information will be more dense]}, the effective sample size (ESS) of the posterior must at least be 200
 for a strong enough inference (\cite{beastbook}). An ESS can be increased by increasing
 the number of samples or decreasing the autocorrelation between samples. 
 Would the ESS be less than 200, we decrease autocorrelation by doubling 
@@ -277,15 +278,14 @@ the MCMC sampling interval of that simulation, until the ESS exceeds 200.
 Each posterior's phylogeny is compared to the (sampled) species tree
 by the nLTT statistic (\cite{janzen2015}), using the nLTT package (\cite{nltt}). 
 The nLTT statistic equates to the area between the normalized
-lineages-through-time-plots of two phylogenies, which will be a value between 
-zero (for identical phylogenies) and one. As the nLTT statistic increases
-when phylogenies get increasingly different, we use the nLTT statistic
-as a measure of inference error. Comparing the one (sampled) species tree
+lineages-through-time-plots of two phylogenies, which has a range 
+from zero (for identical phylogenies) to one. We use inference error 
+and nLTT statistic synonymously. Comparing the one (sampled) species tree
 with each of the posterior's species trees, a distribution nLTT statistics
 is created. 
 
-There will be two data sets produced by this research.
-The first data set will be a general balanced data set to chart
+Two data sets are produced by this research.
+The first data set is a general balanced data set to chart
 the effect of the biological parameters on the nLTT statistic
 distribution. In this data set, incipient species are sampled 
 randomly to represent a good species.
@@ -295,24 +295,24 @@ has an effect. For each of these trees, we sample both MRCA and
 MDCA subspecies. We predict that these two most extreme sampling methods
 result in the most pronounced differences.
 
-Each data set will be stored as a comma-seperated file. We placed 
-an upper limit for this data set's size at the maximum size of a table (called 
-a data frame) of the R programming language, in which such a table may 
-have maximally $2^{32}-1$ cells and occupy less then 2 gigabytes in memory.
-To provide for copying such a table (thus, allowing it to be present in
-memory twice), the size of the table has an upper limit of half its maximal size.
-Each row will contain the parameter set and the generated nLTT 
+Each data set is stored as a comma-seperated file. 
+As a theoretical study such as this could theoretically (pun intended)
+produce an infinitely big data set, we placed an upper limit 
+for this data set's size. This size is chosen as such the 
+the R programming language (\cite{r}) can contain a data file in
+memory twice. Each row will contain a parameter set and the generated nLTT 
 statistics (see \ref{table:specs} for the exact data specification).
-From these constraints, this allows for 20K rows. 
+From these constraints, this allows for $2 \cdot 10^3$ rows. As there are 48 combinations
+of biological parameter \textbf{[NOTE: calculate exact number when Rampal decides
+for $b_i = b_g$ only or for also allowing $b_i \neq b_g$]}, there will be 
+168 {[NOTE: recalculate, as before]} replicates per biological parameter set.
 
-Our results will show the general effect of the biological parameters (speciation initiation, 
-speciation completion and extinction rate) using the balanced data set,
+Our results show the general effect of the biological 
+parameters ($b$, $\lambda$, $\mu$) using the balanced data set,
 and the effect of sampling using the data set conditioned on sampling having an effect.
-In both cases, the nLTT statistics distribution will be plotted per
-biological parameter set using a violin plot. A violin plot is chosen to
-maintain information about the distribution. When displaying the effect of a 
-sampling regime, per regime, the nLTT statistics distribution is shown per
-biological parameter set.
+In both cases, the nLTT statistics distribution is plotted per
+biological parameter set using a violin plot, as such a plot 
+maintains information about distribution.
 We predict that nLTT statistic values increase 
 with an increasing protractednedness (that is, a low speciation completion rate),
 but we cannot predict the the extent of this error, as it has never been 
@@ -341,13 +341,36 @@ measured.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Glossary}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % Please supply, as a separate list, the definitions of field-specific terms used in your article.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}
+  \centering 
+  \begin{tabular}{l p{0.8\textwidth}}
+    \hline
+    Term                  & Definition \\
+    \hline
+    \hline
+    Phylogenetics         & The inference of evolutionary relationships of groups of organisms using genetics \\
+    Model prior           & Knowledge or assumptions about the onotogeny of evolutionary histories \\
+    Posterior             & A collection of phylogenies and parameter estimates, in which likelier combinations are present more \\
+    Protracted speciation & The process in which speciation takes two events to complete: a speciation initiation and a speciation completion event  \\
+    Speciation initiation & The start of a speciatiation event, in which initially the new species-to-be is not recognized as such \\
+    Speciation completion & The end of a speciatiation event, in which the new species is recognized as such \\
+    \hline
+  \end{tabular}
+  \caption{
+    Glossary [NOTE: this is requested by the journal]
+  }
+  \label{table:glossary}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Acknowledgements}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\textbf{[NOTE: journal does not request for this. Suggest to remove, but how to acknowledge Peregrine otherwise?]}
 We would like to thank the Center for Information Technology of the University of Groningen for their support
 and for providing access to the Peregrine high performance computing cluster.
 
@@ -355,6 +378,7 @@ and for providing access to the Peregrine high performance computing cluster.
 \section{Authors' contributions}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\textbf{[NOTE: journal does not request for this]}
 RJCB and RSE conceived the idea for this experiment and package. 
 RJCB created and tested the experiment and package, 
 and wrote the first draft of the manuscript. 
@@ -457,5 +481,6 @@ RSE contributed substantially to revisions.
   \label{table:estimated_parameters}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \end{document}
