@@ -1,0 +1,218 @@
+<p><span><strong>Keywords:</strong></span> computational biology, evolution, phylogenetics, prior choice</p>
+<h1 id="introduction">Introduction</h1>
+<p>The computational tools a contemporary phylogeneticist has at his/her disposal goes beyond the wildest imagination of those living three decades ago. Advances in computational power allowed the first cladograms to be inferred from DNA alignments in 1981 (<span class="citation"></span>), where the first Bayesian tools emerged in 1996 (<span class="citation"></span>), the latter providing for unprecedented flexibility in the setup of a phylogenetic model.</p>
+<p>Currently, the most popular Bayesian phylogenetics tools are BEAST (<span class="citation"></span>) and its successor BEAST2 (<span class="citation"></span>), MrBayes (<span class="citation"></span>) and RevBayes (<span class="citation"></span>). They allow to incorporate known or hypothesized structure of a phylogenetic tree-to-be-inferred through model priors. From these priors and an alignment of DNA, RNA or protein sequences, a posterior is created. A posterior is a collection of phylogenies and parameter estimates (of the model prior), in which likelier combinations are present more often. Each of these tools use efficient tree sampling routines to create an informative posterior fast.</p>
+<p>In a Bayesian analysis, the model priors are explicitly specified. Those model priors can be grouped in three groups: (1) site model, which governs the nucleotide subsititution model, (2) clock model, specifying the rate of mutation per lineage in time, and (3) tree prior, embodying the speciation model behind branching events (speciation) and branch termination (extinction). The effect of choosing a (potentially wrong) prior affects the posterior. For example, recently, it was shown that the effect of choosing a tree prior biases the estimation of the molecular clock rate, for DNA sequences of 100-1000 base pairs (<span class="citation"></span>).</p>
+<p>The contemporary phylogenetic tools provide only for tree priors that assume speciation is instantaneous, where we know that, in animals, speciation is a gradual process. When big populations sizes can be assumed big (thus the effect of sampling to be small), the (constant-rate) birth-death (BD) model is a commonly used tree prior, which ignores the temporal aspect of speciation. The protracted birth-death (PBD) model, an extension of the BD model, does incorporate the idea that speciation takes time. In this model, a branching event does not give rise to a new species, but to a new species-to-be, called an incipient species. Such an incipient species may go extinct, finish its speciation to become a good species, or give rise to new incipient species.</p>
+<p>The effect of using the (incorrect) BD tree prior for a PBD process is unknown. A potential problem in species conservation is that the number of species is underestimated (see <span class="citation"></span> for a clear example). Additionally, protracted speciation may be one explanation in the observed decline of speciation rates in time (<span class="citation"></span>). Also, a BD model places the most recent common ancestor (MRCA) of a young species duo closer to the present, as the BD model allows for a speciation event being recognized immediately, where the PBD model accounts for speciation needing time.</p>
+<p>There are multiple possiblities why the PBD model is relatively unexplored. Biologically, the PBD model is predicted to have an effect strongest in the present (as earlier speciation events are nearly always recognized), so in research that investigates (mostly) older species, a BD model would suffice. Computationally, the BD model is simpler, thus more light-weight, model. Methodological, there is no computational tool where the PBD model fits in: every contemporary framework assumes either an analysis at the species or subspecies level. In the PBD model, incipient species are the cause there is no such thing as a ’true’ species tree, as incipient species may give rise to paraphylies.</p>
+<p>This research’s goal is to explore the effect of using an overly simplistic BD prior on PBD simulated phylogenies. We provide a data set, that quantifies the inference error made in general, and explores the effect of the way species trees are sampled from an incipient species tree. In brief, we simulate protracted phylogenies using the PBD process, from which we sample a species tree. From that species tree, we simulate a DNA sequence alignment. Then, BEAST2 uses these alignments to infer a posterior of phylogenies, using a BD prior. The difference between the (BD) posterior phylogenies and (PBD) species tree is quantified.</p>
+<h1 id="methods-but-we-are-not-allowed-to-keep-this-header">Methods (but we are not allowed to keep this header)</h1>
+<p>The PBD model has five biological parameters (see [table:parameters]), which we explore in a factorial fashion, excluding some combinations. We assume that the speciation initiation and extinction rates of an incipient and good species are equal (<span class="math inline"><em>b</em> = <em>b</em><sub><em>i</em></sub> = <em>b</em><sub><em>g</em></sub></span> and <span class="math inline"><em>μ</em> = <em>μ</em><sub><em>i</em></sub> = <em>μ</em><sub><em>g</em></sub></span>), as this enables use to do more replicates <strong>[NOTE: I am unconvinced. I think we should also explore <span class="math inline"><em>b</em><sub><em>i</em></sub> ≠ <em>b</em><sub><em>g</em></sub></span> and <span class="math inline"><em>μ</em><sub><em>i</em></sub> ≠ <em>μ</em><sub><em>g</em></sub></span>]</strong>. We only simulate a PBD process for phylogenies in which speciation initiation exceeds extinction rate (<span class="math inline"><em>b</em> &gt; <em>μ</em></span>), and in which their difference is not too big (<span class="math inline"><em>b</em> − <em>μ</em> &lt; 0.8</span>), to prevent overly taxon-poor and taxon-rich phylogenies respectively. The parameter values chosen are a superset of <span class="citation"></span>, as these parameters result in reasonably sized phylogenies and allows us to compare results. For the speciation initiation rate <span class="math inline"><em>b</em></span>, we’ll use <span class="math inline">0.1</span>, <span class="math inline">0.5</span> and <span class="math inline">1.0</span> speciation initiation events per (good species) lineage per time unit. The speciation completion rates used are <span class="math inline">0.1</span>, <span class="math inline">0.3</span>, <span class="math inline">1.0</span> and <span class="math inline">10<sup>9</sup></span> speciation completion events per (incipient species) lineage per time unit. For <span class="math inline"><em>λ</em> = ∞</span> (where we assume that in this context <span class="math inline">10<sup>9</sup> ≈ ∞</span>), the PBD model equals a BD model, which allows us to measure the baseline error. The extinction rates used are <span class="math inline">0.0</span>, <span class="math inline">0.1</span>, <span class="math inline">0.2</span> and <span class="math inline">0.4</span> extinction events per (good or incipient) lineage per time unit.</p>
+<p>From each biological parameter set, a protracted birth-death tree is simulated, using the PBD package (<span class="citation"></span>) in the R programming language (<span class="citation"></span>), with the same crown age as <span class="citation"></span> of 15 million years. Each protracted birth-death tree uses a different random number generatior seed, and thus will be unique, resulting in a balanced data set.</p>
+<p>From an incipient species tree, we sample a species tree. To do so, from each species a sub-species is chosen to represent the good species as a whole. To clarify, it may be that an incipient species branched of from its mother lineage. Both of these subspecies are recognized as the good species of the mother lineage, and both can be picked as an (equally good) representative of the good mother species. In this research, we use three sampling scenario’s, in which we pick the most recent common ancestor (MRCA), most distant common ancestor (MDCA) or random subspecies. The scenario in which sampling has an effect on the branch length distributions of the species tree, is when a species in the proces of speciation, gives rise to a new incipient lineage that finishes speciation before the ancestral completes speciation itself.</p>
+<p>From a species tree, we simulate a DNA alignment that has the same history as the phylogeny, using the phangorn package (<span class="citation"></span>). The nucleotides of the DNA alignment follow a Jukes-Cantor (<span class="citation"></span>) nucleotide substitution model, in which all nucleotide-to-nucleotide transitions are equally likely. Although this may seem as a simplification, in our Bayesian inference (see below) we use this exact site model as the (obviously correct) site model prior. The mutation rate is set in such a way to maximize chronologic information. To do so, the mutation rate is set to expect on average one (possibly silent) mutation per nucleotide between crown age and present, which equates to <span class="math inline">$\frac{1}{15}$</span> mutations per million year. The DNA sequence length is chosen to provide a resolution of <span class="math inline">10<sup>3</sup></span> years, that is, to have one expected nucleotide change per <span class="math inline">10<sup>3</sup></span> years per lineage on average. As one nucleotide is expected to have on average one (possibly silent) mutation per 15 million years, <span class="math inline">15 ⋅ 10<sup>3</sup></span> nucleotides results in 1 mutation per alignment per <span class="math inline">10<sup>3</sup></span> years (which is coincidentally the same as <span class="citation"></span>). The simulation of these DNA aligment follows a strict clock model, which we will specify as the known clock model prior in the Bayesian inference.</p>
+<p>From an alignment, we run a Bayesian analysis and create a posterior, using the phylogetic tool BEAST2 <span class="citation"></span> using the pirouette (<span class="citation"></span>) package. For our site model, we assume a Jukes-Cantor nucleotide substitution model, as we used that in the simulation of the alignment. For our clock model, we assume a strict clock with the same fixed rate as used in the simulation of the alignment <strong>[NOTE: <span class="citation"></span> did not use a fixed clock rate, I do not see why]</strong>. The tree prior assumed is the BD model, as this simplification is the goal of this research. Additionally, we assume a MRCA prior with a normal distribution with a mean of the crown age, and a standard deviation of <span class="math inline">0.5 ⋅ 10<sup>−3</sup></span> time units, resulting in 95% of the crown ages used have the same resolution (of <span class="math inline">10<sup>−3</sup></span> time units) as the alignment. The MCMC chain is run to generate 1111 states, of which the first 10% (also called the ’burn-in’) is removed. Of the remaining 1000 MCMC states <strong>[NOTE: Why 1000? Why not 250? I would say 250 is preferable, as the information will be more dense]</strong>, the effective sample size (ESS) of the posterior must at least be 200 for a strong enough inference (<span class="citation"></span>). An ESS can be increased by increasing the number of samples or decreasing the autocorrelation between samples. Would the ESS be less than 200, we decrease autocorrelation by doubling the MCMC sampling interval of that simulation, until the ESS exceeds 200.</p>
+<p>Each posterior’s phylogeny is compared to the (sampled) species tree by the nLTT statistic (<span class="citation"></span>), using the nLTT package (<span class="citation"></span>). The nLTT statistic equates to the area between the normalized lineages-through-time-plots of two phylogenies, which has a range from zero (for identical phylogenies) to one. We use inference error and nLTT statistic synonymously. Comparing the one (sampled) species tree with each of the posterior’s species trees, a distribution nLTT statistics is created.</p>
+<p>Two data sets are produced by this research. The first data set is a general balanced data set to chart the effect of the biological parameters on the nLTT statistic distribution. In this data set, incipient species are sampled randomly to represent a good species. The second data set charts the effect of sampling subspecies and only uses PBD trees in which this sampling has an effect. For each of these trees, we sample both MRCA and MDCA subspecies. We predict that these two most extreme sampling methods result in the most pronounced differences.</p>
+<p>Each data set is stored as a comma-seperated file. As a theoretical study such as this could theoretically (pun intended) produce an infinitely big data set, we placed an upper limit for this data set’s size. This size is chosen as such the the R programming language (<span class="citation"></span>) can contain a data file in memory twice. Each row will contain a parameter set and the generated nLTT statistics (see [table:specs] for the exact data specification). From these constraints, this allows for <span class="math inline">2 ⋅ 10<sup>3</sup></span> rows. As there are 48 combinations of biological parameter <strong>[NOTE: calculate exact number when Rampal decides for <span class="math inline"><em>b</em><sub><em>i</em></sub> = <em>b</em><sub><em>g</em></sub></span> only or for also allowing <span class="math inline"><em>b</em><sub><em>i</em></sub> ≠ <em>b</em><sub><em>g</em></sub></span>]</strong>, there will be 168 <span>[NOTE: recalculate, as before]</span> replicates per biological parameter set.</p>
+<p>Our results show the general effect of the biological parameters (<span class="math inline"><em>b</em></span>, <span class="math inline"><em>λ</em></span>, <span class="math inline"><em>μ</em></span>) using the balanced data set, and the effect of sampling using the data set conditioned on sampling having an effect. In both cases, the nLTT statistics distribution is plotted per biological parameter set using a violin plot, as such a plot maintains information about distribution. We predict that nLTT statistic values increase with an increasing protractednedness (that is, a low speciation completion rate), but we cannot predict the the extent of this error, as it has never been measured.</p>
+<h1 id="results">Results</h1>
+<div class="figure">
+<img src="fig_nltt_stats_per_setup.png" alt=" nLTT statistic distribution per biological parameter set, using the balanced data set " style="width:80.0%" />
+<p class="caption"> nLTT statistic distribution per biological parameter set, using the balanced data set </p>
+</div>
+<div class="figure">
+<img src="fig_sampling.png" alt=" nLTT statistic distribution per biological parameter set per sampling regime, using the data set conditioned on sampling regime having an effect " style="width:80.0%" />
+<p class="caption"> nLTT statistic distribution per biological parameter set per sampling regime, using the data set conditioned on sampling regime having an effect </p>
+</div>
+<h1 id="glossary">Glossary</h1>
+<table>
+<caption> Glossary [NOTE: this is requested by the journal] <span data-label="table:glossary"></span></caption>
+<thead>
+<tr class="header">
+<th align="left">Term</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Phylogenetics</td>
+<td align="left">The inference of evolutionary relationships of groups of organisms using genetics</td>
+</tr>
+<tr class="even">
+<td align="left">Model prior</td>
+<td align="left">Knowledge or assumptions about the onotogeny of evolutionary histories</td>
+</tr>
+<tr class="odd">
+<td align="left">Posterior</td>
+<td align="left">A collection of phylogenies and parameter estimates, in which likelier combinations are present more</td>
+</tr>
+<tr class="even">
+<td align="left">Protracted speciation</td>
+<td align="left">The process in which speciation takes two events to complete: a speciation initiation and a speciation completion event</td>
+</tr>
+<tr class="odd">
+<td align="left">Speciation initiation</td>
+<td align="left">The start of a speciatiation event, in which initially the new species-to-be is not recognized as such</td>
+</tr>
+<tr class="even">
+<td align="left">Speciation completion</td>
+<td align="left">The end of a speciatiation event, in which the new species is recognized as such</td>
+</tr>
+</tbody>
+</table>
+<h1 id="acknowledgements">Acknowledgements</h1>
+<p><strong>[NOTE: journal does not request for this. Suggest to remove, but how to acknowledge Peregrine otherwise?]</strong> We would like to thank the Center for Information Technology of the University of Groningen for their support and for providing access to the Peregrine high performance computing cluster.</p>
+<h1 id="authors-contributions">Authors’ contributions</h1>
+<p><strong>[NOTE: journal does not request for this]</strong> RJCB and RSE conceived the idea for this experiment and package. RJCB created and tested the experiment and package, and wrote the first draft of the manuscript. RSE contributed substantially to revisions.</p>
+<table>
+<caption> Overview of the 12 simulation parameters. Above the horizontal line is the biological parameter set. Sampling method <span class="math inline"><em>M</em></span> is random for the general data set. For the data set exploring the effect of sampling, MRCA is used for odd values of <span class="math inline"><em>R</em><sub><em>i</em></sub></span>, and MDCA is used for even values of <span class="math inline"><em>R</em><sub><em>i</em></sub></span>. <span class="math inline"><em>R</em><sub><em>i</em></sub></span> is 1 for the first simulation, 2 for the next, etcetera. <span data-label="table:parameters"></span></caption>
+<thead>
+<tr class="header">
+<th align="left">Parameter</th>
+<th align="left">Description</th>
+<th align="left">Values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline"><em>b</em> = <em>b</em><sub><em>g</em></sub> = <em>b</em><sub><em>i</em></sub></span></td>
+<td align="left">Speciation initiation rate</td>
+<td align="left">0.1, 0.5, 1.0</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline"><em>λ</em></span></td>
+<td align="left">Speciation completion rate</td>
+<td align="left">0.1, 0.3, 1.0, <span class="math inline">∞</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline"><em>μ</em> = <em>μ</em><sub><em>g</em></sub> = <em>μ</em><sub><em>i</em></sub></span></td>
+<td align="left">Extinction rate</td>
+<td align="left">0.0, 0.1, 0.2, 0.4</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline"><em>t</em><sub><em>c</em></sub></span></td>
+<td align="left">Crown age</td>
+<td align="left">15</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline"><em>σ</em><sub><em>c</em></sub></span></td>
+<td align="left">Standard deviation around crown age</td>
+<td align="left">0.001</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline"><em>M</em></span></td>
+<td align="left">Sampling method</td>
+<td align="left">MRCA, MDCA or random</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline"><em>r</em></span></td>
+<td align="left">Mutation rate</td>
+<td align="left"><span class="math inline">$\frac{1}{15}$</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline"><em>l</em><sub><em>a</em></sub></span></td>
+<td align="left">DNA alignment length</td>
+<td align="left"><span class="math inline">15<em>K</em></span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline"><em>f</em><sub><em>i</em></sub></span></td>
+<td align="left">MCMC sampling interval</td>
+<td align="left">1K or more</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline"><em>R</em><sub><em>i</em></sub></span></td>
+<td align="left">RNG seed incipient tree</td>
+<td align="left">1 to 20K</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline"><em>R</em><sub><em>a</em></sub></span></td>
+<td align="left">RNG seed alignment simulation</td>
+<td align="left"><span class="math inline"><em>R</em><sub><em>i</em></sub></span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline"><em>R</em><sub><em>b</em></sub></span></td>
+<td align="left">RNG seed BEAST2</td>
+<td align="left"><span class="math inline"><em>R</em><sub><em>i</em></sub></span></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption> Specification of the data sets. Each row will contain one experiment, where the columns contain parameters, measurements and diagnostics. This table displays the content of the columns. <span class="math inline"><em>n</em></span> denotes the number of columns a certain item will occupy, resulting in a table of 1023 columns and 20K rows. <span data-label="table:specs"></span></caption>
+<thead>
+<tr class="header">
+<th align="left"><span class="math inline"><em>n</em></span></th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">12</span></td>
+<td align="left">simulation parameters, see table [table:parameters]</td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">1000</span></td>
+<td align="left">nLTT statistic values</td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">11</span></td>
+<td align="left">ESSes of all parameters estimated by BEAST2 (see specs below)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption> Overview of the 11 BEAST2 estimated parameters <span data-label="table:estimated_parameters"></span></caption>
+<thead>
+<tr class="header">
+<th align="left">#</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">posterior</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">likelihood</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="left">prior</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="left">treeLikelihood</td>
+</tr>
+<tr class="odd">
+<td align="left">5</td>
+<td align="left">TreeHeight</td>
+</tr>
+<tr class="even">
+<td align="left">6</td>
+<td align="left">BirthDeath</td>
+</tr>
+<tr class="odd">
+<td align="left">7</td>
+<td align="left">BDBirthRate</td>
+</tr>
+<tr class="even">
+<td align="left">8</td>
+<td align="left">BDDeathRate</td>
+</tr>
+<tr class="odd">
+<td align="left">9</td>
+<td align="left">logP.mrca</td>
+</tr>
+<tr class="even">
+<td align="left">10</td>
+<td align="left">mrcatime</td>
+</tr>
+<tr class="odd">
+<td align="left">11</td>
+<td align="left">clockRate</td>
+</tr>
+</tbody>
+</table>

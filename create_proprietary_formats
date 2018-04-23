@@ -4,6 +4,7 @@ bibtex article.aux
 pdflatex article.tex --shell-escape
 pdflatex article.tex --shell-escape
 pandoc article.tex -o article.docx
+pandoc article.tex -o article.doc
 rm article.aux
 rm article.bbl
 rm article.blg
