@@ -15,7 +15,7 @@
 
 % Affiliations
 \usepackage{authblk}
-\title{The error when inferring phylogenies with incipient species by a Birth-Death model}
+\title{The error when inferring phylogenies with incipient species by a birth-death model}
 % \subtitle{Should protracted speciation be incorporated in phylogenetic tree construction methods?}
 
 \author[1]{Rich\`el J.C. Bilderbeek}
@@ -242,17 +242,18 @@ The nucleotides of the DNA alignment follow a Jukes-Cantor (\cite{jc69})
 nucleotide substitution model, in which all nucleotide-to-nucleotide transitions
 are equally likely. Although this may seem as a simplification, in our Bayesian
 inference (see below) we use this exact site model as the (obviously correct) site model prior.
-The DNA sequence length and mutation rate are chosen as such to provide a
-resolution of a 1000 years, that is, to have one expected nucleotide change 
-per 1000 years per lineage on average. As we use a crown age is 15 million years,
-this equates to a rate of $\frac{1000}{15}$ nucleotide substitutions 
-changes per million years per lineage. To provide for each substitution being unique,
-we simulate as much DNA nucleotides as the expected number of mutations (including those
-that do not modify the nucleotide), which equals the
-nucleotide substitution rate times the crown age, which equals 15000 nucleotides (which is
-coincidentally the same as \cite{moller2018}). As this
-mutation rate is constant over all branches, it in effect follows a strict 
-clock model, which we will specify as the known clock model prior in the Bayesian inference.
+The mutation rate is set in such a way to maximize chronologic information.
+To do so, the mutation rate is set to expect on average 1 (possibly silent) mutation per nucleotide
+between crown age and present, which equates to $\frac{1}{15}$ mutations
+per million year.
+The DNA sequence length is chosen to provide a
+resolution of a 1K years, that is, to have one expected nucleotide change 
+per 1k years per lineage on average. As 1 nucleotide is expected 
+to have on average 1 (possibly silent) mutation per 15 million years, 15K
+nucleotides provides for 1 mutation per alignment per 1K years (which is
+coincidentally the same as \cite{moller2018}). 
+The simulation of these DNA aligment follows a strict clock model, 
+which we will specify as the known clock model prior in the Bayesian inference.
 
 From an alignment, we run a Bayesian analysis and create a posterior, 
 using the phylogetic tool BEAST2 \cite{beast2} using the 
@@ -385,10 +386,10 @@ RSE contributed substantially to revisions.
     $t_c$                 & Crown age & 15 \\
     $\sigma_c$            & Standard deviation around crown age & 0.001 \\
     $M$                   & Sampling method & MRCA, MDCA or random \\
-    $r$                   & Mutation rate & $\frac{1000}{15}$ \\
+    $r$                   & Mutation rate & $\frac{1}{15}$ \\
     $l_a$                 & DNA alignment length & $15K$ \\
     $f_i$                 & MCMC sampling interval & 1K or more \\
-    $R_i$                 & RNG seed incipient tree & 1 to 40K \\
+    $R_i$                 & RNG seed incipient tree & 1 to 20K \\
     $R_a$                 & RNG seed alignment simulation & $R_i$ \\
     $R_b$                 & RNG seed BEAST2 & $R_i$ \\
     \hline
@@ -418,9 +419,12 @@ RSE contributed substantially to revisions.
     \hline
   \end{tabular}
   \caption{
-    Specification of the data sets. $n$ denotes the number
+    Specification of the data sets. Each row will contain one experiment,
+    where the columns contain parameters, measurements and diagnostics.
+    This table displays the content of the columns. 
+    $n$ denotes the number
     of columns a certain item will occupy, resulting in a table of 
-    1023 columns and 40K rows.
+    1023 columns and 20K rows.
   }
   \label{table:specs}
 \end{table}
