@@ -1,6 +1,6 @@
-# flechette_article
+# raket_article
 
-Article for `flechette`, the remake of `WIRITTTE`.
+Article for `raket`, the new name for `flechette`.
 
 ## Feedback
 
