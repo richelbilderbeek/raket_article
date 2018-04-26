@@ -194,13 +194,14 @@ between the (BD) posterior phylogenies and (PBD) species tree is quantified.
 
 The PBD model has five biological parameters (see \ref{table:parameters}), 
 which we explore in a factorial fashion, excluding some combinations. 
-We assume that the speciation initiation and extinction rates
-of an incipient and good species are equal ($b = b_i = b_g$ and $\mu = \mu_i = \mu_g$),
-as this enables use to do more replicates 
-\textbf{[NOTE: I am unconvinced. I think we should also explore $b_i \neq b_g$ and $\mu_i \neq \mu_g$]}.
 We only simulate a PBD process for phylogenies in which
-speciation initiation exceeds extinction rate ($b > \mu$),
-and in which their difference is not too big ($b - \mu < 0.8$), 
+speciation initiation exceeds extinction rate ($b_i > \mu_i$ and $b_g > \mu_g$),
+and in which the expected number of taxa is less than 1000:
+
+```
+EQUATION SHOWING THE EXPECTED NUMBER OF TAXA < 1000
+```
+
 to prevent overly taxon-poor and taxon-rich phylogenies respectively.
 The parameter values chosen are a 
 superset of \cite{etienne2014}, as these parameters result in reasonably
@@ -268,8 +269,7 @@ with a mean of the crown age, and a standard deviation of $0.5 \cdot 10^{-3}$ ti
 resulting in 95\% of the crown ages used have the same resolution (of $10^{-3}$ time 
 units) as the alignment. The MCMC chain is run to generate 1111 states,
 of which the first 10\% (also called the 'burn-in') is removed. Of the remaining
-1000 MCMC states \textbf{[NOTE: Why 1000? Why not 250? I would say 250 is preferable, as
-the information will be more dense]}, the effective sample size (ESS) of the posterior must at least be 200
+1000 MCMC states, the effective sample size (ESS) of the posterior must at least be 200
 for a strong enough inference (\cite{beastbook}). An ESS can be increased by increasing
 the number of samples or decreasing the autocorrelation between samples. 
 Would the ESS be less than 200, we decrease autocorrelation by doubling 
@@ -379,8 +379,8 @@ and for providing access to the Peregrine high performance computing cluster.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \textbf{[NOTE: journal does not request for this]}
-RJCB and RSE conceived the idea for this experiment and package. 
-RJCB created and tested the experiment and package, 
+RSE conceived the idea for this experiment. 
+RJCB created and tested the experiment, 
 and wrote the first draft of the manuscript. 
 RSE contributed substantially to revisions.
 
@@ -403,9 +403,11 @@ RSE contributed substantially to revisions.
     Parameter             & Description & Values \\
     \hline
     \hline
-    $b = b_g = b_i$       & Speciation initiation rate & 0.1, 0.5, 1.0 \\
+    $b_g$                 & Speciation initiation rate of a good species & 0.1, 0.5, 1.0 \\
+    $b_i$                 & Speciation initiation rate of an incipient species & 0.1, 0.5, 1.0 \\
     $\lambda$             & Speciation completion rate & 0.1, 0.3, 1.0, $\infty$ \\
-    $\mu = \mu_g = \mu_i$ & Extinction rate & 0.0, 0.1, 0.2, 0.4 \\
+    $\mu_g$               & Extinction rate of a good species & 0.0, 0.1, 0.2, 0.4 \\
+    $\mu_i$               & Extinction rate of an incipient species & 0.0, 0.1, 0.2, 0.4 \\
     \hline
     $t_c$                 & Crown age & 15 \\
     $\sigma_c$            & Standard deviation around crown age & 0.001 \\
