@@ -101,7 +101,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The computational tools that are currently available go beyond the wildest 
-imagination of those living four decades ago. 
+imagination of those living four decades ago.
 Advances in computational power allowed the first cladograms to be inferred 
 from DNA alignments in 1981 (\cite{felsenstein1981}), and  
 the first Bayesian tools emerged in 1996 (\cite{rannala1996}),
@@ -109,11 +109,10 @@ providing unprecedented flexibility in the setup of a phylogenetic model.
 
 Currently, the most popular Bayesian phylogenetics tools are BEAST (\cite{beast})
 and its successor BEAST2 (\cite{beast2}), MrBayes (\cite{mrbayes}) and RevBayes (\cite{revbayes}). 
-They allow to known or hypothesized structure of a phylogenetic 
-tree-to-be-inferred to be incorporated through model priors. 
-From these priors and an alignment 
-of DNA, RNA or protein sequences, they create a posterior distribution
-of phylogenies and parameter estimates (of the models used as a prior), 
+They allow to incorporate known or hypothesized structure of a phylogenetic 
+tree-to-be-inferred through model priors. 
+From these priors and an alignment of DNA, RNA or protein sequences, they create a posterior distribution
+of parameter estimates (of the models used as a prior) and phylogenies, 
 in which more probable combinations are represented more often.
 Each of these tools use efficient tree sampling routines to rapidly create an 
 informative posterior.
@@ -142,16 +141,6 @@ species may go extinct, finish its speciation to become a good species, or give
 rise to new incipient species. Protracted speciation may explain observed 
 declines in lineage accumulation (\cite{etienne_and_rosindell_2012}).
 
-% RSE: perhaps move to discussion
-% The effect of using the (incorrect) BD tree prior for a PBD process is unknown.
-% A potential problem in species conservation is that the number of 
-% species is underestimated (see \cite{fennessy2016} for a clear example). 
-% Also, a BD model places the most recent common 
-% ancestor (MRCA) of a young species duo closer to the present, as the
-% BD model allows for a speciation event being recognized immediately,
-% where the PBD model accounts for speciation needing time.
-
-
 Unfortunately, a tree prior according to this model, 
 providing the probability of a species tree under the PBD model, 
 is unavailable in current Bayesian phylogenetic tools. 
@@ -174,7 +163,7 @@ may not be compatible with the underlying incipient species tree.
 More precisely, the phylogeny under the PBD model may contain paraphylies, 
 while the multi-species coalescent was developed exactly to avoid 
 this by explaining them as incomplete lineage sorting. 
-Because of the paraphylies there is no such thing as a true species tree in the PBD model. 
+Because of these paraphylies there is no such thing as a true species tree in the PBD model. 
 To get a species-level tree one must sample one incipient species per species. 
 Which incipient species is sampled may therefore have an impact on the species tree.
 
@@ -194,33 +183,36 @@ The PBD model has five biological parameters (see \ref{table:parameters}),
 which we explore in a factorial fashion, excluding some combinations. 
 We only simulate a PBD process for phylogenies in which
 speciation initiation exceeds extinction rate ($b_i > \mu_i$ and $b_g > \mu_g$),
-and in which the expected number of taxa is less than 1000.
-As the analytic solution for the expected number of lineages 
+and in which the expected number of extant good species is less than 1000.
+As the analytic solution for the expected number of extant good species 
 is too complex to be derived (\cite{etienne_and_rosindell_2012}),
-we use a numerical approximation instead \textbf{NOTE: maybe Lambert et al., 2014, 
-but the (closed access) article is unavailable from home}.
-
-to prevent overly taxon-poor and taxon-rich phylogenies respectively.
+we a numerical approximation \textbf{NOTE: I will suggest somewhen/somewhere else if this
+may become a function of the PBD package}.
+We use 1000 good species as a threshold, to prevent overly taxon-poor and taxon-rich phylogenies respectively.
 The parameter values chosen are based on the parameter sets used by 
 \cite{etienne2014}, as these parameters were shown to result in reasonably
 sized phylogenies and using the same set allows us to compare results. 
-For the speciation initiation rate $b$, we use $0.1$, $0.5$ and $1.0$ 
-speciation initiation events per (good species) lineage per time unit.
+For the speciation initiation rates of good and incipient species, $b_g$ and $b_i$ 
+respectively, we use $0.1$, $0.5$ and $1.0$ speciation initiation events per good/incipient species per time unit.
 The speciation completion rates used are $0.1$, $0.3$, $1.0$ and $10^9$ speciation completion
-events per (incipient species) lineage per time unit. We used $10^9 \approx \infty$
+events per (incipient species) species per time unit. We used $10^9 \approx \infty$
 to mimic the BD model, because the PBD model reduces to the BD model for $\lambda = \infty$.
 This allows us to measure the baseline error, 
 which is the difference between inferred tree and true species tree that arises purely due to noise 
 because the generating model and the model used in inference are identical.
-The extinction rates used are $0.0$, $0.1$, $0.2$ and $0.4$ 
-extinction events per (good or incipient) lineage per time unit.
+The extinction rates of good and incipient species, $\mu_g$ and $\mu_i$ respectively, 
+that we used are $0.0$, $0.1$, $0.2$ and $0.4$ 
+extinction events per good/incipient species per time unit.
 
 From each biological parameter set, we simulated a protracted birth-death tree,
 using the PBD package (\cite{pbd}) in the R programming language (\cite{r}), 
-all with a crown age of 15 million years. 
+all with a crown age of 15 million years.
 Each protracted birth-death tree uses a different random number
 generatior seed, which makes all runs independent, resulting in a balanced 
-data set.
+data set. \textbf{NOTE: Rampal suggested to re-use same seeds. I see in Progress
+Report of week 50 of 2015 this was already abandoned in favor of a more smooth data set.
+I do check that nLTT values of multiple random alignments on the same species tree
+result in same distribution, but that may not be written down here}
 
 From each incipient species tree, we construct a species tree,
 by sampling one incipient/good species per good species. 
@@ -238,8 +230,7 @@ as this species tree, using the phangorn package (\cite{phangorn}).
 We assume that the nucleotides of the DNA alignment follow a Jukes-Cantor (\cite{jc69})
 nucleotide substitution model, in which all nucleotide-to-nucleotide transitions
 are equally likely. 
-In our Bayesian inference (see below) 
-we use the same site model as the (obviously correct) site model prior.
+In our Bayesian inference (see below) we use the same site model as the (obviously correct) site model prior.
 One could explore other substitution models in the simulations 
 and in the Bayesian inference, 
 but we chose this simple model because we are primarily interested 
@@ -266,8 +257,8 @@ that sets the input parameters similar to BEAUti 2 and then runs BEAST2.
 For our site model, we assume a Jukes-Cantor 
 nucleotide substitution model, as used in the simulation of the alignment.
 For our clock model, we assume a strict clock with the same fixed rate as 
-used in the simulation of the alignment \textbf{[NOTE: \cite{moller2018} did not use a
-fixed clock rate, I do not see why]}. The tree prior assumed in inference is the BD model, 
+used in the simulation of the alignment. 
+The tree prior assumed in inference is the BD model, 
 because studying the effect of this assumption is the goal of this study. 
 We assumed an MRCA prior with a tight normal distribution
 around the crown age, by choosing the crown age as mean, and a standard deviation 
@@ -277,7 +268,9 @@ units) as the alignment.
 We ran the MCMC chain to generate 1111 states,
 of which we removed the first 10\% (also called the 'burn-in'). 
 Of the remaining
-1000 MCMC states, the effective sample size (ESS) of the posterior must at least be 200
+1000 MCMC states, the effective sample size (ESS) of the posterior \textbf{NOTE: there
+is a parameter estimate called 'posterior'. I choose to pick that one, and I assume
+it is the wiser choice over 'prior' and parameter estimates. Agree?} must at least be 200
 for a strong enough inference (\cite{beastbook}). An ESS can be increased by increasing
 the number of samples or decreasing the autocorrelation between samples. 
 Would the ESS be less than 200, we decrease autocorrelation by doubling 
@@ -285,7 +278,7 @@ the MCMC sampling interval of that simulation, until the ESS exceeds 200.
 
 We compared each posterior phylogeny to the (sampled) species tree
 by the nLTT statistic (\cite{janzen2015}), using the nLTT package (\cite{nltt}). 
-The nLTT statistic is equal to the area between the normalized
+The nLTT statistic equals the area between the normalized
 lineages-through-time-plots of two phylogenies, which has a range 
 from zero (for identical phylogenies) to one. We use inference error 
 and nLTT statistic interchangeably. Comparing the one (sampled) species tree
