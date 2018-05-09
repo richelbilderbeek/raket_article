@@ -1,12 +1,5 @@
 #!/bin/bash
-pdflatex article.tex --shell-escape
-bibtex article.aux
-pdflatex article.tex --shell-escape
-pdflatex article.tex --shell-escape
-pandoc article.tex -o article.docx
-pandoc article.tex -o article.doc
-rm article.aux
-rm article.bbl
-rm article.blg
-rm article.log
-rm article.out
+#./create_article
+
+cp article.pdf "raket_article_$(date +"%Y%m%d").pdf"
+pandoc article.tex -o "raket_article_$(date +"%Y%m%d").docx"
