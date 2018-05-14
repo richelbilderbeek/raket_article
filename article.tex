@@ -131,7 +131,7 @@ the posterior.
 
 Current phylogenetic tools use tree priors 
 that assume speciation is instantaneous, whilst we know that, 
-speciation is often a gradual process \notebf{[REF]}.
+speciation is often a gradual process (\cite{schluter2009}).
 The (constant-rate) birth-death (BD) model is a commonly 
 used tree prior, but it ignores this temporal aspect of speciation.
 The protracted birth-death (PBD) model, an extension of 
@@ -185,7 +185,7 @@ which we explore in a factorial fashion, excluding some combinations.
 We only simulate a PBD process for phylogenies in which
 speciation initiation exceeds extinction rate ($b_i > \mu_i$ and $b_g > \mu_g$),
 and in which the expected number of extant good species is less than 1000.
-{NOTE: accoring to Rampal this has been solved analytically (for the Protracted Birth and Death model). Where?}.
+\textbf{[NOTE: accoring to Rampal this has been solved analytically (for the Protracted Birth and Death model). Where?]}.
 We use 1000 good species as a threshold, to prevent overly taxon-poor and taxon-rich phylogenies respectively.
 The parameter values chosen are based on the parameter sets used by 
 \cite{etienne2014}, as these parameters were shown to result in reasonably
@@ -207,9 +207,7 @@ using the PBD package (\cite{pbd}) in the R programming language (\cite{r}),
 all with a crown age of 15 million years.
 Each protracted birth-death tree uses a different random number
 generatior seed, which makes all runs independent, resulting in a balanced 
-data set. \textbf{NOTE: maybe discuss with Rampal to remove confusion. I see if I can get the
-students to make a histogram of number of taxa in the incipient species trees, as Rampal
-requires a geometric distribution}
+data set. \textbf{[NOTE: maybe discuss with Rampal to remove confusion. Rampal requests a histogram of branch lengths to follow a geometric distribution]}
 
 From each incipient species tree, we construct a species tree,
 by sampling one incipient/good species per good species. 
@@ -265,9 +263,9 @@ units) as the alignment.
 We ran the MCMC chain to generate 1111 states,
 of which we remove the first 10\% (also called the 'burn-in'). 
 Of the remaining
-1000 MCMC states, the effective sample size (ESS) of the posterior \textbf{NOTE: there
+1000 MCMC states, the effective sample size (ESS) of the posterior \textbf{[NOTE: there
 is a parameter estimate called 'posterior'. I choose to pick that one, and I assume
-it is the wiser choice over 'prior' and parameter estimates. Must discuss} must at least be 200
+it is the wiser choice over 'prior' and parameter estimates. Must discuss]} must at least be 200
 for a strong enough inference (\cite{beastbook}). An ESS can be increased by increasing
 the number of samples or decreasing the autocorrelation between samples. 
 If the ESS is less than 200, we decrease autocorrelation by doubling 
