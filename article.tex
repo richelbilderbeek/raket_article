@@ -249,12 +249,11 @@ From an alignment, we run a Bayesian analysis and
 create a posterior distribution of trees and parameters
 using the \verb;babette; (\cite{babette}) package
 that sets the input parameters similar to BEAUti 2 and then runs BEAST2. 
-For our site model, we assume a Jukes-Cantor 
-nucleotide substitution model, as used in the simulation of the alignment.
-For our clock model, we assume a strict clock with the same fixed rate as 
-used in the simulation of the alignment. 
-The tree prior assumed in inference is the BD model, 
-because studying the effect of this assumption is the goal of this study. 
+For our site and clock model, we assume a Jukes-Cantor 
+nucleotide substitution model and strict clock model, 
+as those are also used for simulating that alignment.
+We set the BD model as a tree prior, 
+as gauging the effect of this incorrect assumption is the goal of this study. 
 We assume an MRCA prior with a tight normal distribution
 around the crown age, by choosing the crown age as mean, and a standard deviation 
 of $0.5 \cdot 10^{-3}$ time units,
