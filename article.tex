@@ -180,19 +180,17 @@ between the (BD) posterior phylogenies and the simulated (PBD) species tree.
 \section{Methods (but we are not allowed to keep this header)}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\textbf{[NOTE: I will propose different parameter combinations, due to computational and aesthetic problems]}
 The PBD model has five biological parameters (see \ref{table:parameters}), 
-which we explore in a factorial fashion, excluding some combinations. 
-We only simulate a PBD process for phylogenies in which
-speciation initiation exceeds extinction rate ($b_i > \mu_i$ and $b_g > \mu_g$),
-and in which the expected number of extant good species is less than 1000.
-\textbf{[NOTE: accoring to Rampal this has been solved analytically (for the Protracted Birth and Death model). Where?]}.
+which we explore in a factorial fashion, excluding some combinations.
+We only simulate a PBD process for those combinations in which 
+95\% of all simulated phylogenies are expected to have less than 1000 extant good species.
+\textbf{[NOTE: use Rampals newest code. That new code assumes sirg = siri?]}.
 We use 1000 good species as a threshold, to prevent overly taxon-poor and taxon-rich phylogenies respectively.
 The parameter values chosen are based on the parameter sets used by 
 \cite{etienne2014}, as these parameters were shown to result in reasonably
 sized phylogenies and using the same set allows us to compare results. 
 For the speciation initiation rates of good and incipient species, $b_g$ and $b_i$ 
-respectively, we use $0.1$, $0.5$ and $1.0$ speciation initiation events per good/incipient species per time unit.
+respectively, we use $0.3$ and $0.5$ speciation initiation events per good/incipient species per time unit.
 The speciation completion rates we use are $0.1$, $0.3$, $1.0$ and $10^9$ speciation completion
 events per (incipient species) species per time unit. We use $10^9 \approx \infty$
 to mimic the BD model, because the PBD model reduces to the BD model for $\lambda = \infty$.
@@ -200,7 +198,7 @@ This allows us to measure the baseline error,
 which is the difference between inferred tree and true species tree that arises purely due to noise 
 because the generating model and the model used in inference are identical in this case.
 The extinction rates of good and incipient species, $\mu_g$ and $\mu_i$ respectively, 
-that we use are $0.0$, $0.1$, $0.2$ and $0.4$ 
+that we use are $0.0$, $0.1$ and $0.2$ 
 extinction events per good/incipient species per time unit.
 
 From each biological parameter set, we simulate a protracted birth-death tree,
@@ -208,7 +206,7 @@ using the PBD package (\cite{pbd}) in the R programming language (\cite{r}),
 all with a crown age of 15 million years.
 Each protracted birth-death tree uses a different random number
 generatior seed, which makes all runs independent, resulting in a balanced 
-data set. \textbf{[NOTE: maybe discuss with Rampal to remove confusion. Rampal requests a histogram of branch lengths to follow a geometric distribution]}
+data set. \textbf{[NOTE: Rampal assumed runs with close seeds were related. I hope I have convinced him otherwise]}
 
 From each incipient species tree, we construct a species tree,
 by sampling one incipient/good species per good species. 
@@ -265,7 +263,7 @@ of which we remove the first 10\% (also called the 'burn-in').
 Of the remaining
 1000 MCMC states, the effective sample size (ESS) of the posterior \textbf{[NOTE: there
 is a parameter estimate called 'posterior'. I choose to pick that one, and I assume
-it is the wiser choice over 'prior' and parameter estimates. Must discuss]} must at least be 200
+it is the wisest choice of all BEAST2 parameter estimates, as displayed in table 4]} must at least be 200
 for a strong enough inference (\cite{beastbook}). An ESS can be increased by increasing
 the number of samples or decreasing the autocorrelation between samples. 
 If the ESS is less than 200, we decrease autocorrelation by doubling 
@@ -335,7 +333,7 @@ for $\lambda_g = \lambda_i$ and $\mu_g = \mu_i$.
     \hline
   \end{tabular}
   \caption{
-    Glossary [NOTE: this is requested by the journal]
+    Glossary
   }
   \label{table:glossary}
 \end{table}
@@ -343,22 +341,22 @@ for $\lambda_g = \lambda_i$ and $\mu_g = \mu_i$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Acknowledgements}
+%\section{Acknowledgements}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\textbf{[NOTE: journal does not request for this. Suggest to remove, but how to acknowledge Peregrine otherwise?]}
-We would like to thank the Center for Information Technology of the University of Groningen for their support
-and for providing access to the Peregrine high performance computing cluster.
+%\textbf{[NOTE: journal does not request for this. Suggest to remove, but how to acknowledge Peregrine otherwise?]}
+%We would like to thank the Center for Information Technology of the University of Groningen for their support
+%and for providing access to the Peregrine high performance computing cluster.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Authors' contributions}
+%\section{Authors' contributions}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\textbf{[NOTE: journal does not request for this]}
-RSE conceived the idea for this experiment. 
-RJCB created and tested the experiment, 
-and wrote the first draft of the manuscript. 
-RSE contributed substantially to revisions.
+%\textbf{[NOTE: journal does not request for this]}
+%RSE conceived the idea for this experiment. 
+%RJCB created and tested the experiment, 
+%and wrote the first draft of the manuscript. 
+%RSE contributed substantially to revisions.
 
 % Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -379,10 +377,10 @@ RSE contributed substantially to revisions.
     Parameter             & Description & Values \\
     \hline
     \hline
-    $b_g$                 & Speciation initiation rate of a good species & 0.1, 0.5, 1.0 \\
-    $b_i$                 & Speciation initiation rate of an incipient species & 0.1, 0.5, 1.0 \\
+    $b_g$                 & Speciation initiation rate of a good species & 0.3, 0.5 \\
+    $b_i$                 & Speciation initiation rate of an incipient species & 0.3, 0.5 \\
     $\lambda$             & Speciation completion rate & 0.1, 0.3, 1.0, $\infty$ \\
-    $\mu_g$               & Extinction rate of a good species & 0.0, 0.1, 0.2, 0.4 \\
+    $\mu_g$               & Extinction rate of a good species & 0.0, 0.1, 0.2 \\
     $\mu_i$               & Extinction rate of an incipient species & 0.0, 0.1, 0.2, 0.4 \\
     \hline
     $t_c$                 & Crown age & 15 \\
