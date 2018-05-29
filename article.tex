@@ -22,6 +22,10 @@
 \author[1]{Rampal S. Etienne}
 \affil[1]{Groningen Institute for Evolutionary Life Sciences, University of Groningen, Groningen, The Netherlands}
 
+% Use multi-line cell
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+  
 % Use double spacing
 \usepackage{setspace}
 \doublespacing
@@ -33,6 +37,17 @@
 % Adds numbered lines
 \usepackage{lineno}
 \linenumbers
+
+\hyphenation{
+  BEAST
+  Pa-ra-me-ter
+  Drum-mond 
+  Bayes-ian 
+  Mr-Bayes 
+  ap-proach-es 
+  Rev-Bayes 
+  cre-ate
+ }
 
 \begin{document}
 
@@ -54,7 +69,7 @@
   % more detailed background, comprehensible to
   % scientists in related disciplines.
   Among the most popular tools are Bayesian approaches, 
-  such as BEAST, MrBayes and RevBayes, 
+  such as \\ BEAST, MrBayes and RevBayes, 
   that use efficient tree sampling routines to create a posterior probability distribution 
   of the phylogenetic tree. 
   A feature of these approaches is the possibility to incorporate 
@@ -109,11 +124,13 @@ from DNA alignments in 1981 (\cite{felsenstein1981}), and
 the first Bayesian tools emerged in 1996 (\cite{rannala1996}),
 providing unprecedented flexibility in the setup of a phylogenetic model.
 
-Currently, the most popular Bayesian phylogenetics tools are BEAST (\cite{beast})
-and its successor BEAST2 (\cite{beast2}), MrBayes (\cite{mrbayes}) and RevBayes (\cite{revbayes}). 
+Currently, the most popular Bayesian phylogenetics tools are \\ 
+BEAST (\cite{beast}) and its successor BEAST2 (\cite{beast2}), 
+MrBayes (\cite{mrbayes}) and RevBayes (\cite{revbayes}). 
 They allow to incorporate known or hypothesized structure of a phylogenetic 
 tree-to-be-inferred through model priors. 
-From these priors and an alignment of DNA, RNA or protein sequences, they create a posterior distribution
+From these priors and an alignment of DNA, RNA or protein sequences, 
+they create a posterior distribution
 of parameter estimates (of the models used as a prior) and phylogenies, 
 in which more probable combinations are represented more often.
 Each of these tools use efficient tree sampling routines to rapidly create an 
@@ -320,7 +337,7 @@ for $\lambda_g = \lambda_i$ and $\mu_g = \mu_i$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}
   \centering 
-  \begin{tabular}{l p{0.6\textwidth}}
+  \begin{tabular}{l p{0.65\textwidth}}
     \hline
     Term                  & Definition \\
     \hline
@@ -373,9 +390,9 @@ for $\lambda_g = \lambda_i$ and $\mu_g = \mu_i$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}
   \centering 
-  \begin{tabular}{l l l}
+  \begin{tabular}{p{0.05\textwidth} p{0.6\textwidth} p{0.2\textwidth}}
     \hline
-    Parameter             & Description & Values \\
+                          & Description & Values \\
     \hline
     \hline
     $b_g$                 & Speciation initiation rate of a good species & 0.3, 0.5 \\
@@ -386,7 +403,7 @@ for $\lambda_g = \lambda_i$ and $\mu_g = \mu_i$.
     \hline
     $t_c$                 & Crown age & 15 \\
     $\sigma_c$            & Standard deviation around crown age & 0.001 \\
-    $M$                   & Sampling method & 'shortest', 'longest' or random \\
+    $M$                   & Sampling method & S, L, R \\
     $r$                   & Mutation rate & $\frac{1}{15}$ \\
     $l_a$                 & DNA alignment length & $15K$ \\
     $f_i$                 & MCMC sampling interval & 1K or more \\
@@ -397,7 +414,8 @@ for $\lambda_g = \lambda_i$ and $\mu_g = \mu_i$.
   \end{tabular}
   \caption{
     Overview of the 12 simulation parameters. Above the horizontal line is 
-    the biological parameter set. Sampling method $M$ is random for the general
+    the biological parameter set. The sampling methods are abbreviated as such: R denotes random
+    sampling, 'S' is 'shortest' and 'L' is 'longest'. Sampling method $M$ is random for the general
     data set. For the data set exploring the effect of sampling, we use 'shortest'
     for odd values of $R_i$, and 'longest' for even values of $R_i$.
     $R_i$ is 1 for the first simulation, 2 for the next, etcetera.
