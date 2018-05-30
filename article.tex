@@ -215,11 +215,11 @@ two clock and site priors.
 
 The PBD model has five biological parameters, depicted in table \ref{table:parameters}, 
 which we explore in a factorial fashion, excluding some combinations.
-% HIERO
 We simulate a PBD process for those combinations in which the 
-95\% quantile has less than 1250 extant good species. The quantile is
+95\% quantile of the expected number of good species is less than 1250.
+The quantile is
 calculated with a recently added function to the PBD package,
-inspired on equation 6 of \cite{etienne2014}. This calculation
+based on equation 6 of \cite{etienne2014}. This calculation
 assumes $b = b_g = b_i$, we used $b = \max(b_g, b_i)$.
 We use 1250 good species as a threshold, to prevent overly taxon-poor and taxon-rich phylogenies respectively.
 The parameter values chosen are based on the parameter sets used by 
