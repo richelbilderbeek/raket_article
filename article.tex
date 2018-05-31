@@ -8,20 +8,6 @@
 % These papers should contain no more than two figures, two tables, and thirty references. 
 % A short abstract of fewer than 200 words is acceptable.
 
-% @rsetienne:
-% At the moment, there are 87 parameter combinations for one site and one clock model
-% This allows for 40K / 87 = 460 replicates [*]
-% Using two site and two clock models would result in approx 100 replicates
-% Using four site and four clock models would result in approx 25 replicates
-%
-% I personally think the broadest data set will be most interesting,
-% because it gives a rough idea, but -more importantly- shows the scientific
-% community it can easily be done nowadays.
-%
-% [*] the number of replicates can only be determined by actually running the
-% experiment, as there are multiple constraints that I cannot test for 
-
-
 % Bibliography
 \usepackage{natbib}
 \bibpunct{(}{)}{;}{a}{}{;}
@@ -286,13 +272,11 @@ using the \verb;babette; (\cite{babette}) package
 that sets the input parameters similar to BEAUti 2 and then runs BEAST2. 
 For our site model, we assume either a Jukes-Cantor or GTR nucleotide substitution model.
 The Jukes-Cantor model is the correct one, as it is used for simulating that alignment,
-but the GTR model is the site model with the fewest assumptions and most flexibility.
-\textbf{[NOTE: Why then not use all four site models?]}
-For our clock model, we assume either a strict or relaxed log-normal \textbf{[NOTE: 
-Why that one? Why then not use all clock models?]} clock model. The strict clock
-model is the correct one, as it is used for simulating that alignment,
-but the relaxed log-normal clock model is the model with fewer assumptions and
-more flexibility.
+where the GTR model is the site model that is picked as a default by most users.
+For our clock model, we assume either a strict or relaxed log-normal 
+clock model. 
+Also here, the strict clock model is the correct one, as it is used for simulating that alignment,
+but the relaxed log-normal clock model is the the one most commonly used.
 We set the BD model as a tree prior, 
 as gauging the effect of this incorrect assumption is the goal of this study. 
 We assume an MRCA prior with a tight normal distribution
