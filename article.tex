@@ -210,7 +210,7 @@ To gain more insight of incorrect prior choice, we also explore the effect of
 two clock and site priors.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Methods (but we are not allowed to keep this header)}
+% Methods (but we are not allowed to use this header)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The PBD model has five biological parameters, depicted in table \ref{table:parameters}, 
@@ -458,16 +458,16 @@ on the sampling method used.
     \hline
   \end{tabular}
   \caption{
-    Overview of the 12 simulation parameters. Above the horizontal line is 
-    the biological parameter set. The sampling methods are abbreviated as such: R denotes random
+    Overview of the simulation parameters. Above the horizontal line is 
+    the biological parameter set. 
+    The RNG seed $R_i$ is 1 for the first simulation, 2 for the next, etcetera.
+    The sampling methods are abbreviated as such: R denotes random
     sampling, 'S' is 'shortest' and 'L' is 'longest'. Sampling method $M_s$ is random for the general
-    data set. 
+    data set. For the data set exploring the effect of sampling, we use 'shortest'
+    for odd values of $R_i$, and 'longest' for even values of $R_i$.
     The clock models are abbreviated as 'S' is a strict and 'RLN' is a relaxed log-normal model.
     The site models are abbreviated as 'JC69' for Jukes-Cantor and 'GTR' for the generalised 
     time-reversible model.
-    For the data set exploring the effect of sampling, we use 'shortest'
-    for odd values of $R_i$, and 'longest' for even values of $R_i$.
-    $R_i$ is 1 for the first simulation, 2 for the next, etcetera.
   }
   \label{table:parameters}
 \end{table}
