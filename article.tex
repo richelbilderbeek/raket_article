@@ -244,7 +244,7 @@ See the supplementary information for a visualization of these sampling methods.
 
 Based on the sampled species tree, we simulate a DNA alignment that has the same history
 as this species tree, using the \verb;phangorn; package (\cite{phangorn}). 
-We set the nucleotides of the DNA alignment to follo a Jukes-Cantor (\cite{jc69})
+We set the nucleotides of the DNA alignment to follow a Jukes-Cantor (\cite{jc69})
 nucleotide substitution model, in which all nucleotide-to-nucleotide transitions
 are equally likely.
 In our Bayesian inference (see below) we use the same site model as the (obviously correct) site model prior,
@@ -303,14 +303,14 @@ from zero (for identical phylogenies) to one. We use inference error
 and nLTT statistic interchangeably. Comparing the simulated species tree
 with each of the posterior species trees yields a distribution of nLTT statistics. 
 
-We produce two data sets as a comma-seperated file.
+We produce two data sets as a comma-separated file.
 Each parameter combination has ten replicates. 
 
 We set the number of replicates for each parameter combination such,
 that this file and a possible copy can be handled in R's memory.
 Each row will then contain a parameter set and the generated nLTT 
 statistics (see \ref{table:specs} for the exact data specification).
-The abovementioned memory constraints allows for $2 \cdot 10^3$ rows. 
+The above-mentioned memory constraints allows for $2 \cdot 10^3$ rows. 
 With 87 \textbf{[NOTE: volatile value, recalculate]} combinations of biological parameter, there will be 
 168 \textbf{[NOTE: volatile value, recalculate]} replicates per parameter set.
 
@@ -319,8 +319,8 @@ parameter set using a violin plot, as such a plot
 maintains information about the distribution. To simplify the interpretation
 of these plots, only nLTT statistics distribution are shown 
 for $\lambda_g = \lambda_i$ and $\mu_g = \mu_i$. The general parameter set plot
-does not make an additional seperation between site model and clock model, but these
-are shown in the appendix. The sampling parameter set plot does seperate 
+does not make an additional separation between site model and clock model, but these
+are shown in the appendix. The sampling parameter set plot does separate 
 on the sampling method used.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -446,13 +446,13 @@ on the sampling method used.
   \caption{
     Overview of the simulation parameters. Above the horizontal line is 
     the biological parameter set. 
-    The RNG seed $R_i$ is 1 for the first simulation, 2 for the next, etcetera.
+    The RNG seed $R_i$ is 1 for the first simulation, 2 for the next, etc.
     The sampling methods are abbreviated as such: R denotes random
     sampling, 'S' is 'shortest' and 'L' is 'longest'. Sampling method $M_s$ is random for the general
     data set. For the data set exploring the effect of sampling, we use 'shortest'
     for odd values of $R_i$, and 'longest' for even values of $R_i$.
     The clock models are abbreviated as 'S' is a strict and 'RLN' is a relaxed log-normal model.
-    The site models are abbreviated as 'JC69' for Jukes-Cantor and 'GTR' for the generalised 
+    The site models are abbreviated as 'JC69' for Jukes-Cantor and 'GTR' for the generalized 
     time-reversible model.
   }
   \label{table:parameters}
