@@ -8,6 +8,13 @@
 % These papers should contain no more than two figures, two tables, and thirty references. 
 % A short abstract of fewer than 200 words is acceptable.
 
+% Create the rampal command
+% Usage:
+%
+% \rampal{brilliant!}
+%
+\newcommand*\rampal[1]{\textcolor{red}{\textbf{RSE: #1}}}
+
 % Bibliography
 \usepackage{natbib}
 \bibpunct{(}{)}{;}{a}{}{;}
@@ -63,6 +70,7 @@
   % comprehensible to a scientist in any discipline.
   The tools for reconstructing phylogenetic relationships between taxonomic 
   units (e.g. species) have become very advanced in the last three decades. 
+  \rampal{test comment, so Rampal can see this in action}
 
   % Two to three sentences of
   % more detailed background, comprehensible to
