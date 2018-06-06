@@ -8,12 +8,15 @@
 % These papers should contain no more than two figures, two tables, and thirty references. 
 % A short abstract of fewer than 200 words is acceptable.
 
-% Create the rampal command
+% Create the 'rampal' command
 % Usage:
 %
-% \rampal{brilliant!}
+% One plus one equals two\rampal{brilliant!}.
 %
-\newcommand*\rampal[1]{\textcolor{red}{\textbf{RSE: #1}}}
+\newcommand*\rampal[1]{\textcolor{red}{\textbf{[RSE: #1]}}}
+
+% Create the 'richel' command
+\newcommand*\richel[1]{\textcolor{orange}{\textbf{[RJCB: #1]}}}
 
 % Bibliography
 \usepackage{natbib}
@@ -236,7 +239,7 @@ using the PBD package (\cite{pbd}) in the R programming language (\cite{r}),
 all with a crown age of 15 million years.
 Each protracted birth-death tree uses a different random number
 generatior seed, which makes all runs independent, resulting in a balanced 
-data set. \textbf{[NOTE: Rampal assumed runs with close seeds were related. 
+data set. \richel{Rampal assumed runs with close seeds were related. 
 I assume I have convinced him otherwise]}
 
 From each incipient species tree, we construct a species tree,
@@ -295,9 +298,9 @@ units) as the alignment.
 We ran the MCMC chain to generate 1111 states,
 of which we remove the first 10\% (also called the 'burn-in'). 
 Of the remaining
-1000 MCMC states, the effective sample size (ESS) of the posterior \textbf{[NOTE: I chose 
+1000 MCMC states, the effective sample size (ESS) of the posterior \richel{I chose 
 the ESS of the posterior over the ESS of the tree likelihood (and the 
-others displayed in table 4). For both something can be said. Agree on this choice?]} must at least be 200
+others displayed in table 4). For both something can be said. Agree on this choice?} must at least be 200
 for a strong enough inference (\cite{beastbook}). An ESS can be increased by increasing
 the number of samples or decreasing the autocorrelation between samples. 
 If the ESS is less than 200, we decrease autocorrelation by doubling 
@@ -312,25 +315,25 @@ and nLTT statistic interchangeably. Comparing the simulated species tree
 with each of the posterior species trees yields a distribution of nLTT statistics. 
 
 We produce two data sets as a comma-separated file.
-Each parameter combination has ten replicates.
-We set the number of replicates for each parameter combination such,
-that this file and a possible copy can be handled in R's memory.
-Each row will then contain a parameter set and the generated nLTT 
-statistics (see \ref{table:specs} for the exact data specification).
-The above-mentioned memory constraints allows for $2 \cdot 10^3$ rows. 
-With 87 \textbf{[NOTE: volatile value, recalculate]} combinations of biological parameter, there will be 
-168 \textbf{[NOTE: volatile value, recalculate]} replicates per parameter set.
+The general data set has 348 different combinations
+of biological parameter combinations, site and clock models.
+The data set to investigate sampling has 496 different combinations
+of biological parameter combinations, site models, clock models 
+and sampling methods. The experiment is computationally intensive:
+pilot experiments show that the experiment takes roughly 100 days
+of CPU time and 20 days of wall clock time per replicate. 
+Due to this, we choose to perform ten replicates, so that the complete
+experiment will take an acceptable time of roughly seven months. 
 
 For both data sets, we display the nLTT statistics distribution per
 biological parameter combination as a violin plot.
 We only show combinations for which $\lambda_g = \lambda_i$ and $\mu_g = \mu_i$,
-to simplify the interpretation of these results.
-
-parameter set using a violin plot, as such a plot 
-maintains information about the distribution. 
-does not make an additional separation between site model and clock model. but these
-are shown in the appendix. The sampling parameter set plot does separate 
-on the sampling method used.
+to simplify the interpretation of these results. 
+Additionally, we only show the nLTT distributions
+that were generated under the (correct) assumptions of a Jukes-Cantor site model
+and a strict clock model. We display the nLTT statistic distributions for both
+site and clock models in the supplementary information. We show the effect of sampling,
+by seperating the nLTT statistics distribution per sampling method used.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -340,7 +343,9 @@ on the sampling method used.
   \includegraphics[width=0.8\textwidth]{fig_general.png}
   \caption{
     nLTT statistic distribution per biological parameter set, using the
-    balanced data set, for all clock and site models.
+    balanced data set, 
+    for the subset of combinations in which $\lambda_g = \lambda_i$, $\mu_g = \mu_i$, 
+    under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
   }
 \end{figure}
 
@@ -348,7 +353,9 @@ on the sampling method used.
   \includegraphics[width=0.8\textwidth]{fig_sampling.png}
   \caption{
     nLTT statistic distribution per biological parameter set per sampling
-    regime, using the data set conditioned on sampling regime having an effect.
+    regime, using the data set conditioned on sampling regime having an effect, 
+    for the subset of combinations in which $\lambda_g = \lambda_i$, $\mu_g = \mu_i$, 
+    under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
   }
 \end{figure}
 
@@ -384,7 +391,7 @@ on the sampling method used.
 %\section{Acknowledgements}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\textbf{[NOTE: journal does not request for this. Suggest to remove, but how to acknowledge Peregrine otherwise?]}
+%\richel{journal does not request for this. Suggest to remove, but how to acknowledge Peregrine otherwise?}
 %We would like to thank the Center for Information Technology of the University of Groningen for their support
 %and for providing access to the Peregrine high performance computing cluster.
 
@@ -392,7 +399,7 @@ on the sampling method used.
 %\section{Authors' contributions}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\textbf{[NOTE: journal does not request for this]}
+%\richel{journal does not request for this}
 %RSE conceived the idea for this experiment. 
 %RJCB created and tested the experiment, 
 %and wrote the first draft of the manuscript. 
@@ -413,7 +420,9 @@ on the sampling method used.
   \includegraphics[width=0.8\textwidth]{fig_clock_model.png}
   \caption{
     nLTT statistic distribution per biological parameter set per clock model,
-    using the balanced data set 
+    using the balanced data set, 
+    for the subset of combinations in which $\lambda_g = \lambda_i$, $\mu_g = \mu_i$, 
+    under the (correct) assumption of a Jukes-Cantor site model.
   }
 \end{figure}
 
@@ -421,7 +430,9 @@ on the sampling method used.
   \includegraphics[width=0.8\textwidth]{fig_site_model.png}
   \caption{
     nLTT statistic distribution per biological parameter set per site model,
-    using the balanced data set 
+    using the balanced data set, 
+    for the subset of combinations in which $\lambda_g = \lambda_i$, $\mu_g = \mu_i$, 
+    under the (correct) assumption of a strict clock model.
   }
 \end{figure}
 
