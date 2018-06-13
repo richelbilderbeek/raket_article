@@ -8,15 +8,10 @@
 % These papers should contain no more than two figures, two tables, and thirty references. 
 % A short abstract of fewer than 200 words is acceptable.
 
-% Create the 'rampal' command
-% Usage:
-%
-% One plus one equals two\rampal{brilliant!}.
-%
+
+% Annotation/feedback commands
 \newcommand*\rampal[1]{\textcolor{red}{\textbf{#1}}}
 \newcommand*\RAMPAL[1]{\textcolor{blue}{\textbf{[RSE: #1]}}}
-
-% Create the 'richel' command
 \newcommand*\richel[1]{\textcolor{orange}{\textbf{[RJCB: #1]}}}
 
 % Bibliography
@@ -57,6 +52,8 @@
   ap-proach-es 
   Rev-Bayes 
   cre-ate
+  spe-ci-a-tion-com-ple-tion
+  pro-trac-ted
  }
 
 \begin{document}
@@ -133,13 +130,13 @@ the first Bayesian tools emerged in 1996 (\cite{rannala1996}),
 providing unprecedented flexibility in the setup of a phylogenetic model.
 
 Currently, the most popular Bayesian phylogenetics tools are \\ 
-BEAST (\cite{beast}) and its extension \RAMPAL{it is not really a successor, more a branch} BEAST2 (\cite{beast2}), 
+BEAST (\cite{beast}) and its offshoot BEAST2 (\cite{beast2}), 
 MrBayes (\cite{mrbayes}) and RevBayes (\cite{revbayes}). 
 They allow to incorporate known or hypothesized structure of a phylogenetic 
 tree-to-be-inferred through model priors. 
 With these priors and an alignment of DNA, RNA or protein sequences, 
-they create \rampal{a sample of} the posterior distribution
-of \rampal{phylogenies and parameter estimates} (of the models used as a prior), 
+they create a sample of the posterior distribution
+of phylogenies and parameter estimates (of the models used as a prior), 
 in which more probable combinations are represented more often.
 Each of these tools use efficient tree sampling routines to rapidly create an 
 informative posterior.
@@ -150,7 +147,7 @@ nucleotide substitutions, (2) clock model, specifying
 the rate of mutation per lineage in time, and (3) tree model, 
 constituting the speciation model underlying branching events (speciation) 
 and branch termination (extinction).
-The choice of \RAMPAL{delete: a wrong} site model (\cite{posada_and_buckley_2004}), 
+The choice of site model (\cite{posada_and_buckley_2004}), 
 clock model (\cite{baele_et_al_2012}) 
 or tree prior (\cite{moller2018, yang_and_ranalla_2005}) is known to affect
 the posterior.
@@ -201,8 +198,11 @@ from which we sample a species tree in two very different ways. Given this speci
 we simulate a DNA sequence alignment. Then, we use BEAST2 on these alignments
 to infer a posterior of phylogenies, using a BD prior. We quantify the difference
 between the (BD) posterior phylogenies and the simulated (PBD) species tree.
-\rampal{Furthermore, while we evidently know the clock and site models used in the simulation, using a different clock and/or site model prior in inference may compensate or increase this difference between inferred and simulated tree. To study this, we also explore the effect of 
-a different clock and site model prior in inference.}
+Furthermore, while we evidently know the clock and site models used in the simulation, 
+using a different clock and/or site model prior in inference 
+may compensate or increase this difference between inferred and simulated tree. 
+To study this, we also explore the effect of 
+a different clock and site model prior in inference.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Methods (but we are not allowed to use this header)
@@ -212,30 +212,91 @@ The PBD model has five biological parameters, depicted in table \ref{table:param
 which we explore in a factorial fashion, excluding - for computational reasons - the combinations in which the 
 95\% quantile of the expected number of good species is more than 1250.
 This quantile is
-calculated with \rampal{the pbd\_numspec\_quantile function we added to the} \verb;PBD; package (\cite{pbd}).
-\RAMPAL{I think we should release the new version with this function with this manuscript. I deleted the reference to equation 6, because it is incorrect. Do you want to put the derivation here?}. This calculation
+calculated with the \verb;pbd_numspec_quantile; function we added to the \verb;PBD; package (\cite{pbd}).
+\RAMPAL{I think we should release the new version with this function with this manuscript}\richel{I would personally prefer 'release early, release often', but as lead maintainer you get to decide}\RAMPAL{Do you want to put the derivation here?}\richel{Yes please, either here or at the PBD package (the functions pbd\_geom and 
+pbd\_numspec\_quantile) documentation. Wherever you put it, I will transfer it to the other place}. This calculation
 assumes $b = b_g = b_i$, we used $b = \max(b_g, b_i)$.
 We use 1000 good species as a threshold, to prevent overly taxon-poor and taxon-rich phylogenies respectively.
 The parameter values chosen are based on the parameter sets used by 
 \cite{etienne2014}, as these parameters were shown to result in reasonably
 sized phylogenies and using the same set allows us to compare results. 
-For the speciation initiation rates of good and incipient species, we use $b_g = 0.35$ and $b_i = 0.55$, 
-respectively.\RAMPAL{Jouw units zijn niet helemaal correct, want het zijn probability rates.}
+We use a set of speciation initiation rates, $B = \{0.3, 0.5\}$, of which the speciation initiation
+rate of good species $b_g \in B$ and incipient species $b_i \in B$. \richel{these rates can differ, although we do not plot the combinations in which they differ}.\RAMPAL{your units are not entirely correct, as these are probability rates.}\richel{I though I was correct in my units. If I am wrong, what are the correct units then? In Etienne and Rosindell 2012, there is never 'probability rate' written. To be explicit, I think these sentences are all valid: (1) the extinction rate of good species, mu\_g is 1.2 extinction events per time unit (2) the speciation initiation rate of good species, b\_g is 2.3 speciation events per time unit, (3) the speciation completion rate, lambda is 3.4 speciation completion events per time unit. What would be the better unit?}
 The speciation completion rates we use are $\lambda = 0.1$, $0.3$, $1.0$ and $10^9$. We use $10^9 \approx \infty$
 to mimic the BD model, because the PBD model reduces to the BD model for $\lambda = \infty$.
 This allows us to measure the baseline error, 
 which is the difference between inferred tree and true species tree that arises purely due to noise 
 because the generating model and the model used in inference are identical in this case.
-The extinction rates of good and incipient species used 
-are $\mu_g = \mu_i = 0.0$, $0.1$ and $0.2$.\RAMPAL{I made some changes here as well}
+We use a set of extinction rates, $M = \{0.0, 0.1, 0.2, \infty\}$, of which the extinction
+rate of good species $\mu_g \in M$ and incipient species $\mu_i \in M$. 
+\richel{Also here: these rates can differ}
 
 From each biological parameter set, we simulate a protracted birth-death tree,
 using the PBD package (\cite{pbd}) in the R programming language (\cite{r}), 
-all with a crown age of 15 million years \rampal{as used in \cite{etienne2014}.}
+all with a crown age of 15 million years as used in \cite{etienne2014}.
 Each protracted birth-death tree uses a different random number
-\rampal{generator} seed, which makes all runs independent, resulting in a balanced 
+generator seed, which makes all runs independent, resulting in a balanced 
 data set. \richel{Rampal assumed runs with close seeds were related. 
-I assume I have convinced him otherwise]} \rampal{I am not saying that close seeds mean correlation; we simply don't know whether two lists of pseudo-random numbers generated from the two different seeds are not correlated, but perhaps the easiest way to resolve this is to check this for a fairly long list of numbers}
+I assume I have convinced him otherwise]} \rampal{I am not saying that close seeds mean correlation; we simply don't know whether two lists of pseudo-random numbers generated from the two different seeds are not correlated, but perhaps the easiest way to resolve this is to check this for a fairly long list of numbers}\richel{(1) I checked reproducing one random number from two different (adjacent) seeds, see/run code below in comments. (2) I quote from https://stat.ethz.ch/R-manual/R-patched/library/base/html/Random.html: 'There is no guarantee that different values of seed will seed the RNG differently, although any exceptions would be extremely rare'. The full quote: 'set.seed uses a single integer argument to set as many seeds as are required. It is intended as a simple way to get quite different seeds by specifying small integer arguments, and also as a way to get valid seed sets for the more complicated methods (especially "Mersenne-Twister" [see below, ...]). There is no guarantee that different values of seed will seed the RNG differently, although any exceptions would be extremely rare. "Mersenne-Twister": From Matsumoto and Nishimura (1998). A twisted GFSR with period 2 to the power of 19937 - 1 and equidistribution in 623 consecutive dimensions (over the whole period). The 'seed' is a 624-dimensional set of 32-bit integers plus a current position in that set.'
+(3) I've added a more elaborate example below that shows there is no overlapping sequence  
+}
+
+% From Progress Report of week 21 2018, May 21 - May 25 2018:
+% # If a random number if drawn with one seed,
+% # how long until it is drawn by differently seeded
+% # RNG?
+%
+% Pick any starting seed
+% set.seed(2)
+% value <- runif(n = 1)
+%
+% Pick any other seed
+% set.seed(1)
+% i <- 0
+% while (value != runif(n = 1)) {
+%   i <- i + 1
+% }  
+% print(i)
+
+% More elaborate example:
+% 
+% # Goal:
+% # Proof that runs with different RNG seeds result in completely different sequences
+% 
+% # SETUP
+% n_seeds <- 10000
+% sequence_length <- 10000
+% 
+% # START
+% runs <- list()
+% for (seed in seq(1, n_seeds)) {
+%   set.seed(seed)
+%   runs[[seed]] <- runif(n = sequence_length)
+% }
+% 
+% numbers <- unlist(runs)
+% duplicate_numbers <- numbers[duplicated(numbers)]
+% 
+% if (length(duplicate_numbers) == 0) {
+%   print("all numbers are unique")
+% } else {
+%   percentage <- 100 * length(duplicate_numbers) / length(numbers)
+%   print(paste(length(duplicate_numbers), "of", length(numbers), "numbers (", percentage ,"% ) occur multiple times"))
+%   run_length_encoding <- rle(duplicated(numbers))
+%   repeated_sequence_lengths <- run_length_encoding$lengths[ run_length_encoding$values == TRUE ]
+%   longest_repeated_sequence <- max(repeated_sequence_lengths)
+%   print(paste("Longest sequence of numbers that occurred multiple times (not necessarily in that same order) is", longest_repeated_sequence))
+%   ggplot2::ggplot(
+%     data.frame(length = repeated_sequence_lengths),
+%     ggplot2::aes(x = length)
+%   ) + ggplot2::geom_histogram(binwidth = 1) + ggplot2::coord_cartesian(ylim=c(0, 20)) +
+%     ggplot2::ggtitle(
+%       paste0(
+%         "Lengths of sequence of numbers that occurred multiple times (not necessarily in that same order)\n",
+%         "sequence length: ", sequence_length, ", n_seeds: ", n_seeds
+%       )
+%     )
+%  }
 
 From each incipient species tree, we construct a species tree,
 by sampling one incipient/good species per good species. 
@@ -246,7 +307,7 @@ and hence both can be picked as an (equally good) representative of the species.
 Here, we use three sampling scenarios,
 in which we pick the representative randomly or in such a way that this
 results in either the shortest or longest branch lengths. 
-See the supplementary information for a visualization of these sampling methods.\RAMPAL{Why not include that in the paper here; I think it is essential}
+See the supplementary information for a visualization of these sampling methods.\RAMPAL{Why not include that in the paper here; I think it is essential}\richel{Because we are limited to two figures}
 
 Based on the sampled species tree, we simulate a DNA alignment that has the same history
 as this species tree, using the \verb;phangorn; package (\cite{phangorn}). 
@@ -256,7 +317,9 @@ are equally likely.
 In our Bayesian inference (see below) we use the same site model as the (obviously correct) site model prior,
 but we also explore the effect of assuming a more complex site model prior.
 We predict with the more complex substitution model, 
-that there will be more noise and hence our inference error will increase.\RAMPAL{I am not sure: perhaps we compensate for the error made by adding more flexibility in another prior}
+that there will be more noise and hence our inference error will increase.
+On the other hand, we dare not rule out that the inference error will decrease,
+due to more flexibility in the more complex prior.
 We set the mutation rate in such a way to maximize the information contained in the alignment.
 To do so, we set the mutation rate such that we expect on average one (possibly silent) mutation per nucleotide
 between crown age and present, which equates to $\frac{1}{15}$ mutations
@@ -270,7 +333,7 @@ to have on average one (possibly silent) mutation per 15 million years, $15 \cdo
 nucleotides result in 1 mutation per alignment per $10^3$ years (which is
 coincidentally the same as \cite{moller2018}). 
 The simulation of these DNA aligments follows a strict clock model, 
-which we will specify as one of the two clock models assumed in the Bayesian inference \rampal{(see below)}.
+which we will specify as one of the two clock models assumed in the Bayesian inference (see below).
 
 From an alignment, we run a Bayesian analysis and 
 create a posterior distribution of trees and parameters
@@ -281,7 +344,7 @@ The Jukes-Cantor model is the correct one, as it is used for simulating that ali
 where the GTR model is the site model that is picked as a default by most users.
 For our clock model, we assume either a strict or relaxed log-normal 
 clock model. 
-Also here, the strict clock model is the correct one, as it is used for simulating \rampal{the} alignment,
+Also here, the strict clock model is the correct one, as it is used for simulating the alignment,
 but the relaxed log-normal clock model is the one most commonly used.
 We set the BD model as a tree prior, 
 as gauging the effect of this incorrect assumption is the goal of this study. 
@@ -293,16 +356,15 @@ units) as the alignment.
 We ran the MCMC chain to generate 1111 states,
 of which we remove the first 10\% (also called the 'burn-in'). 
 Of the remaining
-1000 MCMC states, the effective sample size (ESS) of the posterior \richel{I chose 
-the ESS of the posterior over the ESS of the tree likelihood (and the 
-others displayed in table 4). For both something can be said. Agree on this choice?} must at least be 200
+1000 MCMC states, the effective sample size (ESS) of the posterior 
+must at least be 200
 for a strong enough inference (\cite{beastbook}). An ESS can be increased by increasing
 the number of samples or decreasing the autocorrelation between samples. 
 If the ESS is less than 200, we decrease autocorrelation by doubling 
 the MCMC sampling interval of that simulation, until the ESS exceeds 200.
 
 We compare each posterior phylogeny to the (sampled) species tree
-\rampal{using} the nLTT statistic (\cite{janzen2015}), \rampal{from} the nLTT package (\cite{nltt}). 
+using the nLTT statistic (\cite{janzen2015}), from the \verb;nLTT; package (\cite{nltt}). 
 The nLTT statistic equals the area between the normalized
 lineages-through-time-plots of two phylogenies, which has a range 
 from zero (for identical phylogenies) to one. We use inference error 
@@ -316,19 +378,21 @@ The data set to investigate sampling has 496 different combinations
 of biological parameter combinations, site models, clock models 
 and sampling methods. The experiment is computationally intensive:
 pilot experiments show that the experiment takes roughly 100 days
-of CPU time and 20 days of wall clock time per replicate. 
+of CPU time and 20 days of wall clock time (which includes the queued 
+waiting for computational resources) per replicate. 
 Due to this, we choose to perform ten replicates, so that the complete
-experiment will take an acceptable time of roughly seven months. \RAMPAL{So this includes queue time? Perhaps mention this.}
+experiment will take an acceptable time of roughly seven months. 
 
 For both data sets, we display the nLTT statistics distribution per
 biological parameter combination as a violin plot.
-We only show combinations for which $\lambda_g = \lambda_i$ and $\mu_g = \mu_i$ \RAMPAL{So where are the other results? All results should at least be in the supplementary material},
-to simplify the interpretation of \rampal{the} results. 
+We show combinations for which $b_g = b_i$ and $\mu_g = \mu_i$,
+to simplify the interpretation of the results, where the other combinations
+are shown in the supplementary material.
 Additionally, we only show the nLTT distributions
 that were generated under the (correct) assumptions of a Jukes-Cantor site model
-and a strict clock model. We display the nLTT statistic distributions for \RAMPAL{replace 'both' by 'other'?}both
-site and clock models in the supplementary information. {Finally}, we show the effect of sampling,
-by \rampal{separating} the nLTT statistics distribution per sampling method used.
+and a strict clock model, separated per sampling method used. 
+We display the nLTT statistic distributions separated per site or clock model 
+in the supplementary information.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -338,8 +402,8 @@ by \rampal{separating} the nLTT statistics distribution per sampling method used
   \includegraphics[width=0.8\textwidth]{fig_general.png}
   \caption{
     nLTT statistic distribution per biological parameter set, using the
-    balanced data set, 
-    for the subset of combinations in which $\lambda_g = \lambda_i$, $\mu_g = \mu_i$, 
+    general data set, 
+    for the subset of combinations in which $b_g = b_i$, $\mu_g = \mu_i$, 
     under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
   }
 \end{figure}
@@ -349,7 +413,7 @@ by \rampal{separating} the nLTT statistics distribution per sampling method used
   \caption{
     nLTT statistic distribution per biological parameter set per sampling
     regime, using the data set conditioned on sampling regime having an effect, 
-    for the subset of combinations in which $\lambda_g = \lambda_i$, $\mu_g = \mu_i$, 
+    for the subset of combinations in which $b_g = b_i$, $\mu_g = \mu_i$, 
     under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
   }
 \end{figure}
@@ -369,9 +433,9 @@ by \rampal{separating} the nLTT statistics distribution per sampling method used
     Phylogenetics         & The inference of evolutionary relationships of groups of organisms using genetics \\
     Model prior           & Knowledge or assumptions about the ontogeny of evolutionary histories \\
     Posterior             & A collection of phylogenies and parameter estimates, in which more probable combinations (determined by the data and the model prior) are presented more frequently \\
-    Protracted speciation & The process in which speciation takes two events \RAMPAL{delete: to complete}: a speciation-initiation event and a speciation-completion event  \\
+    Protracted speciation & The process in which speciation takes two events: a speciation-initiation event and a speciation-completion event  \\
     Speciation initiation & The start of a speciation event creating an incipient species \\
-    Speciation completion & The end of a speciation event, in which an incipient species \rampal{becomes or }is recognized as a good species \\
+    Speciation completion & The end of a speciation event, in which an incipient species becomes or is recognized as a good species \\
     \hline
   \end{tabular}
   \caption{
@@ -412,11 +476,28 @@ by \rampal{separating} the nLTT statistics distribution per sampling method used
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[!htbp]
+  \includegraphics[width=0.8\textwidth]{fig_sampling_methods.png}
+  \caption{
+    Sampling a species tree from an incipient species tree. At the top left,
+    an incipient species tree is shown, of three different good species (the
+    first and second number in the taxon label) and four different subspecies (the
+    third number in the taxon tabel). The other four trees are species trees,
+    that use a different sampling method to determine which sub-species is picked to
+    represent a good species. These are: 'Youngest', 'Oldest', 'Shortest' and
+    'Longest'. With 'Youngest' the youngest sub-species is picked to represent the
+    good species. With 'Oldest' the oldest sub-species is picked to represent the
+    good species. 'Shortest' is the sampling method in which the sub-species are
+    picked to assure the shortest branch lengths. 'Longest' is the sampling method 
+    in which the sub-species are picked to assure the longest branch lengths.
+  }
+\end{figure}
+
+\begin{figure}[!htbp]
   \includegraphics[width=0.8\textwidth]{fig_clock_model.png}
   \caption{
     nLTT statistic distribution per biological parameter set per clock model,
-    using the balanced data set\RAMPAL{what is a balanced data set? Did you define that anywhere?}, 
-    for the subset of combinations in which $\lambda_g = \lambda_i$, $\mu_g = \mu_i$, 
+    using the general data set, 
+    for the subset of combinations in which $b_g = b_i$, $\mu_g = \mu_i$, 
     under the (correct) assumption of a Jukes-Cantor site model.
   }
 \end{figure}
@@ -425,9 +506,70 @@ by \rampal{separating} the nLTT statistics distribution per sampling method used
   \includegraphics[width=0.8\textwidth]{fig_site_model.png}
   \caption{
     nLTT statistic distribution per biological parameter set per site model,
-    using the balanced data set, 
-    for the subset of combinations in which $\lambda_g = \lambda_i$, $\mu_g = \mu_i$, 
+    using the general data set, 
+    for the subset of combinations in which $b_g = b_i$, $\mu_g = \mu_i$, 
     under the (correct) assumption of a strict clock model.
+  }
+\end{figure}
+
+
+\begin{figure}[!htbp]
+  \includegraphics[width=0.8\textwidth]{fig_general_1.png}
+  \caption{
+    nLTT statistic distribution per biological parameter set, using the
+    general data set, 
+    for $b_i = 0.3$ and $\mu_i = 0.0$, 
+    under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
+  }
+\end{figure}
+
+\begin{figure}[!htbp]
+  \includegraphics[width=0.8\textwidth]{fig_general_2.png}
+  \caption{
+    nLTT statistic distribution per biological parameter set, using the
+    general data set, 
+    for $b_i = 0.3$ and $\mu_i = 0.1$, 
+    under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
+  }
+\end{figure}
+
+\begin{figure}[!htbp]
+  \includegraphics[width=0.8\textwidth]{fig_general_3.png}
+  \caption{
+    nLTT statistic distribution per biological parameter set, using the
+    general data set, 
+    for $b_i = 0.3$ and $\mu_i = 0.2$, 
+    under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
+  }
+\end{figure}
+
+\begin{figure}[!htbp]
+  \includegraphics[width=0.8\textwidth]{fig_general_4.png}
+  \caption{
+    nLTT statistic distribution per biological parameter set, using the
+    general data set, 
+    for $b_i = 0.5$ and $\mu_i = 0.0$, 
+    under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
+  }
+\end{figure}
+
+\begin{figure}[!htbp]
+  \includegraphics[width=0.8\textwidth]{fig_general_5.png}
+  \caption{
+    nLTT statistic distribution per biological parameter set, using the
+    general data set, 
+    for $b_i = 0.5$ and $\mu_i = 0.1$, 
+    under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
+  }
+\end{figure}
+
+\begin{figure}[!htbp]
+  \includegraphics[width=0.8\textwidth]{fig_general_6.png}
+  \caption{
+    nLTT statistic distribution per biological parameter set, using the
+    general data set, 
+    for $b_i = 0.5$ and $\mu_i = 0.2$, 
+    under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
   }
 \end{figure}
 
@@ -443,7 +585,7 @@ by \rampal{separating} the nLTT statistics distribution per sampling method used
     $b_i$                 & Speciation initiation rate of an incipient species & 0.3, 0.5 \\
     $\lambda$             & Speciation completion rate & 0.1, 0.3, 1.0, $\infty$ \\
     $\mu_g$               & Extinction rate of a good species & 0.0, 0.1, 0.2 \\
-    $\mu_i$               & Extinction rate of an incipient species & 0.0, 0.1, 0.2, 0.4 \\
+    $\mu_i$               & Extinction rate of an incipient species & 0.0, 0.1, 0.2 \\
     \hline
     $t_c$                 & Crown age & 15 \\
     $\sigma_c$            & Standard deviation around crown age & 0.001 \\
@@ -453,7 +595,7 @@ by \rampal{separating} the nLTT statistics distribution per sampling method used
     $r$                   & Mutation rate & $\frac{1}{15}$ \\
     $l_a$                 & DNA alignment length & $15K$ \\
     $f_i$                 & MCMC sampling interval & 1K or more \\
-    $R_i$                 & RNG seed incipient tree and randomly sampled species tree & 1 to 20K \\
+    $R_i$                 & RNG seed incipient tree and randomly sampled species tree & 1, 2, ... \\
     $R_a$                 & RNG seed alignment simulation & $R_i$ \\
     $R_b$                 & RNG seed BEAST2 & $R_i$ \\
     \hline
@@ -461,14 +603,16 @@ by \rampal{separating} the nLTT statistics distribution per sampling method used
   \caption{
     Overview of the simulation parameters. Above the horizontal line is 
     the biological parameter set. 
-    The RNG seed $R_i$ is 1 for the first simulation, 2 for the next, etc.
-    The sampling methods are abbreviated as such: \rampal{'R'} denotes random
+    The RNG seed $R_i$ is 1 for the first simulation of the general data set, 2 for the next,
+    and so on, up to and including 3480. The RNG seeds for the data set investigating the effect 
+    of sampling continues from there.
+    The sampling methods are abbreviated as such: 'R' denotes random
     sampling, 'S' is 'shortest' and 'L' is 'longest'. Sampling method $M_s$ is random for the general
     data set. For the data set exploring the effect of sampling, we use 'shortest'
     for odd values of $R_i$, and 'longest' for even values of $R_i$.
-    The clock models are abbreviated as 'S' \rampal{for} a strict and 'RLN' \rampal{for} a relaxed log-normal model.
-    The site models are abbreviated as 'JC69' for Jukes-Cantor \RAMPAL{cite the JC 1969 paper?} and 'GTR' for the generalized 
-    time-reversible model.
+    The clock models are abbreviated as 'S' for a strict and 'RLN' for a relaxed log-normal model.
+    The site models are abbreviated as 'JC69' for Jukes-Cantor (\cite{jc69}) and 'GTR' for the generalized 
+    time-reversible model (\cite{gtr}).
   }
   \label{table:parameters}
 \end{table}
@@ -521,7 +665,7 @@ by \rampal{separating} the nLTT statistics distribution per sampling method used
     \hline
   \end{tabular}
   \caption{
-    Overview of the 11 \rampal{parameters estimated by BEAST2}
+    Overview of the 11 parameters estimated by BEAST2
   }
   \label{table:estimated_parameters}
 \end{table}
