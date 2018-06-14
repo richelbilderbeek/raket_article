@@ -546,11 +546,11 @@ in the supplementary information.
     the biological parameter set. 
     The RNG seed $R_i$ is 1 for the first simulation of the general data set, 2 for the next,
     and so on, up to and including 3480. The RNG seeds for the data set investigating the effect 
-    of sampling continues from there.
+    of sampling continue from there, but only those RNG seeds are used in which sampling has an effect.
     The sampling methods are abbreviated as such: 'R' denotes random
     sampling, 'S' is 'shortest' and 'L' is 'longest'. Sampling method $M_s$ is random for the general
     data set. For the data set exploring the effect of sampling, we use 'shortest'
-    for odd values of $R_i$, and 'longest' for even values of $R_i$.
+    and 'longest' for each value of $R_i$ (which are random seeds in which sampling has an effect).
     The clock models are abbreviated as 'S' for a strict and 'RLN' for a relaxed log-normal model.
     The site models are abbreviated as 'JC69' for Jukes-Cantor (\cite{jc69}) and 'GTR' for the generalized 
     time-reversible model (\cite{gtr}).
