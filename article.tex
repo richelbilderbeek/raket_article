@@ -221,7 +221,7 @@ The parameter values chosen are based on the parameter sets used by
 \cite{etienne2014}, as these parameters were shown to result in reasonably
 sized phylogenies and using the same set allows us to compare results. 
 We use a set of speciation initiation rates, $B = \{0.3, 0.5\}$, of which the speciation initiation
-rate of good species $b_g \in B$ and incipient species $b_i \in B$. \richel{these rates can differ, although we do not plot the combinations in which they differ}\RAMPAL{Prima om die verschillend te nemen. Het ms was hier idd niet duidelijk over.}.\RAMPAL{your units are not entirely correct, as these are probability rates.}\richel{I though I was correct in my units. If I am wrong, what are the correct units then? In Etienne and Rosindell 2012, there is never 'probability rate' written. To be explicit, I think these sentences are all valid: (1) the extinction rate of good species, mu\_g is 1.2 extinction events per time unit (2) the speciation initiation rate of good species, b\_g is 2.3 speciation events per time unit, (3) the speciation completion rate, lambda is 3.4 speciation completion events per time unit. What would be the better unit?}\RAMPAL{
+rate of good species $b_g \in B$ and incipient species $b_i \in B$.\RAMPAL{your units are not entirely correct, as these are probability rates.}\richel{I though I was correct in my units. If I am wrong, what are the correct units then? In Etienne and Rosindell 2012, there is never 'probability rate' written. To be explicit, I think these sentences are all valid: (1) the extinction rate of good species, mu\_g is 1.2 extinction events per time unit (2) the speciation initiation rate of good species, b\_g is 2.3 speciation events per time unit, (3) the speciation completion rate, lambda is 3.4 speciation completion events per time unit. What would be the better unit?}\RAMPAL{
 Je hebt het over de eenheden van de rates. Dat is subtiel omdat het om een stochastisch model gaat en dus om kansen. Voorbeeld: mu * dt is de kans op een extinction event per species in een tijdsinterval dt. 1/mu geeft de verwachte tijd tot een extinctie event van een soort. mu is dus een probability rate.
 }
 The speciation completion rates we use are $\lambda = 0.1$, $0.3$, $1.0$ and $10^9$. We use $10^9 \approx \infty$
@@ -231,7 +231,6 @@ which is the difference between inferred tree and true species tree that arises 
 because the generating model and the model used in inference are identical in this case.
 We use a set of extinction rates, $M = \{0.0, 0.1, 0.2, \infty\}$, of which the extinction
 rate of good species $\mu_g \in M$ and incipient species $\mu_i \in M$. 
-\richel{Also here: these rates can differ}
 
 From each biological parameter set, we simulate a protracted birth-death tree,
 using the PBD package (\cite{pbd}) in the R programming language (\cite{r}), 
