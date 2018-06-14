@@ -237,68 +237,7 @@ using the PBD package (\cite{pbd}) in the R programming language (\cite{r}),
 all with a crown age of 15 million years as used in \cite{etienne2014}.
 Each protracted birth-death tree uses a different random number
 generator seed, which makes all runs independent, resulting in a balanced 
-data set. \richel{Rampal assumed runs with close seeds were related. 
-I assume I have convinced him otherwise]} \rampal{I am not saying that close seeds mean correlation; we simply don't know whether two lists of pseudo-random numbers generated from the two different seeds are not correlated, but perhaps the easiest way to resolve this is to check this for a fairly long list of numbers}\richel{(1) I checked reproducing one random number from two different (adjacent) seeds, see/run code below in comments. (2) I quote from https://stat.ethz.ch/R-manual/R-patched/library/base/html/Random.html: 'There is no guarantee that different values of seed will seed the RNG differently, although any exceptions would be extremely rare'. The full quote: 'set.seed uses a single integer argument to set as many seeds as are required. It is intended as a simple way to get quite different seeds by specifying small integer arguments, and also as a way to get valid seed sets for the more complicated methods (especially "Mersenne-Twister" [see below, ...]). There is no guarantee that different values of seed will seed the RNG differently, although any exceptions would be extremely rare. "Mersenne-Twister": From Matsumoto and Nishimura (1998). A twisted GFSR with period 2 to the power of 19937 - 1 and equidistribution in 623 consecutive dimensions (over the whole period). The 'seed' is a 624-dimensional set of 32-bit integers plus a current position in that set.'
-(3) I've added a more elaborate example below that shows there is no overlapping sequence  
-}
-\RAMPAL{M.i. is het theoretisch nog niet evident, maar empirisch in orde, dus prima zo.}
-
-% From Progress Report of week 21 2018, May 21 - May 25 2018:
-% # If a random number if drawn with one seed,
-% # how long until it is drawn by differently seeded
-% # RNG?
-%
-% Pick any starting seed
-% set.seed(2)
-% value <- runif(n = 1)
-%
-% Pick any other seed
-% set.seed(1)
-% i <- 0
-% while (value != runif(n = 1)) {
-%   i <- i + 1
-% }  
-% print(i)
-
-% More elaborate example:
-% 
-% # Goal:
-% # Proof that runs with different RNG seeds result in completely different sequences
-% 
-% # SETUP
-% n_seeds <- 10000
-% sequence_length <- 10000
-% 
-% # START
-% runs <- list()
-% for (seed in seq(1, n_seeds)) {
-%   set.seed(seed)
-%   runs[[seed]] <- runif(n = sequence_length)
-% }
-% 
-% numbers <- unlist(runs)
-% duplicate_numbers <- numbers[duplicated(numbers)]
-% 
-% if (length(duplicate_numbers) == 0) {
-%   print("all numbers are unique")
-% } else {
-%   percentage <- 100 * length(duplicate_numbers) / length(numbers)
-%   print(paste(length(duplicate_numbers), "of", length(numbers), "numbers (", percentage ,"% ) occur multiple times"))
-%   run_length_encoding <- rle(duplicated(numbers))
-%   repeated_sequence_lengths <- run_length_encoding$lengths[ run_length_encoding$values == TRUE ]
-%   longest_repeated_sequence <- max(repeated_sequence_lengths)
-%   print(paste("Longest sequence of numbers that occurred multiple times (not necessarily in that same order) is", longest_repeated_sequence))
-%   ggplot2::ggplot(
-%     data.frame(length = repeated_sequence_lengths),
-%     ggplot2::aes(x = length)
-%   ) + ggplot2::geom_histogram(binwidth = 1) + ggplot2::coord_cartesian(ylim=c(0, 20)) +
-%     ggplot2::ggtitle(
-%       paste0(
-%         "Lengths of sequence of numbers that occurred multiple times (not necessarily in that same order)\n",
-%         "sequence length: ", sequence_length, ", n_seeds: ", n_seeds
-%       )
-%     )
-%  }
+data set. 
 
 From each incipient species tree, we construct a species tree,
 by sampling one incipient/good species per good species. 
