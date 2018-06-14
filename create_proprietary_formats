@@ -1,5 +1,0 @@
-#!/bin/bash
-#./create_article
-
-cp article.pdf "raket_article_$(date +"%Y%m%d").pdf"
-pandoc article.tex -o "raket_article_$(date +"%Y%m%d").docx"
