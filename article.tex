@@ -260,9 +260,11 @@ as this species tree, using the \verb;phangorn; package (\cite{phangorn}).
 We set the nucleotides of the DNA alignment to follow a Jukes-Cantor (\cite{jc69})
 nucleotide substitution model, in which all nucleotide-to-nucleotide transitions
 are equally likely. 
-\richel{New:}
-The DNA sequence used for the root ancestor has an equal amount of each nucleotide.
-\richel{End of new}
+The DNA sequence of the root ancestor consists of four equally sized single-nucleotide blocks of adenine, cytosine, guanine and thymine respectively. 
+For example, for a DNA sequence length of 12, this would be AAACCCGGGTTT. 
+The order of nucletides does not matter in this study, 
+because we do not consider several partitions of the sequence with their own parameters. 
+Only the frequency of occurrence matters.
 In our Bayesian inference (see below) we use the same site model as the (obviously correct) site model prior,
 but we also explore the effect of assuming a more complex site model prior.
 We predict with the more complex substitution model, 
