@@ -213,17 +213,21 @@ which we explore in a factorial fashion, excluding - for computational reasons -
 95\% quantile of the expected number of good species is more than 1250.
 This quantile is
 calculated with the \verb;pbd_numspec_quantile; function we added to the \verb;PBD; package (\cite{pbd}).
-\RAMPAL{I think we should release the new version with this function with this manuscript}\richel{I would personally prefer 'release early, release often', but as lead maintainer you get to decide}\RAMPAL{Do you want to put the derivation here?}\richel{Yes please, either here or at the PBD package (the functions pbd\_geom and 
-pbd\_numspec\_quantile) documentation. Wherever you put it, I will transfer it to the other place}. This calculation
-assumes $b = b_g = b_i$, we used $b = \max(b_g, b_i)$.
+\RAMPAL{I think we should release the new version with this function with this manuscript}
+\richel{I would personally prefer 'release early, release often', but as lead maintainer you get to decide}
+\RAMPAL{Do you want to put the derivation here?}
+\richel{No, as you've added it to the PBD::pbd\_geom and PBD::pbd\_numspec\_quantile) documentation, so I will transfer it. Thanks!}
+This calculation assumes $b = b_g = b_i$, we used $b = \max(b_g, b_i)$.
 We use 1000 good species as a threshold, to prevent overly taxon-poor and taxon-rich phylogenies respectively.
 The parameter values chosen are based on the parameter sets used by 
 \cite{etienne2014}, as these parameters were shown to result in reasonably
 sized phylogenies and using the same set allows us to compare results. 
 We use a set of speciation initiation rates, $B = \{0.3, 0.5\}$, of which the speciation initiation
-rate of good species $b_g \in B$ and incipient species $b_i \in B$.\RAMPAL{your units are not entirely correct, as these are probability rates.}\richel{I though I was correct in my units. If I am wrong, what are the correct units then? In Etienne and Rosindell 2012, there is never 'probability rate' written. To be explicit, I think these sentences are all valid: (1) the extinction rate of good species, mu\_g is 1.2 extinction events per time unit (2) the speciation initiation rate of good species, b\_g is 2.3 speciation events per time unit, (3) the speciation completion rate, lambda is 3.4 speciation completion events per time unit. What would be the better unit?}\RAMPAL{
-Je hebt het over de eenheden van de rates. Dat is subtiel omdat het om een stochastisch model gaat en dus om kansen. Voorbeeld: mu * dt is de kans op een extinction event per species in een tijdsinterval dt. 1/mu geeft de verwachte tijd tot een extinctie event van een soort. mu is dus een probability rate.
-}
+rate of good species $b_g \in B$ and incipient species $b_i \in B$.
+\RAMPAL{your units are not entirely correct, as these are probability rates.}
+\richel{I (perhaps naively) think I am correct in my units. If I am wrong, what are the correct units then? In Etienne and Rosindell 2012, there is never 'probability rate' written. To be explicit, I think theis sentence is valid: the extinction rate of good species, mu\_g has an expected 1.2 extinction events per time unit. What would be the better unit?}
+\RAMPAL{Je hebt het over de eenheden van de rates. Dat is subtiel omdat het om een stochastisch model gaat en dus om kansen. Voorbeeld: mu * dt is de kans op een extinction event per species in een tijdsinterval dt. 1/mu geeft de verwachte tijd tot een extinctie event van een soort. mu is dus een probability rate.}
+\richel{'mu is dus een probability rate' with what unit? You can redirect me to an article with the proper wording, or finish this sentence: 'the extinction rate of good species, mu\_g ...'. Thanks!}
 The speciation completion rates we use are $\lambda = 0.1$, $0.3$, $1.0$ and $10^9$. We use $10^9 \approx \infty$
 to mimic the BD model, because the PBD model reduces to the BD model for $\lambda = \infty$.
 This allows us to measure the baseline error, 
@@ -248,13 +252,17 @@ and hence both can be picked as an (equally good) representative of the species.
 Here, we use three sampling scenarios,
 in which we pick the representative randomly or in such a way that this
 results in either the shortest or longest branch lengths. 
-See the supplementary information for a visualization of these sampling methods.\RAMPAL{Why not include that in the paper here; I think it is essential}\richel{Because we are limited to two figures}
-
+See the supplementary information for a visualization of these sampling methods.
+% \RAMPAL{Why not include that in the paper here; I think it is essential}
+% \richel{Because we are limited to two figures}
 Based on the sampled species tree, we simulate a DNA alignment that has the same history
 as this species tree, using the \verb;phangorn; package (\cite{phangorn}). 
 We set the nucleotides of the DNA alignment to follow a Jukes-Cantor (\cite{jc69})
 nucleotide substitution model, in which all nucleotide-to-nucleotide transitions
-are equally likely.
+are equally likely. 
+\richel{New:}
+The DNA sequence used for the root ancestor has an equal amount of each nucleotide.
+\richel{End of new}
 In our Bayesian inference (see below) we use the same site model as the (obviously correct) site model prior,
 but we also explore the effect of assuming a more complex site model prior.
 We predict with the more complex substitution model, 
