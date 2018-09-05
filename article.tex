@@ -208,40 +208,26 @@ a different clock and site model prior in inference.
 % Methods (but we are not allowed to use this header)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The PBD model has five biological parameters, depicted in table \ref{table:parameters}, 
-which we explore in a factorial fashion, excluding - for computational reasons - the combinations in which the 
-95\% quantile of the expected number of good species is more than 1250.
-This quantile is
-calculated with the \verb;pbd_numspec_quantile; function we added to the \verb;PBD; package (\cite{pbd}).
-\RAMPAL{I think we should release the new version with this function with this manuscript}
-\richel{I would personally prefer 'release early, release often', but as lead maintainer you get to decide}
-\RAMPAL{Do you want to put the derivation here?}
-\richel{No, as you've added it to the PBD::pbd\_geom and PBD::pbd\_numspec\_quantile) documentation, so I will transfer it. Thanks!}
-This calculation assumes $b = b_g = b_i$, we used $b = \max(b_g, b_i)$.
-We use 1000 good species as a threshold, to prevent overly taxon-poor and taxon-rich phylogenies respectively.
-The parameter values chosen are based on the parameter sets used by 
-\cite{etienne2014}, as these parameters were shown to result in reasonably
-sized phylogenies and using the same set allows us to compare results. 
-We use a set of speciation initiation rates, $B = \{0.3, 0.5\}$, of which the speciation initiation
-rate of good species $b_g \in B$ and incipient species $b_i \in B$.
-\RAMPAL{your units are not entirely correct, as these are probability rates.}
-\richel{I (perhaps naively) think I am correct in my units. If I am wrong, what are the correct units then? In Etienne and Rosindell 2012, there is never 'probability rate' written. To be explicit, I think theis sentence is valid: the extinction rate of good species, mu\_g has an expected 1.2 extinction events per time unit. What would be the better unit?}
-\RAMPAL{Je hebt het over de eenheden van de rates. Dat is subtiel omdat het om een stochastisch model gaat en dus om kansen. Voorbeeld: mu * dt is de kans op een extinction event per species in een tijdsinterval dt. 1/mu geeft de verwachte tijd tot een extinctie event van een soort. mu is dus een probability rate.}
-\richel{'mu is dus een probability rate' with what unit? You can redirect me to an article with the proper wording, or finish this sentence: 'the extinction rate of good species, mu\_g ...'. Thanks!}
-The speciation completion rates we use are $\lambda = 0.1$, $0.3$, $1.0$ and $10^9$. We use $10^9 \approx \infty$
-to mimic the BD model, because the PBD model reduces to the BD model for $\lambda = \infty$.
-This allows us to measure the baseline error, 
-which is the difference between inferred tree and true species tree that arises purely due to noise 
-because the generating model and the model used in inference are identical in this case.
-We use a set of extinction rates, $M = \{0.0, 0.1, 0.2, \infty\}$, of which the extinction
-rate of good species $\mu_g \in M$ and incipient species $\mu_i \in M$. 
+\richel{Start new}
+The PBD model has five parameters, depicted in table \ref{table:parameters}. 
+The speciation completion rates $\lambda$ we use are $0.1$, $0.3$, $1.0$ and $10^9$ probability of occurence per time unit. 
+\richel{Is the unit correct unit now?}
+The extinction rates $\mu = \mu_g = \mu_i$ we use are $0.0$, $0.1$ and $0.2$ probability of occurence per time unit.
+We use expected mean tree sizes $n$ of 50, 100 and 200 good taxa.
+From each combination of $\lambda$, $\mu$ and $n$, we derive a speciation initiation rate $b = b_i = b_g$, shown in table \ref{table:pbd_parameters}.
+Our parameters are inspired on existing work \cite{etienne_and_rosindell_2012}\cite{etienne2014}.
+We use $\lambda = 10^9 \approx \infty$ to let the PBD model reduce to the BD model.
 
-From each biological parameter set, we simulate a protracted birth-death tree,
-using the PBD package (\cite{pbd}) in the R programming language (\cite{r}), 
-all with a crown age of 15 million years as used in \cite{etienne2014}.
-Each protracted birth-death tree uses a different random number
-generator seed, which makes all runs independent, resulting in a balanced 
-data set. 
+We simulate protracted birth-death trees, using the PBD package (\cite{pbd}) in the R programming language (\cite{r}).
+For each combination of ${\lambda, \mu, b, n}$, we generate incipient species trees with a crown age of 15 million years.
+Only trees with the desired number of good taxa are kept.
+
+This research creates two data sets: a general one, to explore parameter space, 
+and one to investigate the effect of sampling incipient species (see below).
+For the general data set, all the trees with the correct number of good species are kept.
+For the data set to investigate sampling, only trees with the additional constraint of sampling having an effect are kept.
+As sampling does not have an effect for $\lambda = \infty$, this parameter value is absent in that data set.
+\richel{End new}
 
 From each incipient species tree, we construct a species tree,
 by sampling one incipient/good species per good species. 
@@ -252,9 +238,8 @@ and hence both can be picked as an (equally good) representative of the species.
 Here, we use three sampling scenarios,
 in which we pick the representative randomly or in such a way that this
 results in either the shortest or longest branch lengths. 
+
 See the supplementary information for a visualization of these sampling methods.
-% \RAMPAL{Why not include that in the paper here; I think it is essential}
-% \richel{Because we are limited to two figures}
 Based on the sampled species tree, we simulate a DNA alignment that has the same history
 as this species tree, using the \verb;phangorn; package (\cite{phangorn}). 
 We set the nucleotides of the DNA alignment to follow a Jukes-Cantor (\cite{jc69})
@@ -321,11 +306,17 @@ lineages-through-time-plots of two phylogenies, which has a range
 from zero (for identical phylogenies) to one. We use inference error 
 and nLTT statistic interchangeably. Comparing the simulated species tree
 with each of the posterior species trees yields a distribution of nLTT statistics. 
+\richel{Start new}
+The input trees generated with a $\lambda = 10^9$ allow us to measure the noise of the experiment.
+For $\lambda = \infty$, the PBD model that generates the starting trees reduces to a BD model.
+In the following steps, sampling will have no effect, BEAST2 will assume the correct speciation model,
+and the difference between inferred tree and true species tree are explained purely due to this experimental noise.
+\richel{End new}
 
 We produce two data sets as a comma-separated file.
-The general data set has 348 different combinations
+The general data set has 144 \richel{recalc} different combinations
 of biological parameter combinations, site and clock models.
-The data set to investigate sampling has 552 different combinations
+The data set to investigate sampling has ?552 \richel{recalc} different combinations
 of biological parameter combinations, site models, clock models 
 and sampling methods. The experiment is computationally intensive:
 pilot experiments show that the experiment takes roughly 100 days
@@ -336,12 +327,11 @@ experiment will take an acceptable time of roughly seven months.
 
 For both data sets, we display the nLTT statistics distribution per
 biological parameter combination as a violin plot.
-We show combinations for which $b_g = b_i$ and $\mu_g = \mu_i$,
-to simplify the interpretation of the results, where the other combinations
-are shown in the supplementary material.
-Additionally, we only show the nLTT distributions
+\richel{Start new}
+We only show the nLTT distributions
 that were generated under the (correct) assumptions of a Jukes-Cantor site model
 and a strict clock model, separated per sampling method used. 
+\richel{End new}
 We display the nLTT statistic distributions separated per site or clock model 
 in the supplementary information.
 
@@ -395,25 +385,6 @@ in the supplementary information.
   \label{table:glossary}
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\section{Acknowledgements}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\richel{journal does not request for this. Suggest to remove, but how to acknowledge Peregrine otherwise?}
-%We would like to thank the Center for Information Technology of the University of Groningen for their support
-%and for providing access to the Peregrine high performance computing cluster.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\section{Authors' contributions}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\richel{journal does not request for this}
-%RSE conceived the idea for this experiment. 
-%RJCB created and tested the experiment, 
-%and wrote the first draft of the manuscript. 
-%RSE contributed substantially to revisions.
 
 % Bibliography
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -471,12 +442,13 @@ in the supplementary information.
                           & Description & Values \\
     \hline
     \hline
-    $b_g$                 & Speciation initiation rate of a good species & 0.3, 0.5 \\
-    $b_i$                 & Speciation initiation rate of an incipient species & 0.3, 0.5 \\
-    $\lambda$             & Speciation completion rate & 0.1, 0.3, 1.0, $\infty$ \\
+    $b_g$                 & Speciation initiation rate of a good species & derived, see \ref{table:pbd_parameters} \\
+    $b_i$                 & Speciation initiation rate of an incipient species & derived, see \ref{table:pbd_parameters} \\
+    $\lambda$             & Speciation completion rate & 0.1, 0.3, 1.0, $10^9$ \\
     $\mu_g$               & Extinction rate of a good species & 0.0, 0.1, 0.2 \\
     $\mu_i$               & Extinction rate of an incipient species & 0.0, 0.1, 0.2 \\
     \hline
+    $n$                   & Number of good taxa & 50, 100, 200 \\
     $t_c$                 & Crown age & 15 \\
     $\sigma_c$            & Standard deviation around crown age & 0.001 \\
     $M_s$                 & Sampling method & S, L, R \\
@@ -508,6 +480,61 @@ in the supplementary information.
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}
+  \begin{tabular}{|l|l|l|l|l|}
+    \hline
+       & $\mu$ & $n$ & $\lambda$  & $b$ \\
+    \hline
+    1  & 0   & 50  & 0.1   & 0.30944 \\
+    2  & 0.1 & 50  & 0.1   & 0.39674 \\
+    3  & 0.2 & 50  & 0.1   & 0.48667 \\
+    4  & 0   & 100 & 0.1   & 0.36344 \\
+    5  & 0.1 & 100 & 0.1   & 0.45283 \\
+    6  & 0.2 & 100 & 0.1   & 0.54425 \\
+    7  & 0   & 200 & 0.1   & 0.41669 \\
+    8  & 0.1 & 200 & 0.1   & 0.50759 \\
+    9  & 0.2 & 200 & 0.1   & 0.6001  \\
+    10 & 0   & 50  & 0.3   & 0.25717 \\
+    11 & 0.1 & 50  & 0.3   & 0.34003 \\
+    12 & 0.2 & 50  & 0.3   & 0.42648 \\
+    13 & 0   & 100 & 0.3   & 0.30862 \\
+    14 & 0.1 & 100 & 0.3   & 0.39455 \\
+    15 & 0.2 & 100 & 0.3   & 0.48328 \\
+    16 & 0   & 200 & 0.3   & 0.35991 \\
+    17 & 0.1 & 200 & 0.3   & 0.44804 \\
+    18 & 0.2 & 200 & 0.3   & 0.53841 \\
+    19 & 0   & 50  & 1     & 0.2297  \\
+    20 & 0.1 & 50  & 1     & 0.30759 \\
+    21 & 0.2 & 50  & 1     & 0.38984 \\
+    22 & 0   & 100 & 1     & 0.2778  \\
+    23 & 0.1 & 100 & 1     & 0.35961 \\
+    24 & 0.2 & 100 & 1     & 0.44481 \\
+    25 & 0   & 200 & 1     & 0.32617 \\
+    26 & 0.1 & 200 & 1     & 0.41078 \\
+    27 & 0.2 & 200 & 1     & 0.49818 \\
+    28 & 0   & 50  & $10^9$ & 0.21589 \\
+    29 & 0.1 & 50  & $10^9$ & 0.28896 \\
+    30 & 0.2 & 50  & $10^9$ & 0.36635 \\
+    31 & 0   & 100 & $10^9$ & 0.26146 \\
+    32 & 0.1 & 100 & $10^9$ & 0.33872 \\
+    33 & 0.2 & 100 & $10^9$ & 0.41945 \\
+    34 & 0   & 200 & $10^9$ & 0.30733 \\
+    35 & 0.1 & 200 & $10^9$ & 0.38768 \\
+    36 & 0.2 & 200 & $10^9$ & 0.47099 \\
+    \hline
+  \end{tabular}
+  \caption{
+    The speciation parameters used. Starting from extinction rate $\mu$ ($\mu = \mu_g = \mu_i$), the expected
+    mean number of good species $n$, speciation completion rate $\lambda$, the speciation initation
+    rate $b$ ($b = b_g = b_i$) follows.  
+  }
+  \label{table:pbd_parameters}
+\end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}
   \centering 
@@ -527,7 +554,7 @@ in the supplementary information.
     This table displays the content of the columns. 
     $n$ denotes the number
     of columns a certain item will occupy, resulting in a table of 
-    1023 columns and 20K rows.
+    1023 \richel{recalc} columns and 20K rows.
   }
   \label{table:specs}
 \end{table}
@@ -561,5 +588,21 @@ in the supplementary information.
 \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Acknowledgements}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\richel{put this section here, as the journal does not request for this}
+We would like to thank the Center for Information Technology of the University of Groningen for their support
+and for providing access to the Peregrine high performance computing cluster.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Authors' contributions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\richel{put this section here, as the journal does not request for this}
+RSE conceived the idea for this experiment. 
+RJCB created and tested the experiment, and wrote the first draft of the manuscript. 
+RSE contributed substantially to revisions.
 
 \end{document}
