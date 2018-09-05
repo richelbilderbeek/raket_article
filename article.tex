@@ -219,6 +219,7 @@ Our parameters are inspired on existing work \cite{etienne_and_rosindell_2012}\c
 We use $\lambda = 10^9 \approx \infty$ to let the PBD model reduce to the BD model.
 
 We simulate protracted birth-death trees, using the PBD package (\cite{pbd}) in the R programming language (\cite{r}).
+The first tree has a random number generator seed of 1, which is incremented by 1 for each simulated tree.
 For each combination of ${\lambda, \mu, b, n}$, we generate incipient species trees with a crown age of 15 million years.
 Only trees with the desired number of good taxa are kept.
 
@@ -340,21 +341,19 @@ in the supplementary information.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[!htbp]
-  \includegraphics[width=0.8\textwidth]{fig_general.png}
+  \includegraphics[width=\textwidth]{fig_general.png}
   \caption{
     nLTT statistic distribution per biological parameter set, using the
     general data set, 
-    for the subset of combinations in which $b_g = b_i$, $\mu_g = \mu_i$, 
     under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
   }
 \end{figure}
 
 \begin{figure}[!htbp]
-  \includegraphics[width=0.8\textwidth]{fig_sampling.png}
+  \includegraphics[width=\textwidth]{fig_sampling.png}
   \caption{
     nLTT statistic distribution per biological parameter set per sampling
     regime, using the data set conditioned on sampling regime having an effect, 
-    for the subset of combinations in which $b_g = b_i$, $\mu_g = \mu_i$, 
     under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
   }
 \end{figure}
@@ -398,7 +397,7 @@ in the supplementary information.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[!htbp]
-  \includegraphics[width=0.8\textwidth]{fig_sampling_methods.png}
+  \includegraphics[width=\textwidth]{fig_sampling_methods.png}
   \caption{
     Sampling a species tree from an incipient species tree. At the top left,
     an incipient species tree is shown, of three different good species (the
@@ -415,21 +414,19 @@ in the supplementary information.
 \end{figure}
 
 \begin{figure}[!htbp]
-  \includegraphics[width=0.8\textwidth]{fig_clock_model.png}
+  \includegraphics[width=\textwidth]{fig_clock_model.png}
   \caption{
     nLTT statistic distribution per biological parameter set per clock model,
     using the general data set, 
-    for the subset of combinations in which $b_g = b_i$, $\mu_g = \mu_i$, 
     under the (correct) assumption of a Jukes-Cantor site model.
   }
 \end{figure}
 
 \begin{figure}[!htbp]
-  \includegraphics[width=0.8\textwidth]{fig_site_model.png}
+  \includegraphics[width=\textwidth]{fig_site_model.png}
   \caption{
     nLTT statistic distribution per biological parameter set per site model,
     using the general data set, 
-    for the subset of combinations in which $b_g = b_i$, $\mu_g = \mu_i$, 
     under the (correct) assumption of a strict clock model.
   }
 \end{figure}
@@ -457,7 +454,7 @@ in the supplementary information.
     $r$                   & Mutation rate & $\frac{1}{15}$ \\
     $l_a$                 & DNA alignment length & $15K$ \\
     $f_i$                 & MCMC sampling interval & 1K or more \\
-    $R_i$                 & RNG seed incipient tree and randomly sampled species tree & 1, 2, ... \\
+    $R_i$                 & RNG seed incipient tree and randomly sampled species tree & 1, 2, etc. \\
     $R_a$                 & RNG seed alignment simulation & $R_i$ \\
     $R_b$                 & RNG seed BEAST2 & $R_i$ \\
     \hline
@@ -465,9 +462,12 @@ in the supplementary information.
   \caption{
     Overview of the simulation parameters. Above the horizontal line is 
     the biological parameter set. 
+    \richel{Start new}
     The RNG seed $R_i$ is 1 for the first simulation of the general data set, 2 for the next,
-    and so on, up to and including 3480. The RNG seeds for the data set investigating the effect 
+    and so on.  
+    The RNG seeds for the data set investigating the effect 
     of sampling continue from there, but only those RNG seeds are used in which sampling has an effect.
+    \richel{End new}
     The sampling methods are abbreviated as such: 'R' denotes random
     sampling, 'S' is 'shortest' and 'L' is 'longest'. Sampling method $M_s$ is random for the general
     data set. For the data set exploring the effect of sampling, we use 'shortest'
