@@ -210,20 +210,18 @@ a different clock and site model prior in inference.
 
 \richel{Start new}
 The PBD model has five parameters, depicted in table \ref{table:parameters}. 
-The speciation completion rates $\lambda$ we use are $0.1$, $0.3$, $1.0$ and $10^9$ probability of occurence per time unit. 
-\richel{Is the unit correct unit now?}
-The extinction rates $\mu = \mu_g = \mu_i$ we use are $0.0$, $0.1$ and $0.2$ probability of occurence per time unit.
-We use expected mean tree sizes $n$ of 50, 100 and 200 good taxa.
-From each combination of $\lambda$, $\mu$ and $n$, we derive a speciation initiation rate $b = b_i = b_g$, shown in table \ref{table:pbd_parameters}.
-Our parameters are inspired on existing work \cite{etienne_and_rosindell_2012}\cite{etienne2014}.
-We use $\lambda = 10^9 \approx \infty$ to let the PBD model reduce to the BD model.
+The per species speciation completion rates $\lambda$ we use are $0.1$, $0.3$, $1.0$ and $10^9$. This means that there is a $0.15 dt$ ($0.35 dt$, $1.0 dt$, $10^9 dt$) probability of speciation completion occurring in an infinitesimal time $dt$. 
+We use per species extinction rates of $\mu = \mu_g = \mu_i$ $0.0$, $0.1$ and $0.2$.
+For each combination of $\lambda$, $\mu$ and $n$, we use a speciation initiation rate $b = b_i = b_g$ that gives a given value of the expected number of species. We use expected mean tree sizes $n$ of 50, 100 and 200 good taxa and the corresponding speciation initiation rates for all parameter combinations are shown in table \ref{table:pbd_parameters}.
+Our parameters are inspired by existing work on protracted speciation \cite{etienne_and_rosindell_2012}\cite{etienne2014}.
+We use $\lambda = 10^9 \approx \infty$ as our control for which the PBD model reduces to the BD model.
 
 We simulate protracted birth-death trees, using the PBD package (\cite{pbd}) in the R programming language (\cite{r}).
 The first tree has a random number generator seed of 1, which is incremented by 1 for each simulated tree.
 For each combination of ${\lambda, \mu, b, n}$, we generate incipient species trees with a crown age of 15 million years.
 Only trees with the desired number of good taxa are kept.
 
-This research creates two data sets: a general one, to explore parameter space, 
+We create two data sets: a general one, to explore parameter space, 
 and one to investigate the effect of sampling incipient species (see below).
 For the general data set, all the trees with the correct number of good species are kept.
 For the data set to investigate sampling, only trees with the additional constraint of sampling having an effect are kept.
@@ -310,8 +308,8 @@ with each of the posterior species trees yields a distribution of nLTT statistic
 \richel{Start new}
 The input trees generated with a $\lambda = 10^9$ allow us to measure the noise of the experiment.
 For $\lambda = \infty$, the PBD model that generates the starting trees reduces to a BD model.
-In the following steps, sampling will have no effect, BEAST2 will assume the correct speciation model,
-and the difference between inferred tree and true species tree are explained purely due to this experimental noise.
+In the subsequent steps, sampling will have no effect in this case, because BEAST2 will assume the correct speciation model,
+so the difference between inferred tree and true species tree are explained purely due to this experimental noise.
 \richel{End new}
 
 
