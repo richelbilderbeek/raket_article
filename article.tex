@@ -233,9 +233,11 @@ Only trees with the desired number of good taxa are kept.
 We create two data sets: a general one, to explore parameter space, 
 and one to investigate the effect of sampling incipient species (see below).
 For the general data set, all the trees with the correct number of good species are kept.
-For the data set to investigate sampling, only trees with the additional constraint of sampling having an effect are kept.
-As sampling does not have an effect for $\lambda = \infty$, this parameter value is absent in that data set.
-\richel{End new}
+There is an additional selection criterion, for the data set to investigate sampling:
+to generate that data set, only incipient species trees are kept, 
+on which the two sampling methods (see below) result in different species trees.
+As sampling will never have an effect for $\lambda = \infty$, 
+this parameter value is absent in that data set.
 
 From each incipient species tree, we construct a species tree,
 by sampling one incipient/good species per good species. 
@@ -314,13 +316,16 @@ lineages-through-time-plots of two phylogenies, which has a range
 from zero (for identical phylogenies) to one. We use inference error 
 and nLTT statistic interchangeably. Comparing the simulated species tree
 with each of the posterior species trees yields a distribution of nLTT statistics. 
-\richel{Start new}
 The input trees generated with a $\lambda = 10^9$ allow us to measure the noise of the experiment.
 For $\lambda = \infty$, the PBD model that generates the starting trees reduces to a BD model.
 In the subsequent steps, sampling will have no effect in this case, because BEAST2 will assume the correct speciation model,
 so the difference between inferred tree and true species tree are explained purely due to this experimental noise.
-\richel{End new}
 
+As described above, per alignment, we do four different Bayian analyses,
+as we use two different site models and two different clock models.
+We know the generative site model (which is JC69) and clock 
+model (a strict clock), but want to explore how often the correct model
+is indeed preferred.  
 
 From Maturana et al:
 Although the marginal likelihood is generally ignored in parameter inference, it plays a key role in model
@@ -367,20 +372,18 @@ in the supplementary information.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[!htbp]
-  \includegraphics[width=\textwidth]{fig_general.png}
-  \caption{
-    nLTT statistic distribution per biological parameter set, using the
-    general data set, 
-    under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
-  }
-\end{figure}
-
-\begin{figure}[!htbp]
   \includegraphics[width=\textwidth]{fig_sampling.png}
   \caption{
     nLTT statistic distribution per biological parameter set per sampling
     regime, using the data set conditioned on sampling regime having an effect, 
     under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
+  }
+\end{figure}
+
+\begin{figure}[!htbp]
+  \includegraphics[width=\textwidth]{fig_model_selection.png}
+  \caption{
+    Model preference on the general parameter set.
   }
 \end{figure}
 
@@ -436,6 +439,15 @@ in the supplementary information.
     good species. 'Shortest' is the sampling method in which the sub-species are
     picked to assure the shortest branch lengths. 'Longest' is the sampling method 
     in which the sub-species are picked to assure the longest branch lengths.
+  }
+\end{figure}
+
+\begin{figure}[!htbp]
+  \includegraphics[width=\textwidth]{fig_general.png}
+  \caption{
+    nLTT statistic distribution per biological parameter set, using the
+    general data set, 
+    under the (correct) assumptions of a strict clock and Jukes-Cantor site model.
   }
 \end{figure}
 
