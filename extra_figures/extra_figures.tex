@@ -76,9 +76,121 @@
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Create the TikZ picture for fig:experiment
+% Create the TikZ picture for fig:experiment, for only 'youngest'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{tikzpicture} 
+\begin{tikzpicture}[scale = 0.5]
+
+  % Incipient species tree
+  \begin{scope}[shift={(0,0)}] 
+
+    \node[font = \bf] at (0, 0) {A)};
+    \draw (-1,1) rectangle (10,-7);
+
+    % Drawing of the phylogeny
+    \begin{scope}[shift={(0,-3)}] 
+      \draw (0, 0) -- (2,  0); % stem 
+      \draw (2, 0) -- (8,  3) node[anchor=west] {$A_1$};
+      \draw[dotted] (4,  -1) -- (5, -0.5); \draw (5, -0.5) -- (8, 1) node[anchor=west] {$B$};
+      \draw[dotted] (6,  -2) -- (7, -1.5); \draw (7, -1.5) -- (8, -1) node[anchor=west] {$C$};
+      \draw[dotted] (2,0) -- (8, -3) node[anchor=west] {$A_2$};
+    \end{scope} % Drawing of the phylogeny
+
+  \end{scope}
+
+  % Species tree, youngest
+  \begin{scope}[shift={( 0,-9)}] 
+
+    \node[font = \bf] at (0, 0) {B)};
+    \draw (-1,1) rectangle (10,-7);
+
+    % Drawing of the species tree, youngest
+    \begin{scope}[shift={(0,-3)}] 
+      \draw (0, 0) -- (4,  0); % stem 
+      \draw (4, 0) -- (8,  2) node[anchor=west] {$B$};
+      \draw (6,-1) -- (8,  0) node[anchor=west] {$C$};
+      \draw (4, 0) -- (8, -2) node[anchor=west] {$A_2$};
+    \end{scope} % Drawing of the species tree, youngest
+
+  \end{scope}
+
+  % Alignment, youngest
+  \begin{scope}[shift={(0,-18)}] 
+
+    \node[font = \bf] at (0.0, 0  ) {C)};
+    \draw (-1,1) rectangle (10,-4);
+
+    % Drawing of the alignment
+    \begin{scope}[shift={(1,-1)}, text width = 1.5mm, text height = 1.0mm, align = center, scale = 1.3] 
+
+      \node[draw, fill = red   ] at (0.0, 0  ) {\tiny A};
+      \node[draw, fill = red   ] at (0.5, 0  ) {\tiny A};
+      \node[draw, fill = red   ] at (1.0, 0  ) {\tiny A};
+      \node[draw, fill = red   ] at (1.5, 0  ) {\tiny A};
+      \node[draw, fill = red   ] at (2.0, 0  ) {\tiny A};
+      \node[draw, fill = red   ] at (2.5, 0  ) {\tiny A};
+      \node[draw, fill = red   ] at (3.0, 0  ) {\tiny A};
+      \node[draw, fill = red   ] at (3.5, 0  ) {\tiny A};
+      \node[draw, fill = red   ] at (4.0, 0  ) {\tiny A};
+      \node[draw, fill = red   ] at (4.5, 0  ) {\tiny A};
+      \node[draw, fill = red   ] at (5.0, 0  ) {\tiny A};
+      \node[draw, fill = red   ] at (5.5, 0  ) {\tiny A};
+      \node[                   ] at (6.0, -0.1) {$B$};
+
+      \node[draw, fill = red   ] at (0.0, -0.5) {\tiny A};
+      \node[draw, fill = red   ] at (0.5, -0.5) {\tiny A};
+      \node[draw, fill = red   ] at (1.0, -0.5) {\tiny A};
+      \node[draw, fill = red   ] at (1.5, -0.5) {\tiny A};
+      \node[draw, fill = red   ] at (2.0, -0.5) {\tiny A};
+      \node[draw, fill = yellow] at (2.5, -0.5) {\tiny C};
+      \node[draw, fill = yellow] at (3.0, -0.5) {\tiny C};
+      \node[draw, fill = yellow] at (3.5, -0.5) {\tiny C};
+      \node[draw, fill = red   ] at (4.0, -0.5) {\tiny A};
+      \node[draw, fill = yellow] at (4.5, -0.5) {\tiny C};
+      \node[draw, fill = yellow] at (5.0, -0.5) {\tiny C};
+      \node[draw, fill = yellow] at (5.5, -0.5) {\tiny C};
+      \node[                   ] at (6.0, -0.6) {$C$};
+
+      \node[draw, fill = red   ] at (0.0, -1.0) {\tiny A};
+      \node[draw, fill = red   ] at (0.5, -1.0) {\tiny A};
+      \node[draw, fill = red   ] at (1.0, -1.0) {\tiny A};
+      \node[draw, fill = red   ] at (1.5, -1.0) {\tiny A};
+      \node[draw, fill = red   ] at (2.0, -1.0) {\tiny A};
+      \node[draw, fill = yellow] at (2.5, -1.0) {\tiny C};
+      \node[draw, fill = yellow] at (3.0, -1.0) {\tiny C};
+      \node[draw, fill = yellow] at (3.5, -1.0) {\tiny C};
+      \node[draw, fill = red   ] at (4.0, -1.0) {\tiny A};
+      \node[draw, fill = yellow] at (4.5, -1.0) {\tiny C};
+      \node[draw, fill = green ] at (5.0, -1.0) {\tiny G};
+      \node[draw, fill = blue  ] at (5.5, -1.0) {\tiny T};
+      \node[                   ] at (6.0, -1.1) {$A_2$};
+
+    \end{scope} % Drawing of the alignment
+
+  \end{scope}
+
+  % Estimated species tree, youngest
+  \begin{scope}[shift={(0,-24)}] 
+
+    \node[font = \bf] at (0, 0) {D)};
+    \draw (-1,1) rectangle (10,-7);
+
+    \begin{scope}[shift={(0,-3)}] 
+      \draw (0, 0) -- (3,  0);
+      \draw (3, 0) -- (8,  2) node[anchor=west] {$B$};
+      \draw (6,-1.2) -- (8, -0.2) node[anchor=west] {$C$};
+      \draw (3, 0) -- (8, -2) node[anchor=west] {$A_2$};
+    \end{scope}
+
+  \end{scope}
+
+\end{tikzpicture}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Create the TikZ picture for fig:experiment, both sampling methods
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tikzpicture}[scale = 0.5]
 
   % Incipient species tree
   \begin{scope}[shift={(0,0)}] 
