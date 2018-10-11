@@ -325,25 +325,22 @@ As described above, per alignment, we do four different Bayian analyses,
 as we use two different site models and two different clock models.
 We know the generative site model (which is JC69) and clock 
 model (a strict clock), but want to explore how often the correct model
-is indeed preferred.  
-
-From Maturana et al:
-Although the marginal likelihood is generally ignored in parameter inference, it plays a key role in model
-selection: it is a measure of the goodness of fit. Indeed, it is the probability of the data given the model,
-i.e., it is by definition a measure of model fit. The marginal likelihood acts as the normalisation constant in
-the posterior distribution making it a probability density function. Thus, this quantity is a multidimensional
-integral of the prior distribution times the likelihood function over the parameter space. MCMC methods
-used for parameter estimation within a model use only ratios of posterior densities, and are therefore unable
-to measure its normalisation in general.
-Unlike maximum likelihood, which represents the model fit at a single point, this quantity stands for an average
-of how well the model fits the data. By being an average of the likelihood function with respect to the prior,
-the model with the greatest evidence might be different from the model with the highest likelihood because
-the prior could down-weight some regions of parameter space. Also, the marginal likelihood is sensitive to the
-size of the region over which the likelihood is high. As a result, both methods could favour different models.
-Despite its important role in model selection, the marginal likelihood is usually analytically intractable and
-has to be approximated by numerical methods.
-
-
+is indeed preferred. Per alignment, we measure the estimated marginal 
+likelihood (which is the probability of the data given the model)
+for each of the four models and measure their relative propertions.
+To estimate the marginal likelihood, we use the novel 
+Nested Sampling approach (\cite{maturana_et_al_2018}),
+which we configure to have an effective sample size (in estimating
+the marginal likelihood) of at least 200, by using a single-particle
+sub-chain with a length equal to the MCMC interval.
+\richel{
+  There are no rules described in the setup of the NS
+  (for example, what should the relation between MCMC chain length
+  and NS sub-chain length be?),
+  but one can experiment with a sub-chain length and number of particles.
+  I will need to do some pilot studies to verify if this is
+  the correct way to do and describe this.  
+}
 
 We produce two data sets as a comma-separated file.
 The general data set has 144 \richel{recalc} different combinations
@@ -383,7 +380,7 @@ in the supplementary information.
 \begin{figure}[!htbp]
   \includegraphics[width=\textwidth]{fig_model_selection.png}
   \caption{
-    Model preference on the general parameter set.
+    Model preference on the general parameter set. 
   }
 \end{figure}
 
