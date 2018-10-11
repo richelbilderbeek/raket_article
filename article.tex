@@ -210,6 +210,7 @@ a different clock and site model prior in inference.
 % Methods (but we are not allowed to use this header)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\richel{Start new}
 The PBD model has five parameters, depicted in table \ref{table:parameters}. 
 The per species speciation completion rates $\lambda$ we use are $0.1$, $0.3$, $1.0$ and $10^9$. 
 This means that there is a $0.15\thinspace dt$ ($0.35\thinspace dt$, $1.0\thinspace dt$, $10^9\thinspace dt$) 
@@ -238,6 +239,7 @@ to generate that data set, only incipient species trees are kept,
 on which the two sampling methods (see below) result in different species trees.
 As sampling will never have an effect for $\lambda = \infty$, 
 this parameter value is absent in that data set.
+\richel{End new}
 
 From each incipient species tree, we construct a species tree,
 by sampling one incipient/good species per good species. 
@@ -321,6 +323,12 @@ For $\lambda = \infty$, the PBD model that generates the starting trees reduces 
 In the subsequent steps, sampling will have no effect in this case, because BEAST2 will assume the correct speciation model,
 so the difference between inferred tree and true species tree are explained purely due to this experimental noise.
 
+\richel{
+  Note there is no twinning, as in the razzo package.
+  Already sent an email to discuss this with RSE.
+}
+
+\richel{Start new}
 As described above, per alignment, we do four different Bayian analyses,
 as we use two different site models and two different clock models.
 We know the generative site model (which is JC69) and clock 
@@ -341,6 +349,7 @@ sub-chain with a length equal to the MCMC interval.
   I will need to do some pilot studies to verify if this is
   the correct way to do and describe this.  
 }
+\richel{End new}
 
 We produce two data sets as a comma-separated file.
 The general data set has 144 \richel{recalc} different combinations
@@ -354,15 +363,34 @@ waiting for computational resources) per replicate.
 Due to this, we choose to perform ten replicates, so that the complete
 experiment will take an acceptable time of roughly seven months. 
 
-For both data sets, we display the nLTT statistics distribution per
-biological parameter combination as a violin plot.
 \richel{Start new}
-We only show the nLTT distributions
-that were generated under the (correct) assumptions of a Jukes-Cantor site model
-and a strict clock model, separated per sampling method used. 
+In this article, we showcase the effect of sampling
+and the certainty when selecting a (site and clock) model. 
+We show the effect sampling has on the inference error,
+for the nLTT distributions generated from assuming the (correct) Jukes-Cantor 
+site model and a strict clock model. We do so per parameter combination,
+displaying the distribution as a violin plot.
+In the supplementary information, we display these error distributions 
+of the general data set all combined, or separated per site or clock model.
+The certainty in the model selection is again shown per parameter setting,
+as a stacked bar. 
+\richel{
+  I am unsure how to depict that stacked bar and its uncertainty.
+  Sure, the stacked bars (without uncertainty) will work,
+  but information about uncertainty is lost. 
+  See figure 'Showing a stacked bar with uncertainty'
+  for three equivalent ways to display a stacked bar with uncertainty.
+}
+
+\begin{figure}[!htbp]
+  \includegraphics[width=\textwidth]{fig_stacked_bar_with_uncertainty.png}
+  \caption{
+    Showing a stacked bar with uncertainty. These three different ways
+    display the same underlying data.
+  }
+\end{figure}
+
 \richel{End new}
-We display the nLTT statistic distributions separated per site or clock model 
-in the supplementary information.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -380,7 +408,7 @@ in the supplementary information.
 \begin{figure}[!htbp]
   \includegraphics[width=\textwidth]{fig_model_selection.png}
   \caption{
-    Model preference on the general parameter set. 
+    Model preference on the general data set.
   }
 \end{figure}
 
@@ -581,6 +609,9 @@ in the supplementary information.
     $12$   & simulation parameters, see table \ref{table:parameters} \\
     $1000$ & nLTT statistic values \\
     $11$ & ESSes of all parameters estimated by BEAST2 (see specs below) \\
+    $1$ & Marginal likelihood estimate \\
+    $1$ & Marginal likelihood estimation uncertainty \\
+    $1$ & Marginal likelihood ESS \\
     \hline
   \end{tabular}
   \caption{
