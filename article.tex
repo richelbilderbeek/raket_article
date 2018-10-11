@@ -20,6 +20,8 @@
 
 \usepackage[english]{babel}
 
+\newcommand*\mean[1]{\overline{#1}}
+
 % Use 'It was found that something is something (Name 1234)' style
 \setcitestyle{authoryear,open={},close={}}
 
@@ -208,12 +210,19 @@ a different clock and site model prior in inference.
 % Methods (but we are not allowed to use this header)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\richel{Start new}
 The PBD model has five parameters, depicted in table \ref{table:parameters}. 
-The per species speciation completion rates $\lambda$ we use are $0.1$, $0.3$, $1.0$ and $10^9$. This means that there is a $0.15 dt$ ($0.35 dt$, $1.0 dt$, $10^9 dt$) probability of speciation completion occurring in an infinitesimal time $dt$. 
+The per species speciation completion rates $\lambda$ we use are $0.1$, $0.3$, $1.0$ and $10^9$. 
+This means that there is a $0.15\thinspace dt$ ($0.35\thinspace dt$, $1.0\thinspace dt$, $10^9\thinspace dt$) 
+probability of speciation completion occurring in an infinitesimal time $dt$. 
 We use per species extinction rates of $\mu = \mu_g = \mu_i$ $0.0$, $0.1$ and $0.2$.
-For each combination of $\lambda$, $\mu$ and $n$, we use a speciation initiation rate $b = b_i = b_g$ that gives a given value of the expected number of species. We use expected mean tree sizes $n$ of 50, 100 and 200 good taxa and the corresponding speciation initiation rates for all parameter combinations are shown in table \ref{table:pbd_parameters}.
-Our parameters are inspired by existing work on protracted speciation \cite{etienne_and_rosindell_2012}\cite{etienne2014}.
+We use tree sizes of $n$ of 50, 100 and 200 good taxa.
+For each combination of $\lambda$, $\mu$ and $n$, 
+we use a speciation initiation rate $b = b_i = b_g$ 
+so that the expected mean number of species $\mathbf{E}(\mean{n}; b, \lambda, \mu)$,
+given a $b$, $\lambda$ and $\mu$,
+equals the desired number of species $n$.
+$b$ is calculated using the PBD R package (\cite{pbd})
+for each parameter combination and shown in table \ref{table:pbd_parameters}.
 We use $\lambda = 10^9 \approx \infty$ as our control for which the PBD model reduces to the BD model.
 
 We simulate protracted birth-death trees, using the PBD package (\cite{pbd}) in the R programming language (\cite{r}).
