@@ -212,8 +212,10 @@ a different clock and site model prior in inference.
 
 \richel{Start new}
 The PBD model has five parameters, depicted in table \ref{table:parameters}. 
-The per species speciation completion rates $\lambda$ we use are $0.1$, $0.3$, $1.0$ and $10^9$. 
-This means that there is a $0.15\thinspace dt$ ($0.35\thinspace dt$, $1.0\thinspace dt$, $10^9\thinspace dt$) 
+The per species speciation completion rates $\lambda$ 
+we use are $0.1$, $0.3$, $1.0$ and $10^9$. 
+This means that there is a $0.15\thinspace dt$ 
+($0.35\thinspace dt$, $1.0\thinspace dt$, $10^9\thinspace dt$) 
 probability of speciation completion occurring in an infinitesimal time $dt$. 
 We use per species extinction rates of $\mu = \mu_g = \mu_i$ $0.0$, $0.1$ and $0.2$.
 We use tree sizes of $n$ of 50, 100 and 200 good taxa.
@@ -224,11 +226,15 @@ given a $b$, $\lambda$ and $\mu$,
 equals the desired number of species $n$.
 $b$ is calculated using the PBD R package (\cite{pbd})
 for each parameter combination and shown in table \ref{table:pbd_parameters}.
-We use $\lambda = 10^9 \approx \infty$ as our control for which the PBD model reduces to the BD model.
+We use $\lambda = 10^9 \approx \infty$ 
+as our control for which the PBD model reduces to the BD model.
 
-We simulate protracted birth-death trees, using the PBD package (\cite{pbd}) in the R programming language (\cite{r}).
-The first tree has a random number generator seed of 1, which is incremented by 1 for each simulated tree.
-For each combination of ${\lambda, \mu, b, n}$, we generate incipient species trees with a crown age of 15 million years.
+We simulate protracted birth-death trees, using the PBD 
+package (\cite{pbd}) in the R programming language (\cite{r}).
+The first tree has a random number generator seed of 1, 
+which is incremented by 1 for each simulated tree.
+For each combination of ${\lambda, \mu, b, n}$, 
+we generate incipient species trees with a crown age of 15 million years.
 Only trees with the desired number of good taxa are kept.
 
 We create two data sets: a general one, to explore parameter space, 
