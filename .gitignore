@@ -44,3 +44,4 @@ extra_figures/extra_figures.pdf
 article.txt
 article.docx
 raket_article_*.*
+*.aux
