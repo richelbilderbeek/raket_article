@@ -146,7 +146,6 @@ a different clock and site model prior in inference.
 % Methods (but we are not allowed to use this header)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\richel{Start new}
 The PBD model has five parameters, depicted in table \ref{table:parameters}. 
 The per species speciation completion rates $\lambda$ 
 we use are $0.1$, $0.3$, $1.0$ and $10^9$. 
@@ -181,7 +180,6 @@ to generate that data set, only incipient species trees are kept,
 on which the two sampling methods (see below) result in different species trees.
 As sampling will never have an effect for $\lambda = \infty$, 
 this parameter value is absent in that data set.
-\richel{End new}
 
 From each incipient species tree, we construct a species tree,
 by sampling one incipient/good species per good species. 
@@ -270,7 +268,6 @@ so the difference between inferred tree and true species tree are explained pure
   Already sent an email to discuss this with RSE.
 }
 
-\richel{Start new}
 As described above, per alignment, we do four different Bayian analyses,
 as we use two different site models and two different clock models.
 We know the generative site model (which is JC69) and clock 
@@ -291,7 +288,6 @@ sub-chain with a length equal to the MCMC interval.
   I will need to do some pilot studies to verify if this is
   the correct way to do and describe this.  
 }
-\richel{End new}
 
 We produce two data sets as a comma-separated file.
 The general data set has 144 \richel{recalc} different combinations
@@ -305,7 +301,6 @@ waiting for computational resources) per replicate.
 Due to this, we choose to perform ten replicates, so that the complete
 experiment will take an acceptable time of roughly seven months. 
 
-\richel{Start new}
 In this article, we showcase the effect of sampling
 and the certainty when selecting a (site and clock) model. 
 We show the effect sampling has on the inference error,
@@ -331,8 +326,6 @@ as a stacked bar.
     display the same underlying data.
   }
 \end{figure}
-
-\richel{End new}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -485,12 +478,10 @@ RSE contributed substantially to revisions.
   \caption{
     Overview of the simulation parameters. Above the horizontal line is 
     the biological parameter set. 
-    \richel{Start new}
     The RNG seed $R_i$ is 1 for the first simulation of the general data set, 2 for the next,
     and so on.  
     The RNG seeds for the data set investigating the effect 
     of sampling continue from there, but only those RNG seeds are used in which sampling has an effect.
-    \richel{End new}
     The sampling methods are abbreviated as such: 'R' denotes random
     sampling, 'S' is 'shortest' and 'L' is 'longest'. Sampling method $M_s$ is random for the general
     data set. For the data set exploring the effect of sampling, we use 'shortest'
