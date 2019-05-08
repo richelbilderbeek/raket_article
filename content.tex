@@ -13,10 +13,12 @@
   % more detailed background, comprehensible to
   % scientists in related disciplines.
   Among the most popular tools are Bayesian approaches, 
-  such as \\ BEAST, MrBayes and RevBayes, 
-  that use efficient tree sampling routines to create a posterior probability distribution 
+  such as BEAST, MrBayes and RevBayes, 
+  that use efficient tree sampling routines to create a 
+  posterior probability distribution 
   of the phylogenetic tree. 
-  A feature of these approaches is the possibility to incorporate known or hypothesized structure of the phylogenetic tree through the tree prior. 
+  A feature of these approaches is the possibility to incorporate known 
+  or hypothesized structure of the phylogenetic tree through the tree prior. 
   It has been shown that the effect of the prior on the posterior distribution 
   of trees can be substantial. 
 
@@ -88,7 +90,9 @@ and branch termination (extinction).
 The choice of site model (\cite{posada_and_buckley_2004}), 
 clock model (\cite{baele_et_al_2012}) 
 or tree prior (\cite{moller2018, yang_and_ranalla_2005}) is known to affect
-the posterior.
+the posterior. There is evidence, however, that the 
+tree prior and molecular clock do not do so substantially affect 
+the estimation of diversification rates (\cite{sarver2019choice})).
 
 Current phylogenetic tools use tree priors 
 that assume speciation is instantaneous, whilst we know that, 
@@ -263,10 +267,7 @@ For $\lambda = \infty$, the PBD model that generates the starting trees reduces 
 In the subsequent steps, sampling will have no effect in this case, because BEAST2 will assume the correct speciation model,
 so the difference between inferred tree and true species tree are explained purely due to this experimental noise.
 
-\richel{
-  Note there is no twinning, as in the razzo package.
-  Already sent an email to discuss this with RSE.
-}
+TWINNING
 
 As described above, per alignment, we do four different Bayian analyses,
 as we use two different site models and two different clock models.
@@ -277,17 +278,7 @@ likelihood (which is the probability of the data given the model)
 for each of the four models and measure their relative propertions.
 To estimate the marginal likelihood, we use the novel 
 Nested Sampling approach (\cite{maturana_et_al_2018}),
-which we configure to have an effective sample size (in estimating
-the marginal likelihood) of at least 200, by using a single-particle
-sub-chain with a length equal to the MCMC interval.
-\richel{
-  There are no rules described in the setup of the NS
-  (for example, what should the relation between MCMC chain length
-  and NS sub-chain length be?),
-  but one can experiment with a sub-chain length and number of particles.
-  I will need to do some pilot studies to verify if this is
-  the correct way to do and describe this.  
-}
+which we configure to have a relative error $\epsilon$ of $1^{-12}$.
 
 We produce two data sets as a comma-separated file.
 The general data set has 144 \richel{recalc} different combinations
@@ -311,13 +302,8 @@ In the supplementary information, we display these error distributions
 of the general data set all combined, or separated per site or clock model.
 The certainty in the model selection is again shown per parameter setting,
 as a stacked bar. 
-\richel{
-  I am unsure how to depict that stacked bar and its uncertainty.
-  Sure, the stacked bars (without uncertainty) will work,
-  but information about uncertainty is lost. 
-  See figure 'Showing a stacked bar with uncertainty'
-  for three equivalent ways to display a stacked bar with uncertainty.
-}
+
+HIERO: DESCRIBE PLOTTING.
 
 \begin{figure}[!htbp]
   \includegraphics[width=\textwidth]{fig_stacked_bar_with_uncertainty.png}
@@ -352,7 +338,6 @@ as a stacked bar.
 \section{Acknowledgements}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\richel{put this section here, as the journal does not request for this}
 We would like to thank the Center for Information Technology of the University of Groningen for their support
 and for providing access to the Peregrine high performance computing cluster.
 
@@ -360,7 +345,6 @@ and for providing access to the Peregrine high performance computing cluster.
 \section{Authors' contributions}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\richel{put this section here, as the journal does not request for this}
 RSE conceived the idea for this experiment. 
 RJCB created and tested the experiment, and wrote the first draft of the manuscript. 
 RSE contributed substantially to revisions.
