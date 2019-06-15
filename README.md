@@ -1,5 +1,9 @@
 # raket_article
 
+Branch|[![Travis CI logo](pics/TravisCI.png)](https://travis-ci.org)
+---|---
+`master`|[![Build Status](https://travis-ci.org/richelbilderbeek/raket_article.svg?branch=master)](https://travis-ci.org/richelbilderbeek/raket_article)
+
 Article for [raket](https://github.com/richelbilderbeek/raket).
 
 ## Which file contains the article?
