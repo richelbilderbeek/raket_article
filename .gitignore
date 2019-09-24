@@ -45,3 +45,5 @@ article.txt
 article.docx
 raket_article_*.*
 *.aux
+content.bbl
+content.blg
